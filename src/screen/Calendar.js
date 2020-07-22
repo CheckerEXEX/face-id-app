@@ -5,7 +5,7 @@ function CalendarScreen() {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.title}>Header</Text>
+                <Text style={styles.title}>Headers</Text>
             </View>
             <View style={styles.body} />
             <View style={styles.footer} />
