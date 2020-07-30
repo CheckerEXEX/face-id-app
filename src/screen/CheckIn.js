@@ -2,32 +2,31 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { Icon } from 'react-native-elements';
 import * as Location from 'expo-location';
-import { set } from 'react-native-reanimated';
+import Camera from '../common/Camera';
 
 function CheckInScreen() {
 
     const [location, setLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
     const [locationName, setLocationName] = useState(null);
+    const [isCamera, setisCamera] = useState(false)
 
 
     useEffect(() => {
-        if (!locationName) {
-            (async () => {
-                let { status } = await Location.requestPermissionsAsync();
-                if (status !== 'granted') {
-                    setErrorMsg('Không tìm thấy vị trí vui lòng thử lại !');
-                }
-                let location = await Location.getCurrentPositionAsync({});
-                let nameLocation = await Location.reverseGeocodeAsync({
-                    latitude: location.coords.latitude,
-                    longitude: location.coords.longitude
-                })
-                setLocationName(nameLocation);
-                setLocation(location);
-            })();
-        }
-    });
+        (async () => {
+            let { status } = await Location.requestPermissionsAsync();
+            if (status !== 'granted') {
+                setErrorMsg('Không tìm thấy vị trí vui lòng thử lại !');
+            }
+            let location = await Location.getCurrentPositionAsync({});
+            let nameLocation = await Location.reverseGeocodeAsync({
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude
+            })
+            setLocationName(nameLocation);
+            setLocation(location);
+        })();
+    }, []);
 
 
     let street = '';
@@ -44,6 +43,10 @@ function CheckInScreen() {
         text = street + ' - ' + city;
     }
 
+    function openCamera() {
+        setisCamera(true);
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -58,7 +61,20 @@ function CheckInScreen() {
                         type='font-awesome'
                         color='#4eab52'
                         size={80}
-                        onPress={() => console.log('hello')} />
+                        onPress={() => openCamera()} />
+                    <Camera />
+                    {/* {
+                        !isCamera ?
+                            <Icon
+                                reverse
+                                name='camera'
+                                type='font-awesome'
+                                color='#4eab52'
+                                size={80}
+                                onPress={() => openCamera()} />
+                            : <Camera />
+                    } */}
+
                 </View>
             </View>
             <View style={styles.footer} />
