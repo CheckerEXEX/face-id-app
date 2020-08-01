@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { Text, View, TouchableOpacity } from "react-native";
+import React, { useState, useEffect, createRef, useRef } from "react";
+import { Text, View, TouchableOpacity, Platform } from "react-native";
 import { Camera } from "expo-camera";
+import * as FaceDetector from "expo-face-detector";
 
-export default function CameraScreen() {
+const CameraScreen = () => {
   const [hasPermission, setHasPermission] = useState(null);
-  const [type, setType] = useState(Camera.Constants.Type.front);
 
   useEffect(() => {
     (async () => {
@@ -19,17 +19,25 @@ export default function CameraScreen() {
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
   }
+
   return (
     <View style={{ flex: 1 }}>
-      <Camera style={{ flex: 1 }} type={type}>
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: "transparent",
-            flexDirection: "row",
-          }}
-        ></View>
-      </Camera>
+      <Camera
+        style={{ flex: 1 }}
+        type={Camera.Constants.Type.front}
+        onFacesDetected={(faces) => {
+          console.log("nhận diện khuôn mặc", faces);
+        }}
+        faceDetectorSettings={{
+          mode: FaceDetector.Constants.Mode.fast,
+          detectLandmarks: FaceDetector.Constants.Landmarks.none,
+          runClassifications: FaceDetector.Constants.Classifications.none,
+          minDetectionInterval: 100,
+          tracking: true,
+        }}
+      ></Camera>
     </View>
   );
-}
+};
+
+export default CameraScreen;

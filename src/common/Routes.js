@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from '../screen/Login';
-import Main from '../screen/Main';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import Main from './Main';
 
 const RootStack = createStackNavigator();
 
