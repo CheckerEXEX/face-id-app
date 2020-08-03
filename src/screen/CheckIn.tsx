@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, SafeAreaView } from "react-native";
 import { Icon } from "react-native-elements";
 import * as Location from "expo-location";
-import Camera from "../common/Camera";
+import Clock from "../common/Clock";
 
 const CheckInScreen = () => {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [locationName, setLocationName] = useState(null);
-  const [isCamera, setisCamera] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -33,47 +32,51 @@ const CheckInScreen = () => {
   if (errorMsg) {
     text = errorMsg;
   } else if (location) {
-    locationName.find((item) => {
+    locationName.find((item: any) => {
       (street = item.street), (city = item.region);
     });
     text = street + " - " + city;
   }
 
-  function openCamera() {
-    setisCamera(true);
-  }
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}></Text>
+        <SafeAreaView>
+          <Text style={styles.title}>CHECK IN</Text>
+        </SafeAreaView>
       </View>
       <View style={styles.body}>
-        <Text style={styles.position}>Vị trí hợp lệ: {text} </Text>
-        <View style={styles.camera}>
+        {/* <Text style={styles.position}>Vị trí hợp lệ</Text> */}
+        <Text style={{ color: "red", fontWeight: "bold", fontSize: 20 }}>
+          Vị trí không hợp lệ
+        </Text>
+        <View style={{ flexDirection: "row", marginTop: 20 }}>
+          <View>
+            <Icon
+              name="map-marker"
+              type="font-awesome"
+              color="#4eab52"
+              size={15}
+            />
+          </View>
+          <View style={{ maxWidth: "90%" }}>
+            <Text style={styles.position_name}>{text}</Text>
+          </View>
+        </View>
+        <View style={styles.clock}>
+          <Clock />
+        </View>
+        <View style={{ marginTop: 20 }}>
           <Icon
             reverse
             name="camera"
             type="font-awesome"
             color="#4eab52"
-            size={80}
-            onPress={() => openCamera()}
+            size={60}
+            onPress={() => alert("camera")}
           />
-          {/* <Camera /> */}
-          {/* {
-                        !isCamera ?
-                            <Icon
-                                reverse
-                                name='camera'
-                                type='font-awesome'
-                                color='#4eab52'
-                                size={80}
-                                onPress={() => openCamera()} />
-                            : <Camera />
-                    } */}
         </View>
       </View>
-      <View style={styles.footer} />
     </View>
   );
 };
@@ -86,31 +89,45 @@ const styles = StyleSheet.create({
   header: {
     width: "100%",
     height: "10%",
-    backgroundColor: "powderblue",
+    backgroundColor: "#4eab52",
     justifyContent: "center",
     alignItems: "center",
   },
   body: {
     width: "100%",
-    height: "80%",
-    backgroundColor: "skyblue",
+    height: "90%",
+    backgroundColor: "#f0f0f0",
     justifyContent: "center",
     alignItems: "center",
   },
-  footer: {
-    width: "100%",
-    height: "10%",
-    backgroundColor: "steelblue",
-  },
   title: {
-    paddingTop: 35,
     padding: 10,
     fontSize: 20,
+    fontWeight: "bold",
+    color: "#ebecf1",
   },
   position: {
     fontSize: 20,
+    color: "#4eab52",
+    fontWeight: "bold",
   },
-  camera: {
+  body_top: {
+    width: "100%",
+    height: "50%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  body_bottom: {
+    width: "100%",
+    height: "40%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  position_name: {
+    marginLeft: 5,
+    fontSize: 15,
+  },
+  clock: {
     marginTop: 20,
   },
 });

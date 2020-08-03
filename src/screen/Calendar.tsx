@@ -15,7 +15,8 @@ const DATA = {
 };
 
 const CalendarScreen = () => {
-  const [date, setDate] = useState("");
+  const [hasItem, setHasItem] = useState(true);
+  const [data, setData] = useState({});
   const weekdays = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "CN"];
   const months = [
     "Tháng 1",
@@ -41,9 +42,18 @@ const CalendarScreen = () => {
     if (month.length < 2) month = "0" + month;
     if (day.length < 2) day = "0" + day;
     const dValue = [year, month, day].join("-");
-    console.log(dValue);
-    alert(dValue);
-    // setDate(d);
+    setDataForItem(dValue);
+    setHasItem(false);
+  };
+
+  const setDataForItem = (dates) => {
+    setData({
+      id: "1",
+      date: dates,
+      checkIn: "07:52:11",
+      checkOut: "18:23:20",
+      color: "red",
+    });
   };
 
   return (
@@ -69,8 +79,12 @@ const CalendarScreen = () => {
             selectYearTitle={" Chọn năm"}
           />
         </View>
-        <View>
-          <Item data={DATA} />
+        <View style={{ alignItems: "center" }}>
+          {!hasItem ? (
+            <Item data={data} />
+          ) : (
+            <Text style={styles.select_note}>Không có dữ liệu</Text>
+          )}
         </View>
       </View>
     </View>
@@ -80,7 +94,6 @@ const CalendarScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "column",
   },
   header: {
     width: "100%",
@@ -90,10 +103,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   body: {
+    paddingTop: 10,
     padding: 5,
     width: "100%",
     height: "90%",
     backgroundColor: "#f0f0f0",
+    // justifyContent: "center",
   },
   title: {
     padding: 10,
@@ -105,6 +120,11 @@ const styles = StyleSheet.create({
     borderColor: "#4eab52",
     borderWidth: 1,
     borderRadius: 5,
+  },
+  select_note: {
+    fontSize: 20,
+    color: "#4eab52",
+    marginTop: 10,
   },
 });
 

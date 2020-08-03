@@ -19,13 +19,37 @@ const Item = (props) => {
           style={styles.image}
           source={require("../../assets/avatar.png")}
         />
-        <Text style={styles.checkInText}>
-          <Text style={{ color: props.data.color }}>{props.data.checkIn}</Text>
-        </Text>
-        <Icon name="clock-o" type="font-awesome" color="#4eab52" size={30} />
-        <Text style={styles.checkOutText}>
-          <Text style={{ color: props.data.color }}>{props.data.checkOut}</Text>
-        </Text>
+        <View style={styles.time_Left}>
+          <Icon
+            name="clock-o"
+            type="font-awesome"
+            color="#4eab52"
+            size={14}
+            style={styles.icon}
+          />
+          <Text style={styles.checkInText}>
+            <Text style={{ color: props.data.color }}>
+              {props.data.checkIn}
+            </Text>
+          </Text>
+        </View>
+
+        <Text>|</Text>
+        {/* <Icon name="clock-o" type="font-awesome" color="#4eab52" size={30} /> */}
+        <View style={styles.time_Right}>
+          <Icon
+            name="clock-o"
+            type="font-awesome"
+            color="#4eab52"
+            size={14}
+            style={styles.icon}
+          />
+          <Text style={styles.checkOutText}>
+            <Text style={{ color: props.data.color }}>
+              {props.data.checkOut}
+            </Text>
+          </Text>
+        </View>
         <Image
           style={styles.image}
           source={require("../../assets/avatar.png")}
@@ -63,14 +87,25 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   checkInText: {
-    marginLeft: "6%",
-    marginRight: "8%",
     fontSize: 14,
+    marginLeft: 2,
   },
   checkOutText: {
-    marginRight: "6%",
-    marginLeft: "8%",
     fontSize: 14,
+    marginLeft: 2,
+  },
+  time_Left: {
+    flexDirection: "row",
+    marginRight: "7%",
+    marginLeft: "5%",
+  },
+  time_Right: {
+    flexDirection: "row",
+    marginRight: "5%",
+    marginLeft: "7%",
+  },
+  icon: {
+    marginTop: 1,
   },
 });
 

@@ -26,13 +26,20 @@ const DrawerContent = (props) => {
         </View>
         <View style={styles.drawerSection}>
           <DrawerItem
-            icon={() => <MaterialCommunityIcons name="account-box-multiple" />}
+            icon={() => (
+              <MaterialCommunityIcons
+                name="account-box-multiple"
+                color="#4eab52"
+              />
+            )}
             label="Thông tin cá nhân"
             onPress={() => {}}
           />
           <DrawerItem
             style={{ justifyContent: "space-between" }}
-            icon={() => <MaterialCommunityIcons name="logout-variant" />}
+            icon={() => (
+              <MaterialCommunityIcons name="logout-variant" color="#4eab52" />
+            )}
             label="Đăng xuất"
             onPress={() => signOut()}
           />

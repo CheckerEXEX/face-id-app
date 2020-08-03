@@ -35,13 +35,13 @@ const BottomTabScreen = () => (
         tabBarIcon: "camera",
       }}
     />
-    <Tab.Screen
+    {/* <Tab.Screen
       name="Hồ sơ"
       component={ProfileScreen}
       options={{
         tabBarIcon: "account-box-multiple",
       }}
-    />
+    /> */}
   </Tab.Navigator>
 );
 
