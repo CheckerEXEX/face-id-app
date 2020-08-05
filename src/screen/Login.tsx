@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import { Icon } from "react-native-elements";
 import { AuthContext } from "../common/AuthContext";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 const LoginScreen = () => {
   const [email, setemail] = useState("");

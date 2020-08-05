@@ -2,17 +2,14 @@ import React, { useState } from "react";
 import { Text, View, StyleSheet, SafeAreaView, Alert } from "react-native";
 import CalendarPicker from "react-native-calendar-picker";
 import Item from "../common/Item";
-import * as moment from "moment";
-import "moment/locale/vi";
-moment.locale("vi");
 
-const DATA = {
-  id: "1",
-  date: "Thứ 2 ngày 20-11-2020",
-  checkIn: "07:52:11",
-  checkOut: "18:23:20",
-  color: "red",
-};
+// const DATA = {
+//   id: "1",
+//   date: "Thứ 2 ngày 20-11-2020",
+//   checkIn: "07:52:11",
+//   checkOut: "18:23:20",
+//   color: "red",
+// };
 
 const CalendarScreen = () => {
   const [hasItem, setHasItem] = useState(true);
@@ -73,17 +70,19 @@ const CalendarScreen = () => {
             maxDate="2020-08-30"
             weekdays={weekdays}
             months={months}
-            previousTitle={"Quay lại"}
-            nextTitle={"Kế tiếp"}
+            previousTitle={"<"}
+            nextTitle={">"}
             selectMonthTitle={"Chọn tháng "}
             selectYearTitle={" Chọn năm"}
           />
         </View>
-        <View style={{ alignItems: "center" }}>
+        <View>
           {!hasItem ? (
             <Item data={data} />
           ) : (
-            <Text style={styles.select_note}>Không có dữ liệu</Text>
+            <View style={{ alignItems: "center" }}>
+              <Text style={styles.select_note}>Không có dữ liệu</Text>
+            </View>
           )}
         </View>
       </View>
