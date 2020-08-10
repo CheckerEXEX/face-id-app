@@ -1,8 +1,8 @@
 import React from "react";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
-import HomeScreen from "../screen/Home";
 import CheckInScreen from "../screen/CheckIn";
 import CalendarScreen from "../screen/Calendar";
+import ListScreen from "../screen/List";
 
 const Tab = createMaterialBottomTabNavigator();
 const BottomTabScreen = () => (
@@ -21,8 +21,8 @@ const BottomTabScreen = () => (
       }}
     />
     <Tab.Screen
-      name="Home"
-      component={HomeScreen}
+      name="List"
+      component={ListScreen}
       options={{
         tabBarIcon: "format-list-bulleted",
       }}

@@ -1,7 +1,15 @@
 import React, { useState } from "react";
-import { Text, View, StyleSheet, SafeAreaView, Alert } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  SafeAreaView,
+  Alert,
+  Button,
+} from "react-native";
 import CalendarPicker from "react-native-calendar-picker";
 import Item from "../common/Item";
+import { Icon } from "react-native-elements";
 
 // const DATA = {
 //   id: "1",
@@ -11,7 +19,7 @@ import Item from "../common/Item";
 //   color: "red",
 // };
 
-const CalendarScreen = () => {
+const CalendarScreen = ({ navigation: { goBack } }) => {
   const [hasItem, setHasItem] = useState(true);
   const [data, setData] = useState({});
   const weekdays = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "CN"];
@@ -57,7 +65,37 @@ const CalendarScreen = () => {
     <View style={styles.container}>
       <View style={styles.header}>
         <SafeAreaView>
-          <Text style={styles.title}>CALENDAR</Text>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <View style={{ width: "25%" }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                }}
+              >
+                <Button
+                  onPress={() => goBack()}
+                  title="Quay lại"
+                  color="black"
+                />
+              </View>
+            </View>
+            <View style={{ width: "50%" }}>
+              <View
+                style={{
+                  alignItems: "center",
+                }}
+              >
+                <Text style={styles.title}>CALENDAR LOG</Text>
+              </View>
+            </View>
+            <View style={{ width: "25%" }}></View>
+          </View>
         </SafeAreaView>
       </View>
       <View style={styles.body}>
@@ -98,8 +136,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "10%",
     backgroundColor: "#4eab52",
-    justifyContent: "center",
-    alignItems: "center",
   },
   body: {
     paddingTop: 10,
@@ -113,7 +149,7 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 20,
     fontWeight: "bold",
-    color: "#ebecf1",
+    color: "black",
   },
   calendar: {
     borderColor: "#4eab52",

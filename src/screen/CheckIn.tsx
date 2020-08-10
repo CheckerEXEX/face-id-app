@@ -4,15 +4,15 @@ import { Icon } from "react-native-elements";
 import * as Location from "expo-location";
 import Clock from "../common/Clock";
 
-const CheckInScreen = ({ navigation }) => {
+const CheckInScreen = () => {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [locationName, setLocationName] = useState(null);
   const [hasRadius, setHasRadius] = useState(true);
 
-  const LATITUDE_SYSTEMEXE = 37.785834;
-  const LONGITUDE_SYSTEMEXE = -122.406417;
-  const RADIUS_DEAULT = 0.5;
+  const LATITUDE_SYSTEMEXE = 10.801244131973288;
+  const LONGITUDE_SYSTEMEXE = 106.640986249321;
+  const RADIUS_DEAULT = 0.2; //km
 
   useEffect(() => {
     (async () => {
@@ -37,6 +37,7 @@ const CheckInScreen = ({ navigation }) => {
       } else {
         setHasRadius(true);
       }
+      console.log(hasRadius);
       setLocationName(nameLocation);
       setLocation(location);
     })();
@@ -64,6 +65,7 @@ const CheckInScreen = ({ navigation }) => {
     dist = dist * 60 * 1.1515;
     dist = dist * 1.609344;
     console.log("positon_system: ", dist);
+
     return dist;
   };
 
@@ -81,22 +83,22 @@ const CheckInScreen = ({ navigation }) => {
   }
 
   const openCamera = () => {
-    navigation.navigate("CameraScreen");
+    // navigation.navigate("CameraScreen");
   };
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <SafeAreaView>
           <Text style={styles.title}>CHECK IN</Text>
         </SafeAreaView>
-      </View>
+      </View> */}
       <View style={styles.body}>
         <View>
           {!hasRadius ? (
             <Text style={styles.position}>Vị trí hợp lệ</Text>
           ) : (
-            <Text style={{ color: "red", fontWeight: "bold", fontSize: 20 }}>
+            <Text style={{ color: "red", fontWeight: "bold", fontSize: 25 }}>
               Vị trí không hợp lệ
             </Text>
           )}
@@ -117,7 +119,7 @@ const CheckInScreen = ({ navigation }) => {
         <View style={styles.clock}>
           <Clock />
         </View>
-        <View style={{ marginTop: 20 }}>
+        {/* <View style={{ marginTop: 20 }}>
           <Icon
             // disabled={hasRadius}
             reverse
@@ -127,7 +129,7 @@ const CheckInScreen = ({ navigation }) => {
             size={60}
             onPress={() => openCamera()}
           />
-        </View>
+        </View> */}
       </View>
     </View>
   );
@@ -135,8 +137,8 @@ const CheckInScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    flexDirection: "column",
+    // flex: 1,
+    // flexDirection: "column",
   },
   header: {
     width: "100%",
@@ -159,7 +161,7 @@ const styles = StyleSheet.create({
     color: "#ebecf1",
   },
   position: {
-    fontSize: 20,
+    fontSize: 25,
     color: "#4eab52",
     fontWeight: "bold",
   },

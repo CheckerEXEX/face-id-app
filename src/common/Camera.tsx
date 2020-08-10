@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { Camera } from "expo-camera";
-import * as FaceDetector from "expo-face-detector";
+// import * as FaceDetector from "expo-face-detector";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Icon } from "react-native-elements";
 
-const CameraScreen = ({ navigation }) => {
+const CameraScreen = (props) => {
   const [hasPermission, setHasPermission] = useState(null);
-  const [isCameraReady, setIsCameraReady] = useState(false);
   const [cameraRef, setCameraRef] = useState(null);
   // let cameraRef = useRef();
 
@@ -17,10 +16,6 @@ const CameraScreen = ({ navigation }) => {
       setHasPermission(status === "granted");
     })();
   }, []);
-
-  const onCameraReady = () => {
-    setIsCameraReady(true);
-  };
 
   if (hasPermission === null) {
     return <View />;
@@ -33,10 +28,11 @@ const CameraScreen = ({ navigation }) => {
     if (cameraRef) {
       const options = { quality: 0, base64: true };
       const data = await cameraRef.takePictureAsync(options);
+      // xử lý data (base64) ở đây
       console.log(data);
       const source = data.uri;
 
-      navigation.navigate("CheckIn");
+      props.navigation.navigate("HomeScreen");
     }
   };
 
@@ -52,14 +48,14 @@ const CameraScreen = ({ navigation }) => {
         }}
         style={{ flex: 1 }}
         type={Camera.Constants.Type.front}
-        onFacesDetected={handleFacesDetected}
-        faceDetectorSettings={{
-          mode: FaceDetector.Constants.Mode.accurate,
-          detectLandmarks: FaceDetector.Constants.Landmarks.none,
-          runClassifications: FaceDetector.Constants.Classifications.all,
-          minDetectionInterval: 1000,
-          tracking: true,
-        }}
+        // onFacesDetected={handleFacesDetected}
+        // faceDetectorSettings={{
+        //   mode: FaceDetector.Constants.Mode.accurate,
+        //   detectLandmarks: FaceDetector.Constants.Landmarks.none,
+        //   runClassifications: FaceDetector.Constants.Classifications.all,
+        //   minDetectionInterval: 1000,
+        //   tracking: true,
+        // }}
       >
         <View
           style={{
