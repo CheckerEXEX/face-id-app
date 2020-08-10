@@ -3,9 +3,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { AuthContext } from "./src/common/AuthContext";
 import Routes from './src/common/Routes';
 import { Alert } from 'react-native';
+import CameraScreen from './src/common/Camera';
 
 function App() {
-
   const [isLoading, setIsLoading] = React.useState(true);
   const [userDtoToken, setUserDtoToken] = React.useState({});
 
@@ -53,5 +53,4 @@ function App() {
     </AuthContext.Provider>
   );
 }
-
 export default App;
