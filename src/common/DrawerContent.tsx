@@ -22,10 +22,10 @@ const DrawerContent = (props) => {
             source={require("../../assets/avatar.png")}
           />
           <Title style={styles.title}>Nguyễn Duy Khang</Title>
-          <Caption style={styles.caption}>Mã số nhân viên: VN168</Caption>
+          <Caption style={styles.caption}>Mã số nhân viên: SEV168</Caption>
         </View>
         <View style={styles.drawerSection}>
-          <DrawerItem
+          {/* <DrawerItem
             icon={() => (
               <MaterialCommunityIcons
                 name="account-box-multiple"
@@ -34,7 +34,7 @@ const DrawerContent = (props) => {
             )}
             label="Thông tin cá nhân"
             onPress={() => {}}
-          />
+          /> */}
           <DrawerItem
             style={{ justifyContent: "space-between" }}
             icon={() => (

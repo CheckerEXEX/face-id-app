@@ -7,7 +7,9 @@ import {
   FlatList,
   Button,
 } from "react-native";
-import Item from "../common/Item";
+import Item from "../common/component/Item";
+import { LinearGradient } from "expo-linear-gradient";
+import HeaderContent from "../common/header/HeaderContent";
 
 const DATA = [
   {
@@ -95,43 +97,11 @@ const DATA = [
 
 const renderItem = ({ item }) => <Item data={item} />;
 
-const ListScreen = ({ navigation: { goBack } }) => {
+const ListScreen = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <SafeAreaView>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <View style={{ width: "25%" }}>
-              <View
-                style={{
-                  flexDirection: "row",
-                }}
-              >
-                <Button
-                  onPress={() => goBack()}
-                  title="Quay lại"
-                  color="black"
-                />
-              </View>
-            </View>
-            <View style={{ width: "50%" }}>
-              <View
-                style={{
-                  alignItems: "center",
-                }}
-              >
-                <Text style={styles.title}>DANH SÁCH LOG</Text>
-              </View>
-            </View>
-            <View style={{ width: "25%" }}></View>
-          </View>
-        </SafeAreaView>
+        <HeaderContent navigation={props.navigation} title={"DANH SÁCH LOG"} />
       </View>
       <View style={styles.body}>
         <SafeAreaView>
@@ -154,9 +124,6 @@ const styles = StyleSheet.create({
   header: {
     width: "100%",
     height: "10%",
-    backgroundColor: "#4eab52",
-    justifyContent: "center",
-    alignItems: "center",
   },
   body: {
     width: "100%",

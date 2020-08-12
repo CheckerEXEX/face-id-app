@@ -1,43 +1,16 @@
 import React from "react";
 import { Text, View, Button, StyleSheet, SafeAreaView } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import HeaderContent from "../common/header/HeaderContent";
 
-const ProfileScreen = ({ navigation: { goBack } }) => {
+const ProfileScreen = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <SafeAreaView>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <View style={{ width: "20%" }}>
-              <View
-                style={{
-                  flexDirection: "row",
-                }}
-              >
-                <Button
-                  onPress={() => goBack()}
-                  title="Quay lại"
-                  color="black"
-                />
-              </View>
-            </View>
-            <View style={{ width: "60%" }}>
-              <View
-                style={{
-                  alignItems: "center",
-                }}
-              >
-                <Text style={styles.title}>THÔNG TIN CÁ NHÂN</Text>
-              </View>
-            </View>
-            <View style={{ width: "20%" }}></View>
-          </View>
-        </SafeAreaView>
+        <HeaderContent
+          navigation={props.navigation}
+          title={"THÔNG TIN CÁ NHÂN"}
+        />
       </View>
       <View style={styles.body}></View>
     </View>
@@ -55,7 +28,6 @@ const styles = StyleSheet.create({
   header: {
     width: "100%",
     height: "10%",
-    backgroundColor: "#4eab52",
   },
   body: {
     paddingTop: 10,

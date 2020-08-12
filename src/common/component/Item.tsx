@@ -17,16 +17,16 @@ const Item = (props) => {
       >
         <Image
           style={styles.image}
-          source={require("../../assets/avatar.png")}
+          source={require("../../../assets/avatar.png")}
         />
         <View style={styles.time_Left}>
-          <Icon
+          {/* <Icon
             name="clock-o"
             type="font-awesome"
             color="#4eab52"
             size={14}
             style={styles.icon}
-          />
+          /> */}
           <Text style={styles.checkInText}>
             <Text style={{ color: props.data.color }}>
               {props.data.checkIn}
@@ -34,16 +34,16 @@ const Item = (props) => {
           </Text>
         </View>
 
-        <Text>|</Text>
-        {/* <Icon name="clock-o" type="font-awesome" color="#4eab52" size={30} /> */}
+        {/* <Text>|</Text> */}
+        <Icon name="clock-o" type="font-awesome" color="#4eab52" size={17} />
         <View style={styles.time_Right}>
-          <Icon
+          {/* <Icon
             name="clock-o"
             type="font-awesome"
             color="#4eab52"
             size={14}
             style={styles.icon}
-          />
+          /> */}
           <Text style={styles.checkOutText}>
             <Text style={{ color: props.data.color }}>
               {props.data.checkOut}
@@ -52,7 +52,7 @@ const Item = (props) => {
         </View>
         <Image
           style={styles.image}
-          source={require("../../assets/avatar.png")}
+          source={require("../../../assets/avatar.png")}
         />
       </View>
     </View>

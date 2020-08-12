@@ -1,6 +1,6 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import CameraScreen from "./Camera";
+import CameraScreen from "./component/Camera";
 import HomeScreen from "../screen/Home";
 import ListScreen from "../screen/List";
 import ProfileScreen from "../screen/Profile";

@@ -1,42 +1,32 @@
 import React, { useState } from "react";
-import {
-  Text,
-  View,
-  StyleSheet,
-  SafeAreaView,
-  Alert,
-  Button,
-} from "react-native";
+import { Text, View, StyleSheet, ActivityIndicator } from "react-native";
 import CalendarPicker from "react-native-calendar-picker";
-import Item from "../common/Item";
-import { Icon } from "react-native-elements";
+import Item from "../common/component/Item";
+import HeaderContent from "../common/header/HeaderContent";
 
-// const DATA = {
-//   id: "1",
-//   date: "Thứ 2 ngày 20-11-2020",
-//   checkIn: "07:52:11",
-//   checkOut: "18:23:20",
-//   color: "red",
-// };
-
-const CalendarScreen = ({ navigation: { goBack } }) => {
+const CalendarScreen = (props) => {
   const [hasItem, setHasItem] = useState(true);
   const [data, setData] = useState({});
   const weekdays = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "CN"];
-  const months = [
-    "Tháng 1",
-    "Tháng 2",
-    "Tháng 3",
-    "Tháng 4",
-    "Tháng 5",
-    "Tháng 6",
-    "Tháng 7",
-    "Tháng 8",
-    "Tháng 9",
-    "Tháng 10",
-    "Tháng 11",
-    "Tháng 12",
-  ];
+  // const months = [
+  //   "Tháng 1",
+  //   "Tháng 2",
+  //   "Tháng 3",
+  //   "Tháng 4",
+  //   "Tháng 5",
+  //   "Tháng 6",
+  //   "Tháng 7",
+  //   "Tháng 8",
+  //   "Tháng 9",
+  //   "Tháng 10",
+  //   "Tháng 11",
+  //   "Tháng 12",
+  // ];
+  const months = [];
+  //months
+  for (let i = 1; i <= 12; i++) {
+    months.push("Tháng " + i);
+  }
 
   const onDateChange = (date: any) => {
     let d = new Date(date),
@@ -64,39 +54,7 @@ const CalendarScreen = ({ navigation: { goBack } }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <SafeAreaView>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <View style={{ width: "25%" }}>
-              <View
-                style={{
-                  flexDirection: "row",
-                }}
-              >
-                <Button
-                  onPress={() => goBack()}
-                  title="Quay lại"
-                  color="black"
-                />
-              </View>
-            </View>
-            <View style={{ width: "50%" }}>
-              <View
-                style={{
-                  alignItems: "center",
-                }}
-              >
-                <Text style={styles.title}>CALENDAR LOG</Text>
-              </View>
-            </View>
-            <View style={{ width: "25%" }}></View>
-          </View>
-        </SafeAreaView>
+        <HeaderContent navigation={props.navigation} title={"CALENDAR LOG"} />
       </View>
       <View style={styles.body}>
         <View style={styles.calendar}>
@@ -113,17 +71,18 @@ const CalendarScreen = ({ navigation: { goBack } }) => {
             selectMonthTitle={"Chọn tháng "}
             selectYearTitle={" Chọn năm"}
           />
-        </View>
-        <View>
-          {!hasItem ? (
-            <Item data={data} />
-          ) : (
-            <View style={{ alignItems: "center" }}>
-              <Text style={styles.select_note}>Không có dữ liệu</Text>
-            </View>
-          )}
+          <View>
+            {!hasItem ? (
+              <Item data={data} />
+            ) : (
+              <View style={{ alignItems: "center" }}>
+                <Text style={styles.select_note}>Không tìm thấy dữ liệu</Text>
+              </View>
+            )}
+          </View>
         </View>
       </View>
+      <ActivityIndicator size="large" />
     </View>
   );
 };
@@ -135,7 +94,6 @@ const styles = StyleSheet.create({
   header: {
     width: "100%",
     height: "10%",
-    backgroundColor: "#4eab52",
   },
   body: {
     paddingTop: 10,

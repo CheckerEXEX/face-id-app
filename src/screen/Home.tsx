@@ -9,7 +9,7 @@ import {
 import { Icon } from "react-native-elements";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Location from "expo-location";
-import Clock from "../common/Clock";
+import Clock from "../common/component/Clock";
 
 const HomeScreen = (props) => {
   const [location, setLocation] = useState(null);
@@ -100,18 +100,21 @@ const HomeScreen = (props) => {
       );
       const response = await api_requests.json();
       console.log("weather is a:", response.current.temp);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <View style={styles.container}>
-      {/* <View style={styles.header}> */}
-      <LinearGradient style={styles.header} colors={["#7fffd4", "cadetblue"]}>
+      <LinearGradient style={styles.header} colors={["#4eab52", "cadetblue"]}>
         <View>
           {!hasRadius ? (
             <Text style={styles.position}>Vị trí hợp lệ</Text>
           ) : (
-            <Text style={{ color: "red", fontWeight: "bold", fontSize: 25 }}>
+            <Text
+              style={{ color: "#e71414", fontWeight: "bold", fontSize: 25 }}
+            >
               Vị trí không hợp lệ
             </Text>
           )}
@@ -121,7 +124,7 @@ const HomeScreen = (props) => {
             <Icon
               name="map-marker"
               type="font-awesome"
-              color="#4eab52"
+              color="#e71414"
               size={15}
             />
           </View>
@@ -133,7 +136,6 @@ const HomeScreen = (props) => {
           <Clock />
         </View>
       </LinearGradient>
-      {/* </View> */}
       <View style={styles.body}>
         <SafeAreaView>
           <View style={styles.body_top}>
@@ -151,7 +153,7 @@ const HomeScreen = (props) => {
                   type="font-awesome"
                   color="red"
                 />
-                <Text>CALENDAR LOG</Text>
+                <Text style={styles.title}>CALENDAR LOG</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.body_center}></View>
@@ -169,7 +171,7 @@ const HomeScreen = (props) => {
                   type="font-awesome"
                   color="#fa26a0"
                 />
-                <Text>THÔNG TIN CÁ NHÂN</Text>
+                <Text style={styles.title}>THÔNG TIN CÁ NHÂN</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -187,18 +189,17 @@ const HomeScreen = (props) => {
                 type="font-awesome"
                 color="#05dfd7"
               />
-              <Text>DANH SÁCH LOG</Text>
+              <Text style={styles.title}>DANH SÁCH LOG</Text>
             </TouchableOpacity>
           </View>
         </SafeAreaView>
       </View>
       <View style={styles.footer}>
-        {/* <SafeAreaView> */}
         <View
           style={{
             flex: 1,
             flexDirection: "column",
-            backgroundColor: "#f8f4f4",
+            backgroundColor: "#eeeeee",
           }}
         >
           <View
@@ -224,7 +225,7 @@ const HomeScreen = (props) => {
               }}
             />
           </View>
-          <View
+          <LinearGradient
             style={{
               position: "absolute",
               backgroundColor: "#4eab52",
@@ -237,9 +238,9 @@ const HomeScreen = (props) => {
               paddingHorizontal: 15,
               paddingVertical: 10,
             }}
-          ></View>
+            colors={["#4eab52", "cadetblue"]}
+          ></LinearGradient>
         </View>
-        {/* </SafeAreaView> */}
       </View>
     </View>
   );
@@ -262,7 +263,7 @@ const styles = StyleSheet.create({
   body: {
     width: "100%",
     height: "40%",
-    backgroundColor: "#f8f4f4",
+    backgroundColor: "#eeeeee",
   },
   footer: {
     width: "100%",
@@ -295,38 +296,38 @@ const styles = StyleSheet.create({
   touchable_body_left: {
     padding: 5,
     width: "100%",
-    borderRadius: 15,
+    borderRadius: 10,
     height: "100%",
-    backgroundColor: "#ffa36c",
+    backgroundColor: "#FFF",
     justifyContent: "center",
     alignItems: "center",
-    // shadowOffset: { width: 3, height: 3 },
-    // shadowColor: "#ffa36c",
-    // shadowOpacity: 0.7,
+    shadowOffset: { width: 1, height: 1 },
+    shadowColor: "#4d4646",
+    shadowOpacity: 0.5,
   },
   touchable_body_right: {
     padding: 5,
     width: "100%",
-    borderRadius: 15,
+    borderRadius: 10,
     height: "100%",
-    backgroundColor: "#ebdc87",
+    backgroundColor: "#FFF",
     justifyContent: "center",
     alignItems: "center",
-    // shadowOffset: { width: 3, height: 3 },
-    // shadowColor: "#ebdc87",
-    // shadowOpacity: 0.7,
+    shadowOffset: { width: 1, height: 1 },
+    shadowColor: "#4d4646",
+    shadowOpacity: 0.5,
   },
   touchable_body_bottom: {
     padding: 5,
     width: "100%",
-    borderRadius: 15,
+    borderRadius: 10,
     height: "100%",
-    backgroundColor: "#d54062",
+    backgroundColor: "#FFF",
     justifyContent: "center",
     alignItems: "center",
-    // shadowOffset: { width: 3, height: 3 },
-    // shadowColor: "#d54062",
-    // shadowOpacity: 0.7,
+    shadowOffset: { width: 1, height: 1 },
+    shadowColor: "#4d4646",
+    shadowOpacity: 0.5,
   },
   tilte_touch: {
     fontSize: 18,
@@ -344,12 +345,9 @@ const styles = StyleSheet.create({
   clock: {
     marginTop: 20,
   },
-  linearGradient: {
-    // alignItems: "center",
-    // justifyContent: "center",
-    // borderRadius: 5,
-    // height: 200,
-    // width: 350,
+  title: {
+    color: "gray",
+    fontWeight: "700",
   },
 });
 
