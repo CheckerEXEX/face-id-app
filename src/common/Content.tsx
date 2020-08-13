@@ -13,6 +13,7 @@ const Content = () => {
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
+        gestureEnabled: false,
       }}
     >
       <Stack.Screen name="HomeScreen" component={HomeScreen} />

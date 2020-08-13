@@ -3,11 +3,11 @@ import { View, StyleSheet, Image } from "react-native";
 import { DrawerItem, DrawerContentScrollView } from "@react-navigation/drawer";
 import { Title, Caption, Drawer, Paragraph } from "react-native-paper";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { AuthContext } from "./AuthContext";
+import { useSelector } from "react-redux";
 
 const DrawerContent = (props) => {
-  const { signOut } = useContext(AuthContext);
-
+  const userDto = useSelector((state) => state.user.userDto);
+  const { name, msnv } = userDto[0];
   return (
     <DrawerContentScrollView style={styles.drawer}>
       <View style={styles.drawerContent}>
@@ -21,27 +21,17 @@ const DrawerContent = (props) => {
             }}
             source={require("../../assets/avatar.png")}
           />
-          <Title style={styles.title}>Nguyễn Duy Khang</Title>
-          <Caption style={styles.caption}>Mã số nhân viên: SEV168</Caption>
+          <Title style={styles.title}>{name}</Title>
+          <Caption style={styles.caption}>Mã số nhân viên: {msnv}</Caption>
         </View>
         <View style={styles.drawerSection}>
-          {/* <DrawerItem
-            icon={() => (
-              <MaterialCommunityIcons
-                name="account-box-multiple"
-                color="#4eab52"
-              />
-            )}
-            label="Thông tin cá nhân"
-            onPress={() => {}}
-          /> */}
           <DrawerItem
             style={{ justifyContent: "space-between" }}
             icon={() => (
               <MaterialCommunityIcons name="logout-variant" color="#4eab52" />
             )}
             label="Đăng xuất"
-            onPress={() => signOut()}
+            onPress={() => props.navigation.navigate("Login")}
           />
         </View>
       </View>

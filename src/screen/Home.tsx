@@ -141,7 +141,7 @@ const HomeScreen = (props) => {
           <View style={styles.body_top}>
             <View style={styles.body_left}>
               <TouchableOpacity
-                style={styles.touchable_body_left}
+                style={styles.touchable_body_top_left}
                 onPress={() => {
                   props.navigation.navigate("CalendarScreen");
                 }}
@@ -159,7 +159,7 @@ const HomeScreen = (props) => {
             <View style={styles.body_center}></View>
             <View style={styles.body_right}>
               <TouchableOpacity
-                style={styles.touchable_body_right}
+                style={styles.touchable_body_top_right}
                 onPress={() => {
                   props.navigation.navigate("ProfileScreen");
                 }}
@@ -176,21 +176,41 @@ const HomeScreen = (props) => {
             </View>
           </View>
           <View style={styles.body_bottom}>
-            <TouchableOpacity
-              style={styles.touchable_body_bottom}
-              onPress={() => {
-                props.navigation.navigate("ListScreen");
-              }}
-            >
-              <Icon
-                raised
-                size={35}
-                name="list-ul"
-                type="font-awesome"
-                color="#05dfd7"
-              />
-              <Text style={styles.title}>DANH SÁCH LOG</Text>
-            </TouchableOpacity>
+            <View style={styles.body_left}>
+              <TouchableOpacity
+                style={styles.touchable_body_bottom_left}
+                onPress={() => {
+                  props.navigation.navigate("ListScreen");
+                }}
+              >
+                <Icon
+                  raised
+                  size={35}
+                  name="list-ul"
+                  type="font-awesome"
+                  color="#05dfd7"
+                />
+                <Text style={styles.title}>DANH SÁCH LOG</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.body_center}></View>
+            <View style={styles.body_right}>
+              <TouchableOpacity
+                style={styles.touchable_body_bottom_right}
+                onPress={() => {
+                  props.navigation.navigate("ProfileScreen");
+                }}
+              >
+                <Icon
+                  raised
+                  size={35}
+                  name="user"
+                  type="font-awesome"
+                  color="#fa26a0"
+                />
+                <Text style={styles.title}>THÔNG TIN CÁ NHÂN</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </SafeAreaView>
       </View>
@@ -199,14 +219,14 @@ const HomeScreen = (props) => {
           style={{
             flex: 1,
             flexDirection: "column",
-            backgroundColor: "#eeeeee",
+            backgroundColor: "#FFF",
           }}
         >
           <View
             style={{
               position: "absolute",
               alignSelf: "center",
-              backgroundColor: "#f8f4f4",
+              backgroundColor: "#FFF",
               borderRadius: 50,
               bottom: 25,
               zIndex: 10,
@@ -214,7 +234,7 @@ const HomeScreen = (props) => {
           >
             <Icon
               name="camera"
-              disabled={hasRadius}
+              // disabled={hasRadius}
               type="font-awesome"
               color="#4eab52"
               containerStyle={{ alignSelf: "center" }}
@@ -225,10 +245,26 @@ const HomeScreen = (props) => {
               }}
             />
           </View>
-          <LinearGradient
+          <View
             style={{
               position: "absolute",
-              backgroundColor: "#4eab52",
+              backgroundColor: "#EEEEEE",
+              borderColor: "#eeeeee",
+              borderWidth: 1,
+              bottom: 0,
+              zIndex: 1,
+              width: "100%",
+              height: 75,
+              flexDirection: "row",
+              justifyContent: "space-between",
+              paddingHorizontal: 15,
+              paddingVertical: 10,
+            }}
+          />
+          {/* <LinearGradient
+            style={{
+              position: "absolute",
+              backgroundColor: "gray",
               bottom: 0,
               zIndex: 1,
               width: "100%",
@@ -239,7 +275,7 @@ const HomeScreen = (props) => {
               paddingVertical: 10,
             }}
             colors={["#4eab52", "cadetblue"]}
-          ></LinearGradient>
+          ></LinearGradient> */}
         </View>
       </View>
     </View>
@@ -263,7 +299,7 @@ const styles = StyleSheet.create({
   body: {
     width: "100%",
     height: "40%",
-    backgroundColor: "#eeeeee",
+    backgroundColor: "#FFF",
   },
   footer: {
     width: "100%",
@@ -293,24 +329,48 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "48%",
   },
-  touchable_body_left: {
+  touchable_body_top_left: {
     padding: 5,
     width: "100%",
-    borderRadius: 10,
+    borderRadius: 5,
     height: "100%",
-    backgroundColor: "#FFF",
+    backgroundColor: "#4eab52",
     justifyContent: "center",
     alignItems: "center",
     shadowOffset: { width: 1, height: 1 },
     shadowColor: "#4d4646",
     shadowOpacity: 0.5,
   },
-  touchable_body_right: {
+  touchable_body_top_right: {
     padding: 5,
     width: "100%",
-    borderRadius: 10,
+    borderRadius: 5,
     height: "100%",
-    backgroundColor: "#FFF",
+    backgroundColor: "#4eab52",
+    justifyContent: "center",
+    alignItems: "center",
+    shadowOffset: { width: 1, height: 1 },
+    shadowColor: "#4d4646",
+    shadowOpacity: 0.5,
+  },
+  touchable_body_bottom_left: {
+    padding: 5,
+    width: "100%",
+    borderRadius: 5,
+    height: "100%",
+    backgroundColor: "#005086",
+    justifyContent: "center",
+    alignItems: "center",
+    shadowOffset: { width: 1, height: 1 },
+    shadowColor: "#4d4646",
+    shadowOpacity: 0.5,
+  },
+  touchable_body_bottom_right: {
+    padding: 5,
+    width: "100%",
+    borderRadius: 5,
+    height: "100%",
+    backgroundColor: "#005086",
     justifyContent: "center",
     alignItems: "center",
     shadowOffset: { width: 1, height: 1 },
@@ -346,7 +406,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   title: {
-    color: "gray",
+    color: "#ebecf1",
     fontWeight: "700",
   },
 });

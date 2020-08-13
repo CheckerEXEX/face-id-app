@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,14 +6,43 @@ import {
   TouchableOpacity,
   TextInput,
   ImageBackground,
+  Alert,
 } from "react-native";
 import { Icon } from "react-native-elements";
-import { AuthContext } from "../common/AuthContext";
+import { useDispatch } from "react-redux";
+import { addUserDto } from "../actions/user";
 
-const LoginScreen = () => {
-  const [email, setemail] = useState("");
-  const [password, setpassword] = useState("");
-  const { signIn } = useContext(AuthContext);
+const LoginScreen = (props) => {
+  const [user, setUser] = useState(null);
+  const [password, setPassword] = useState(null);
+  // gọi useDispatch để sử dụng
+  const dispatch = useDispatch();
+
+  // kiểm tra login
+  const handleLogin = () => {
+    if (user && password) {
+      // xử lý server ở đây
+
+      // server trả về user dto
+      const userDto = {
+        user: "khangndit@gmail.com",
+        password: "########",
+        name: "Nguyễn Duy Khang",
+        msnv: "SEV168",
+      };
+      // gọi qua action
+      const action = addUserDto(userDto);
+      dispatch(action);
+      props.navigation.navigate("Drawer");
+    } else {
+      Alert.alert(
+        "Thông báo",
+        "Vui lòng điền Email và Mật khẩu !",
+        [{ text: "OK", onPress: () => console.log("OK Pressed") }],
+        { cancelable: false }
+      );
+    }
+  };
 
   return (
     <ImageBackground
@@ -33,7 +62,7 @@ const LoginScreen = () => {
           style={styles.textInput}
           placeholderTextColor="gray"
           placeholder="Tài khoản"
-          onChangeText={(text) => setemail(text)}
+          onChangeText={(text) => setUser(text)}
         />
       </View>
       <View style={styles.action}>
@@ -49,14 +78,11 @@ const LoginScreen = () => {
           secureTextEntry
           placeholderTextColor="gray"
           placeholder="Mật khẩu"
-          onChangeText={(text) => setpassword(text)}
+          onChangeText={(text) => setPassword(text)}
         />
       </View>
       <View style={styles.button_container}>
-        <TouchableOpacity
-          style={styles.loginBtn}
-          onPress={() => signIn(email, password)}
-        >
+        <TouchableOpacity style={styles.loginBtn} onPress={() => handleLogin()}>
           <Text style={styles.loginText}>Đăng nhập</Text>
         </TouchableOpacity>
         <Text

@@ -6,19 +6,16 @@ import Drawer from './Drawer';
 
 const RootStack = createStackNavigator();
 
-const Routes = ({ userDtoToken }) => (
+const Routes = () => (
     <SafeAreaProvider>
-        <RootStack.Navigator screenOptions={{
-            headerShown: false
+        <RootStack.Navigator initialRouteName={LoginScreen} screenOptions={{
+            headerShown: false,
+            gestureEnabled: false,
         }} >
-            {userDtoToken?.user ?
-                (<RootStack.Screen name="Drawer" component={Drawer} />)
-                :
-                (<RootStack.Screen name="Login" component={LoginScreen} />)
-            }
+            <RootStack.Screen name="Login" component={LoginScreen} />
+            <RootStack.Screen name="Drawer" component={Drawer} />
         </RootStack.Navigator>
     </SafeAreaProvider>
-
 )
 
 export default Routes;
