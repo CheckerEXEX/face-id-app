@@ -11,7 +11,7 @@ const Routes = () => (
         <RootStack.Navigator initialRouteName={LoginScreen} screenOptions={{
             headerShown: false,
             gestureEnabled: false,
-        }} >
+        }}>
             <RootStack.Screen name="Login" component={LoginScreen} />
             <RootStack.Screen name="Drawer" component={Drawer} />
         </RootStack.Navigator>

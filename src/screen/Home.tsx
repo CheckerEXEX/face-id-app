@@ -10,16 +10,23 @@ import { Icon } from "react-native-elements";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Location from "expo-location";
 import Clock from "../common/component/Clock";
+import Loading from "../common/component/Loading";
+import { useSelector, useDispatch } from "react-redux";
+import { removeBase64 } from "../actions/camera";
 
 const HomeScreen = (props) => {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [locationName, setLocationName] = useState(null);
   const [hasRadius, setHasRadius] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [titleLoading, setTitleLoading] = useState(null);
 
   const LATITUDE_SYSTEMEXE = 10.801244131973288;
   const LONGITUDE_SYSTEMEXE = 106.640986249321;
-  const RADIUS_DEAULT = 0.2; //km
+  const RADIUS_DEAULT = 0.5; //km
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     (async () => {
@@ -44,14 +51,25 @@ const HomeScreen = (props) => {
       } else {
         setHasRadius(true);
       }
-
-      //get weather from location
-      getWeather(location.coords.latitude, location.coords.longitude);
-      console.log(hasRadius);
       setLocationName(nameLocation);
       setLocation(location);
+      setIsLoading(false);
     })();
   }, []);
+
+  //get base64 from redux
+  const base64Init = useSelector((state) => state.camera.base64);
+  // sử lý base64
+  useEffect(() => {
+    // xử lý server ở đây
+    if (base64Init != "") {
+      setIsLoading(true);
+      setTitleLoading("Đang xử lý");
+      const action = removeBase64();
+      dispatch(action);
+      setIsLoading(false);
+    }
+  }, [base64Init]);
 
   // calculation location radius two point
   const getRadiusTwoPoint = (
@@ -91,30 +109,29 @@ const HomeScreen = (props) => {
     text = street + " - " + city;
   }
 
-  const getWeather = async (latitude, longitude) => {
-    const api_key = "f0283990e0581e2d7e1b7c41996132e9";
-    try {
-      const api_requests = await fetch(
-        `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&lang=vi&
-        exclude=hourly,daily&appid=${api_key}`
-      );
-      const response = await api_requests.json();
-      console.log("weather is a:", response.current.temp);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const getWeather = async (latitude, longitude) => {
+  //   const api_key = "f0283990e0581e2d7e1b7c41996132e9";
+  //   try {
+  //     const api_requests = await fetch(
+  //       `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&lang=vi&
+  //       exclude=hourly,daily&appid=${api_key}`
+  //     );
+  //     const response = await api_requests.json();
+  //     console.log("weather is a:", response.current.temp);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   return (
     <View style={styles.container}>
+      <Loading isLoading={isLoading} titleLoading={titleLoading} />
       <LinearGradient style={styles.header} colors={["#4eab52", "cadetblue"]}>
         <View>
           {!hasRadius ? (
             <Text style={styles.position}>Vị trí hợp lệ</Text>
           ) : (
-            <Text
-              style={{ color: "#e71414", fontWeight: "bold", fontSize: 25 }}
-            >
+            <Text style={{ color: "red", fontWeight: "bold", fontSize: 25 }}>
               Vị trí không hợp lệ
             </Text>
           )}
@@ -201,14 +218,14 @@ const HomeScreen = (props) => {
                   props.navigation.navigate("ProfileScreen");
                 }}
               >
-                <Icon
+                {/* <Icon
                   raised
                   size={35}
                   name="user"
                   type="font-awesome"
                   color="#fa26a0"
                 />
-                <Text style={styles.title}>THÔNG TIN CÁ NHÂN</Text>
+                <Text style={styles.title}>THÔNG TIN CÁ NHÂN</Text> */}
               </TouchableOpacity>
             </View>
           </View>
@@ -261,21 +278,6 @@ const HomeScreen = (props) => {
               paddingVertical: 10,
             }}
           />
-          {/* <LinearGradient
-            style={{
-              position: "absolute",
-              backgroundColor: "gray",
-              bottom: 0,
-              zIndex: 1,
-              width: "100%",
-              height: 75,
-              flexDirection: "row",
-              justifyContent: "space-between",
-              paddingHorizontal: 15,
-              paddingVertical: 10,
-            }}
-            colors={["#4eab52", "cadetblue"]}
-          ></LinearGradient> */}
         </View>
       </View>
     </View>
@@ -285,6 +287,7 @@ const HomeScreen = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    zIndex: 1,
   },
   background_img: {
     width: "100%",
@@ -395,7 +398,7 @@ const styles = StyleSheet.create({
   },
   position: {
     fontSize: 25,
-    color: "#4eab52",
+    color: "#FFF",
     fontWeight: "bold",
   },
   position_name: {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Text,
   View,
@@ -8,8 +8,8 @@ import {
   Button,
 } from "react-native";
 import Item from "../common/component/Item";
-import { LinearGradient } from "expo-linear-gradient";
 import HeaderContent from "../common/header/HeaderContent";
+import Loading from "../common/component/Loading";
 
 const DATA = [
   {
@@ -70,36 +70,18 @@ const DATA = [
   },
 ];
 
-// const Item = ({ data }) => (
-//   <View style={styles.item}>
-//     <View style={styles.date}>
-//       <Text style={styles.titleDate}>{data.date}</Text>
-//     </View>
-//     <View
-//       style={{
-//         flexDirection: "row",
-//         alignItems: "center",
-//         justifyContent: "center",
-//       }}
-//     >
-//       <Image style={styles.image} source={require("../../assets/avatar.png")} />
-//       <Text style={styles.checkInText}>
-//         <Text style={{ color: data.color }}>{data.checkIn}</Text>
-//       </Text>
-//       <Icon name="clock-o" type="font-awesome" color="#4eab52" size={30} />
-//       <Text style={styles.checkOutText}>
-//         <Text style={{ color: data.color }}>{data.checkOut}</Text>
-//       </Text>
-//       <Image style={styles.image} source={require("../../assets/avatar.png")} />
-//     </View>
-//   </View>
-// );
-
 const renderItem = ({ item }) => <Item data={item} />;
 
 const ListScreen = (props) => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  setTimeout(() => {
+    setIsLoading(false);
+  }, 1500);
+
   return (
     <View style={styles.container}>
+      <Loading isLoading={isLoading} />
       <View style={styles.header}>
         <HeaderContent navigation={props.navigation} title={"DANH SÁCH LOG"} />
       </View>

@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { Camera } from "expo-camera";
-// import * as FaceDetector from "expo-face-detector";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Icon } from "react-native-elements";
+import { useDispatch } from "react-redux";
+import { addBase64 } from "../../actions/camera";
 
 const CameraScreen = (props) => {
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
-  // let cameraRef = useRef();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     (async () => {
@@ -29,9 +30,9 @@ const CameraScreen = (props) => {
       const options = { quality: 0, base64: true };
       const data = await cameraRef.takePictureAsync(options);
       // xử lý data (base64) ở đây
-      console.log(data);
-      const source = data.uri;
-
+      const base64 = data.base64;
+      const action = addBase64(base64);
+      dispatch(action);
       props.navigation.navigate("HomeScreen");
     }
   };

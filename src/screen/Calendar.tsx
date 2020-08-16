@@ -1,34 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Text, View, StyleSheet, ActivityIndicator } from "react-native";
 import CalendarPicker from "react-native-calendar-picker";
 import Item from "../common/component/Item";
 import HeaderContent from "../common/header/HeaderContent";
+import Loading from "../common/component/Loading";
 
 const CalendarScreen = (props) => {
   const [hasItem, setHasItem] = useState(true);
   const [data, setData] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  }, []);
+
   const weekdays = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "CN"];
-  // const months = [
-  //   "Tháng 1",
-  //   "Tháng 2",
-  //   "Tháng 3",
-  //   "Tháng 4",
-  //   "Tháng 5",
-  //   "Tháng 6",
-  //   "Tháng 7",
-  //   "Tháng 8",
-  //   "Tháng 9",
-  //   "Tháng 10",
-  //   "Tháng 11",
-  //   "Tháng 12",
-  // ];
   const months = [];
   //months
   for (let i = 1; i <= 12; i++) {
     months.push("Tháng " + i);
   }
 
-  const onDateChange = (date: any) => {
+  const onDateChange = (date) => {
     let d = new Date(date),
       month = "" + (d.getMonth() + 1),
       day = "" + d.getDate(),
@@ -53,6 +48,7 @@ const CalendarScreen = (props) => {
 
   return (
     <View style={styles.container}>
+      <Loading isLoading={isLoading} />
       <View style={styles.header}>
         <HeaderContent navigation={props.navigation} title={"CALENDAR LOG"} />
       </View>
