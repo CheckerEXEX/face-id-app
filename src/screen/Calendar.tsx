@@ -24,6 +24,7 @@ const CalendarScreen = (props) => {
   }
 
   const onDateChange = (date) => {
+    setIsLoading(true);
     let d = new Date(date),
       month = "" + (d.getMonth() + 1),
       day = "" + d.getDate(),
@@ -34,6 +35,7 @@ const CalendarScreen = (props) => {
     const dValue = [year, month, day].join("-");
     setDataForItem(dValue);
     setHasItem(false);
+    setIsLoading(false);
   };
 
   const setDataForItem = (dates) => {

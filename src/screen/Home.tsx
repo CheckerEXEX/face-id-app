@@ -55,21 +55,36 @@ const HomeScreen = (props) => {
       setLocation(location);
       setIsLoading(false);
     })();
+    // component un mount
+    return () => {
+      setIsLoading(false);
+      setLocationName(null);
+      setLocation(null);
+    };
   }, []);
 
-  //get base64 from redux
-  const base64Init = useSelector((state) => state.camera.base64);
-  // sử lý base64
+  // get base64 from redux
+  const base64 = useSelector((state) => state.camera.base64);
+
+  // handle base64
   useEffect(() => {
-    // xử lý server ở đây
-    if (base64Init != "") {
+    if (base64) {
+      console.log("Base 64 is a: ", base64);
       setIsLoading(true);
       setTitleLoading("Đang xử lý");
+      try {
+        //handle server in here
+      } catch (error) {
+        console.log(error);
+      }
+
+      // remove base64 of redux when success handle
       const action = removeBase64();
       dispatch(action);
+
       setIsLoading(false);
     }
-  }, [base64Init]);
+  }, [base64]);
 
   // calculation location radius two point
   const getRadiusTwoPoint = (
@@ -126,7 +141,7 @@ const HomeScreen = (props) => {
   return (
     <View style={styles.container}>
       <Loading isLoading={isLoading} titleLoading={titleLoading} />
-      <LinearGradient style={styles.header} colors={["#4eab52", "cadetblue"]}>
+      <LinearGradient style={styles.header} colors={["#a3f7bf", "cadetblue"]}>
         <View>
           {!hasRadius ? (
             <Text style={styles.position}>Vị trí hợp lệ</Text>
@@ -165,7 +180,7 @@ const HomeScreen = (props) => {
               >
                 <Icon
                   raised
-                  size={35}
+                  size={30}
                   name="calendar"
                   type="font-awesome"
                   color="red"
@@ -183,7 +198,7 @@ const HomeScreen = (props) => {
               >
                 <Icon
                   raised
-                  size={35}
+                  size={30}
                   name="user"
                   type="font-awesome"
                   color="#fa26a0"
@@ -202,7 +217,7 @@ const HomeScreen = (props) => {
               >
                 <Icon
                   raised
-                  size={35}
+                  size={30}
                   name="list-ul"
                   type="font-awesome"
                   color="#05dfd7"
@@ -337,7 +352,7 @@ const styles = StyleSheet.create({
     width: "100%",
     borderRadius: 5,
     height: "100%",
-    backgroundColor: "#4eab52",
+    backgroundColor: "#318fb5",
     justifyContent: "center",
     alignItems: "center",
     shadowOffset: { width: 1, height: 1 },
@@ -349,7 +364,7 @@ const styles = StyleSheet.create({
     width: "100%",
     borderRadius: 5,
     height: "100%",
-    backgroundColor: "#4eab52",
+    backgroundColor: "#318fb5",
     justifyContent: "center",
     alignItems: "center",
     shadowOffset: { width: 1, height: 1 },
@@ -361,7 +376,7 @@ const styles = StyleSheet.create({
     width: "100%",
     borderRadius: 5,
     height: "100%",
-    backgroundColor: "#005086",
+    backgroundColor: "#4f8a8b",
     justifyContent: "center",
     alignItems: "center",
     shadowOffset: { width: 1, height: 1 },
@@ -373,7 +388,7 @@ const styles = StyleSheet.create({
     width: "100%",
     borderRadius: 5,
     height: "100%",
-    backgroundColor: "#005086",
+    backgroundColor: "#4f8a8b",
     justifyContent: "center",
     alignItems: "center",
     shadowOffset: { width: 1, height: 1 },

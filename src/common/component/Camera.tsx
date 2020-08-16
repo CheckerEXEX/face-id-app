@@ -7,38 +7,30 @@ import { useDispatch } from "react-redux";
 import { addBase64 } from "../../actions/camera";
 
 const CameraScreen = (props) => {
-  const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
+  const [base64, setBase64] = useState(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestPermissionsAsync();
-      setHasPermission(status === "granted");
     })();
+    // component un mount
+    return () => {
+      console.log("un mount");
+    };
   }, []);
-
-  if (hasPermission === null) {
-    return <View />;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
 
   const takePicture = async () => {
     if (cameraRef) {
       const options = { quality: 0, base64: true };
       const data = await cameraRef.takePictureAsync(options);
-      // xử lý data (base64) ở đây
       const base64 = data.base64;
+      // add data => base 64 in redux
       const action = addBase64(base64);
       dispatch(action);
       props.navigation.navigate("HomeScreen");
     }
-  };
-
-  const handleFacesDetected = (faces) => {
-    console.log(faces);
   };
 
   return (
@@ -49,14 +41,6 @@ const CameraScreen = (props) => {
         }}
         style={{ flex: 1 }}
         type={Camera.Constants.Type.front}
-        // onFacesDetected={handleFacesDetected}
-        // faceDetectorSettings={{
-        //   mode: FaceDetector.Constants.Mode.accurate,
-        //   detectLandmarks: FaceDetector.Constants.Landmarks.none,
-        //   runClassifications: FaceDetector.Constants.Classifications.all,
-        //   minDetectionInterval: 1000,
-        //   tracking: true,
-        // }}
       >
         <View
           style={{
@@ -66,7 +50,6 @@ const CameraScreen = (props) => {
           }}
         >
           <TouchableOpacity
-            // disabled={true}
             style={{ alignSelf: "center" }}
             onPress={async () => {
               if (cameraRef) {
