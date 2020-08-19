@@ -83,7 +83,10 @@ const ListScreen = (props) => {
     <View style={styles.container}>
       <Loading isLoading={isLoading} />
       <View style={styles.header}>
-        <HeaderContent navigation={props.navigation} title={"DANH SÁCH LOG"} />
+        <HeaderContent
+          navigation={props.navigation}
+          title={"LỊCH SỬ CHẤM CÔNG"}
+        />
       </View>
       <View style={styles.body}>
         <SafeAreaView>

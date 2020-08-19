@@ -5,8 +5,9 @@ import {
   StyleSheet,
   SafeAreaView,
   TouchableOpacity,
+  Button,
 } from "react-native";
-import { Icon } from "react-native-elements";
+import { Icon, Image } from "react-native-elements";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Location from "expo-location";
 import Clock from "../common/component/Clock";
@@ -141,33 +142,103 @@ const HomeScreen = (props) => {
   return (
     <View style={styles.container}>
       <Loading isLoading={isLoading} titleLoading={titleLoading} />
-      <LinearGradient style={styles.header} colors={["#a3f7bf", "cadetblue"]}>
-        <View>
-          {!hasRadius ? (
-            <Text style={styles.position}>Vị trí hợp lệ</Text>
-          ) : (
-            <Text style={{ color: "red", fontWeight: "bold", fontSize: 25 }}>
-              Vị trí không hợp lệ
-            </Text>
-          )}
-        </View>
-        <View style={{ flexDirection: "row", marginTop: 20 }}>
-          <View>
-            <Icon
-              name="map-marker"
-              type="font-awesome"
-              color="#e71414"
-              size={15}
+      {/* <LinearGradient style={styles.header} colors={["#21243d", "cadetblue"]}> */}
+      <View style={styles.header}>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            height: "30%",
+          }}
+        >
+          <View style={{ width: "22%" }}>
+            <View
+              style={{
+                flexDirection: "row",
+              }}
+            >
+              <View style={{ marginLeft: 10 }}>
+                <Icon
+                  size={29}
+                  name="navicon"
+                  type="font-awesome"
+                  onPress={() => props.navigation.openDrawer()}
+                />
+              </View>
+            </View>
+          </View>
+          <View
+            style={{
+              width: "56%",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Image
+              style={{
+                resizeMode: "stretch",
+                height: 75,
+                width: 70,
+                borderRadius: 100,
+                marginRight: 10,
+              }}
+              source={require("../../assets/favicon.png")}
             />
           </View>
-          <View style={{ maxWidth: "90%" }}>
-            <Text style={styles.position_name}>{text}</Text>
+          <View style={{ width: "22%", flexDirection: "row-reverse" }}>
+            <TouchableOpacity
+              onPress={() => {
+                props.navigation.navigate("ProfileScreen");
+              }}
+            >
+              <Image
+                style={{
+                  resizeMode: "stretch",
+                  height: 40,
+                  width: 40,
+                  borderRadius: 100,
+                  marginRight: 10,
+                }}
+                source={require("../../assets/avatar.png")}
+              />
+            </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.clock}>
-          <Clock />
+        <View
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            height: "50%",
+          }}
+        >
+          <View>
+            {!hasRadius ? (
+              <Text style={styles.position}>Vị trí hợp lệ</Text>
+            ) : (
+              <Text style={{ color: "red", fontWeight: "bold", fontSize: 25 }}>
+                Vị trí không hợp lệ
+              </Text>
+            )}
+          </View>
+          <View style={{ flexDirection: "row", marginTop: 20 }}>
+            <View>
+              <Icon
+                name="map-marker"
+                type="font-awesome"
+                color="#e71414"
+                size={15}
+              />
+            </View>
+            <View style={{ maxWidth: "90%" }}>
+              <Text style={styles.position_name}>{text}</Text>
+            </View>
+          </View>
+          <View style={styles.clock}>
+            <Clock />
+          </View>
         </View>
-      </LinearGradient>
+      </View>
+      {/* </LinearGradient> */}
       <View style={styles.body}>
         <SafeAreaView>
           <View style={styles.body_top}>
@@ -180,12 +251,15 @@ const HomeScreen = (props) => {
               >
                 <Icon
                   raised
-                  size={30}
-                  name="calendar"
+                  size={28}
+                  name="calendar-check-o"
                   type="font-awesome"
                   color="red"
                 />
-                <Text style={styles.title}>CALENDAR LOG</Text>
+                <View style={{ marginLeft: 10 }}>
+                  <Text style={styles.title}>Lịch sử</Text>
+                  <Text style={styles.content_title}>Thời gian chấm công</Text>
+                </View>
               </TouchableOpacity>
             </View>
             <View style={styles.body_center}></View>
@@ -198,12 +272,15 @@ const HomeScreen = (props) => {
               >
                 <Icon
                   raised
-                  size={30}
+                  size={28}
                   name="user"
                   type="font-awesome"
                   color="#fa26a0"
                 />
-                <Text style={styles.title}>THÔNG TIN CÁ NHÂN</Text>
+                <View style={{ marginLeft: 10 }}>
+                  <Text style={styles.title}>Cá nhân</Text>
+                  <Text style={styles.content_title}>Thông tin cá nhân</Text>
+                </View>
               </TouchableOpacity>
             </View>
           </View>
@@ -217,12 +294,15 @@ const HomeScreen = (props) => {
               >
                 <Icon
                   raised
-                  size={30}
-                  name="list-ul"
+                  size={28}
+                  name="list-ol"
                   type="font-awesome"
-                  color="#05dfd7"
+                  color="#6f4a8e"
                 />
-                <Text style={styles.title}>DANH SÁCH LOG</Text>
+                <View style={{ marginLeft: 10 }}>
+                  <Text style={styles.title}>Lịch sử</Text>
+                  <Text style={styles.content_title}>Thời gian chấm công</Text>
+                </View>
               </TouchableOpacity>
             </View>
             <View style={styles.body_center}></View>
@@ -230,17 +310,20 @@ const HomeScreen = (props) => {
               <TouchableOpacity
                 style={styles.touchable_body_bottom_right}
                 onPress={() => {
-                  props.navigation.navigate("ProfileScreen");
+                  // props.navigation.openDrawer();
                 }}
               >
-                {/* <Icon
+                <Icon
                   raised
-                  size={35}
-                  name="user"
+                  size={28}
+                  name="file-text"
                   type="font-awesome"
-                  color="#fa26a0"
+                  color="#05dfd7"
                 />
-                <Text style={styles.title}>THÔNG TIN CÁ NHÂN</Text> */}
+                <View style={{ marginLeft: 10 }}>
+                  <Text style={styles.title}>Đơn từ</Text>
+                  <Text style={styles.content_title}>Đơn xin phép</Text>
+                </View>
               </TouchableOpacity>
             </View>
           </View>
@@ -251,7 +334,7 @@ const HomeScreen = (props) => {
           style={{
             flex: 1,
             flexDirection: "column",
-            backgroundColor: "#FFF",
+            backgroundColor: "#eeeeee",
           }}
         >
           <View
@@ -280,9 +363,9 @@ const HomeScreen = (props) => {
           <View
             style={{
               position: "absolute",
-              backgroundColor: "#EEEEEE",
-              borderColor: "#eeeeee",
-              borderWidth: 1,
+              backgroundColor: "#4eab52",
+              borderColor: "#4eab52",
+              borderTopWidth: 0.5,
               bottom: 0,
               zIndex: 1,
               width: "100%",
@@ -309,15 +392,14 @@ const styles = StyleSheet.create({
     height: "90%",
   },
   header: {
-    justifyContent: "center",
-    alignItems: "center",
     width: "100%",
     height: "45%",
+    backgroundColor: "#eeeeee",
   },
   body: {
     width: "100%",
     height: "40%",
-    backgroundColor: "#FFF",
+    backgroundColor: "#eeeeee",
   },
   footer: {
     width: "100%",
@@ -352,48 +434,58 @@ const styles = StyleSheet.create({
     width: "100%",
     borderRadius: 5,
     height: "100%",
-    backgroundColor: "#318fb5",
+    // backgroundColor: "#4eab52",
     justifyContent: "center",
-    alignItems: "center",
-    shadowOffset: { width: 1, height: 1 },
-    shadowColor: "#4d4646",
-    shadowOpacity: 0.5,
+    // alignItems: "center",
+    // shadowOffset: { width: 1, height: 1 },
+    // shadowColor: "#4d4646",
+    // shadowOpacity: 0.5,
+    borderColor: "gray",
+    borderWidth: 1,
   },
   touchable_body_top_right: {
     padding: 5,
     width: "100%",
     borderRadius: 5,
     height: "100%",
-    backgroundColor: "#318fb5",
+    // backgroundColor: "#4eab52",
     justifyContent: "center",
-    alignItems: "center",
-    shadowOffset: { width: 1, height: 1 },
-    shadowColor: "#4d4646",
-    shadowOpacity: 0.5,
+    // alignItems: "center",
+    // shadowOffset: { width: 1, height: 1 },
+    // shadowColor: "#4d4646",
+    // shadowOpacity: 0.5,
+    borderColor: "#4d4646",
+    borderWidth: 1,
   },
   touchable_body_bottom_left: {
     padding: 5,
     width: "100%",
     borderRadius: 5,
     height: "100%",
-    backgroundColor: "#4f8a8b",
+    // backgroundColor: "#4eab52",
     justifyContent: "center",
-    alignItems: "center",
-    shadowOffset: { width: 1, height: 1 },
-    shadowColor: "#4d4646",
-    shadowOpacity: 0.5,
+    // alignItems: "center",
+    // shadowOffset: { width: 1, height: 1 },
+    // shadowColor: "#4d4646",
+    // shadowOpacity: 0.5,
+    // borderColor: "#4eab52",
+    // borderWidth: 1,
+    borderColor: "#4d4646",
+    borderWidth: 1,
   },
   touchable_body_bottom_right: {
     padding: 5,
     width: "100%",
     borderRadius: 5,
     height: "100%",
-    backgroundColor: "#4f8a8b",
+    // backgroundColor: "#4eab52",
     justifyContent: "center",
-    alignItems: "center",
-    shadowOffset: { width: 1, height: 1 },
-    shadowColor: "#4d4646",
-    shadowOpacity: 0.5,
+    // alignItems: "center",
+    // shadowOffset: { width: 1, height: 1 },
+    // shadowColor: "#4d4646",
+    // shadowOpacity: 0.5,
+    borderColor: "#4d4646",
+    borderWidth: 1,
   },
   touchable_body_bottom: {
     padding: 5,
@@ -424,7 +516,13 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   title: {
-    color: "#ebecf1",
+    fontSize: 18,
+    color: "#4eab52",
+    fontWeight: "700",
+  },
+  content_title: {
+    fontSize: 12,
+    color: "#4eab52",
     fontWeight: "700",
   },
 });

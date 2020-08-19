@@ -1,14 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, ActivityIndicator } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  ActivityIndicator,
+  ScrollView,
+} from "react-native";
 import CalendarPicker from "react-native-calendar-picker";
 import Item from "../common/component/Item";
 import HeaderContent from "../common/header/HeaderContent";
 import Loading from "../common/component/Loading";
+import { Icon } from "react-native-elements";
 
 const CalendarScreen = (props) => {
   const [hasItem, setHasItem] = useState(true);
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [minDate, setMinDate] = useState("");
 
   useEffect(() => {
     setTimeout(() => {
@@ -23,8 +31,19 @@ const CalendarScreen = (props) => {
     months.push("Tháng " + i);
   }
 
+  const getMaxMinDate = () => {
+    const date = new Date();
+    let month = "" + date.getMonth(),
+      day = "" + date.getDate(),
+      year = date.getFullYear();
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+    console.log([year, month, "01"].join("-"));
+    setMinDate([year, month, day].join("-"));
+  };
+
   const onDateChange = (date) => {
-    setIsLoading(true);
+    // setIsLoading(true);
     let d = new Date(date),
       month = "" + (d.getMonth() + 1),
       day = "" + d.getDate(),
@@ -35,7 +54,7 @@ const CalendarScreen = (props) => {
     const dValue = [year, month, day].join("-");
     setDataForItem(dValue);
     setHasItem(false);
-    setIsLoading(false);
+    // setIsLoading(false);
   };
 
   const setDataForItem = (dates) => {
@@ -52,16 +71,19 @@ const CalendarScreen = (props) => {
     <View style={styles.container}>
       <Loading isLoading={isLoading} />
       <View style={styles.header}>
-        <HeaderContent navigation={props.navigation} title={"CALENDAR LOG"} />
+        <HeaderContent
+          navigation={props.navigation}
+          title={"LỊCH SỬ CHẤM CÔNG"}
+        />
       </View>
       <View style={styles.body}>
-        <View style={styles.calendar}>
+        <View style={styles.body_top}>
           <CalendarPicker
             onDateChange={onDateChange}
             mode="date"
             format="YYYY-MM-DD"
-            minDate="2020-07-01"
-            maxDate="2020-08-30"
+            minDate={minDate}
+            maxDate={new Date()}
             weekdays={weekdays}
             months={months}
             previousTitle={"<"}
@@ -74,10 +96,51 @@ const CalendarScreen = (props) => {
               <Item data={data} />
             ) : (
               <View style={{ alignItems: "center" }}>
-                <Text style={styles.select_note}>Không tìm thấy dữ liệu</Text>
+                <Text style={styles.select_note}>Chọn ngày</Text>
               </View>
             )}
           </View>
+        </View>
+        <View style={styles.body_bottom}>
+          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+            <View style={{ flexDirection: "row", padding: 5 }}>
+              <Icon size={15} name="circle" type="font-awesome" color="red" />
+              <Text style={styles.text_bottom}>Số phút đi trễ: 15 phút</Text>
+            </View>
+            <View style={{ flexDirection: "row", padding: 5 }}>
+              <Icon
+                size={15}
+                name="circle"
+                type="font-awesome"
+                color="#4eab52"
+              />
+              <Text style={styles.text_bottom}>
+                Tổng số giờ tăng ca: 16 giờ
+              </Text>
+            </View>
+            <View style={{ flexDirection: "row", padding: 5 }}>
+              <Icon
+                size={15}
+                name="circle"
+                type="font-awesome"
+                color="#4eab52"
+              />
+              <Text style={styles.text_bottom}>
+                Tổng số ngày công trong tháng: 22 ngày
+              </Text>
+            </View>
+            <View style={{ flexDirection: "row", padding: 5 }}>
+              <Icon
+                size={15}
+                name="circle"
+                type="font-awesome"
+                color="#4eab52"
+              />
+              <Text style={styles.text_bottom}>
+                Số ngày nghỉ phép trong tháng: 0 ngày
+              </Text>
+            </View>
+          </ScrollView>
         </View>
       </View>
       <ActivityIndicator size="large" />
@@ -99,7 +162,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "90%",
     backgroundColor: "#f0f0f0",
-    // justifyContent: "center",
   },
   title: {
     padding: 10,
@@ -107,15 +169,24 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "black",
   },
-  calendar: {
+  body_top: {
     borderColor: "#4eab52",
     borderWidth: 1,
     borderRadius: 5,
+    // height: "60%",
+  },
+  body_bottom: {
+    padding: 0,
+    // height: "40%",
   },
   select_note: {
     fontSize: 20,
-    color: "#4eab52",
+    // color: "#4eab52",
     marginTop: 10,
+  },
+  text_bottom: {
+    fontSize: 15,
+    marginLeft: 5,
   },
 });
 
