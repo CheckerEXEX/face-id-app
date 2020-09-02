@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import LoginScreen from '../screen/Login';
+import LoginScreen from '../screen/LoginScreen';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Drawer from './Drawer';
 

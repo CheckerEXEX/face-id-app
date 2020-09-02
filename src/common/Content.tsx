@@ -1,10 +1,10 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import CameraScreen from "./component/Camera";
-import HomeScreen from "../screen/Home";
-import ListScreen from "../screen/List";
-import ProfileScreen from "../screen/Profile";
-import CalendarScreen from "../screen/Calendar";
+import HomeScreen from "../screen/HomeScreen";
+import ListScreen from "../screen/ListScreen";
+import ProfileScreen from "../screen/ProfileScreen";
+import CalendarScreen from "../screen/CalendarScreen";
 
 const Stack = createStackNavigator();
 

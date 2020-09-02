@@ -8,14 +8,19 @@ import {
   Button,
 } from "react-native";
 import { Icon, Image } from "react-native-elements";
-import { LinearGradient } from "expo-linear-gradient";
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 import * as Location from "expo-location";
 import Clock from "../common/component/Clock";
 import Loading from "../common/component/Loading";
 import { useSelector, useDispatch } from "react-redux";
 import { removeBase64 } from "../actions/camera";
+import { Title, Caption} from "react-native-paper";
 
 const HomeScreen = (props) => {
+
+  const userDto = useSelector((state) => state.user.userDto);
+  const { name, msnv } = userDto[0];
+
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [locationName, setLocationName] = useState(null);
@@ -70,7 +75,7 @@ const HomeScreen = (props) => {
   // handle base64
   useEffect(() => {
     if (base64) {
-      console.log("Base 64 is a: ", base64);
+      //console.log("Base 64 is a: ", base64);
       setIsLoading(true);
       setTitleLoading("Đang xử lý");
       try {
@@ -142,68 +147,29 @@ const HomeScreen = (props) => {
   return (
     <View style={styles.container}>
       <Loading isLoading={isLoading} titleLoading={titleLoading} />
-      {/* <LinearGradient style={styles.header} colors={["#21243d", "cadetblue"]}> */}
+      <View style={styles.status}></View>
       <View style={styles.header}>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            height: "30%",
-          }}
-        >
-          <View style={{ width: "22%" }}>
-            <View
-              style={{
-                flexDirection: "row",
-              }}
-            >
-              <View style={{ marginLeft: 10 }}>
-                <Icon
-                  size={29}
-                  name="navicon"
-                  type="font-awesome"
-                  onPress={() => props.navigation.openDrawer()}
-                />
-              </View>
-            </View>
-          </View>
-          <View
-            style={{
-              width: "56%",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Image
-              style={{
-                resizeMode: "stretch",
-                height: 75,
-                width: 70,
-                borderRadius: 100,
-                marginRight: 10,
-              }}
-              source={require("../../assets/favicon.png")}
-            />
-          </View>
-          <View style={{ width: "22%", flexDirection: "row-reverse" }}>
-            <TouchableOpacity
-              onPress={() => {
-                props.navigation.navigate("ProfileScreen");
-              }}
-            >
-              <Image
-                style={{
-                  resizeMode: "stretch",
-                  height: 40,
-                  width: 40,
-                  borderRadius: 100,
-                  marginRight: 10,
-                }}
-                source={require("../../assets/avatar.png")}
-              />
-            </TouchableOpacity>
+        {/* <View style={{ width: "20%", justifyContent: "center"}}>
+          <Icon size={50} name="navicon" type="font-awesome" onPress={() => props.navigation.openDrawer()}/>
+        </View> */}
+        {/* <View style={{ width: "60%", justifyContent: "center", alignItems: "center" }}>
+          <Image style={styles.logo} source={require("../../assets/favicon.png")}/>
+        </View> */}
+        <View style={{justifyContent: "center", flexDirection: 'row'}}>
+          <TouchableOpacity onPress={() => { props.navigation.navigate("ProfileScreen")}}>
+            <Image style={styles.avatar} source={require("../../assets/avatar.png")}/>
+          </TouchableOpacity>
+          <View style={{justifyContent: "center"}}>
+            <Title style={styles.avatarTitle}>{name}</Title>
+            <Caption style={styles.avatarCaption}>MSNV: {msnv}</Caption>
           </View>
         </View>
+        <View style={{justifyContent: "center", paddingRight: 10}}>
+          <Icon color="#FFF" size={30} name="sign-out" type="font-awesome" onPress={() => props.navigation.navigate("Login")}/>
+          <Text style={{fontSize: 12, color:"#FFF"}}>Đăng xuất</Text>
+        </View>
+      </View>
+      <View style={styles.location}>
         <View
           style={{
             justifyContent: "center",
@@ -215,9 +181,14 @@ const HomeScreen = (props) => {
             {!hasRadius ? (
               <Text style={styles.position}>Vị trí hợp lệ</Text>
             ) : (
-              <Text style={{ color: "red", fontWeight: "bold", fontSize: 25 }}>
-                Vị trí không hợp lệ
-              </Text>
+              <View>
+                <Text style={{ color: "#f44336", fontWeight: "bold", fontSize: 25 }}>
+                  Vị trí không hợp lệ
+                </Text>
+                <Text style={{ textAlign: "center", color: "#f44336", fontSize: 12 }}>
+                  (Bán kính {RADIUS_DEAULT*1000}m tính từ vị trí công ty)
+                </Text>
+              </View>
             )}
           </View>
           <View style={{ flexDirection: "row", marginTop: 20 }}>
@@ -225,7 +196,7 @@ const HomeScreen = (props) => {
               <Icon
                 name="map-marker"
                 type="font-awesome"
-                color="#e71414"
+                color="#227f58"
                 size={15}
               />
             </View>
@@ -334,7 +305,6 @@ const HomeScreen = (props) => {
           style={{
             flex: 1,
             flexDirection: "column",
-            backgroundColor: "#eeeeee",
           }}
         >
           <View
@@ -343,7 +313,7 @@ const HomeScreen = (props) => {
               alignSelf: "center",
               backgroundColor: "#FFF",
               borderRadius: 50,
-              bottom: 25,
+              bottom: 55,
               zIndex: 10,
             }}
           >
@@ -351,7 +321,7 @@ const HomeScreen = (props) => {
               name="camera"
               // disabled={hasRadius}
               type="font-awesome"
-              color="#4eab52"
+              color="#227f58"
               containerStyle={{ alignSelf: "center" }}
               reverse
               size={35}
@@ -363,47 +333,76 @@ const HomeScreen = (props) => {
           <View
             style={{
               position: "absolute",
-              backgroundColor: "#4eab52",
-              borderColor: "#4eab52",
+              backgroundColor: "#227f58",
+              borderColor: "#227f58",
               borderTopWidth: 0.5,
               bottom: 0,
               zIndex: 1,
               width: "100%",
-              height: 75,
-              flexDirection: "row",
-              justifyContent: "space-between",
+              height: 100,
               paddingHorizontal: 15,
               paddingVertical: 10,
+
+              flex: 1,
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
           />
+           <View style={stylesGrid.boxContainer}><Text>B1</Text></View>
+           <View style={stylesGrid.boxContainer}><Text>B2</Text></View>
+           <View style={stylesGrid.boxContainer}><Text>B3</Text></View>
+           <View style={stylesGrid.boxContainer}><Text>B4</Text></View>
+           <View style={stylesGrid.boxContainer}><Text>B5</Text></View>
+          <Icon
+              name="camera"
+              type="font-awesome"
+              color="red"
+              size={35}
+              onPress={() => {
+                props.navigation.navigate("CameraScreen");
+              }}
+            />
         </View>
       </View>
     </View>
   );
 };
+const stylesGrid = StyleSheet.create({
+  boxContainer: {
+
+  }
+})
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    zIndex: 1,
+    backgroundColor: '#FFF'
   },
-  background_img: {
-    width: "100%",
-    height: "90%",
+  status: {
+    height: getStatusBarHeight(),
+    backgroundColor: '#227f58'
   },
   header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: '#227f58',
     width: "100%",
-    height: "45%",
-    backgroundColor: "#eeeeee",
+    paddingTop: 10,
+    paddingBottom: 10,
+  },
+  location: {
+    paddingTop: '25%',
+    height: "35%",
   },
   body: {
     width: "100%",
-    height: "40%",
-    backgroundColor: "#eeeeee",
+    height: "35%",
+    backgroundColor: "#FFF",
   },
   footer: {
     width: "100%",
-    height: "15%",
+    height: "20%",
   },
   body_top: {
     padding: 15,
@@ -524,6 +523,32 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#4eab52",
     fontWeight: "700",
+  },
+  logo:{
+    resizeMode: "stretch",
+    height: '100%',
+    width: 65,
+  },
+  avatar :{
+    marginLeft: 10,
+    marginRight: 10,
+    height: 50,
+    width: 50,
+    borderRadius: 100
+  },
+  avatarTitle: {
+    color: '#FFF',
+    fontWeight: "bold",
+  },
+  avatarCaption: {
+    color: '#FFF',
+    fontSize: 12,
+    lineHeight: 12,
+    fontWeight: "bold",
+    top: -5
+  },
+  titleHeader: {
+    fontSize: 10
   },
 });
 
