@@ -1,5 +1,4 @@
 import { StyleSheet, Dimensions } from 'react-native';
-
 const PRIMARY_BACKGROUND_COLOR = '#19224d';
 
 const screenHeight = Dimensions.get('window').height;
@@ -12,54 +11,54 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: PRIMARY_BACKGROUND_COLOR,
-    width: "100%",
+    width: '100%',
     height: 65,
-    paddingTop: 5,
+    paddingTop: 5
   },
   location: {
     // height: screenHeight - 65 - 100,
   },
   body: {
-    justifyContent: "center",
-    width: "100%",
+    justifyContent: 'center',
+    width: '100%',
     height: screenHeight - 65 - 100,
-    backgroundColor: PRIMARY_BACKGROUND_COLOR,
+    backgroundColor: PRIMARY_BACKGROUND_COLOR
   },
   footer: {
-    width: "100%",
+    width: '100%',
     height: 100,
-    backgroundColor: PRIMARY_BACKGROUND_COLOR,
+    backgroundColor: PRIMARY_BACKGROUND_COLOR
   },
   position: {
     fontSize: 25,
-    color: "#000",
-    fontWeight: "bold",
+    color: '#000',
+    fontWeight: 'bold'
   },
   positionName: {
-    textAlign: "center",
+    textAlign: 'center',
     marginLeft: 5,
     fontSize: 15,
-    justifyContent: "center",
+    justifyContent: 'center'
   },
   clock: {
-    marginTop: 20,
+    marginTop: 20
   },
   title: {
     fontSize: 18,
-    color: "#4eab52",
-    fontWeight: "700",
+    color: '#4eab52',
+    fontWeight: '700'
   },
   content_title: {
     fontSize: 12,
-    color: "#4eab52",
-    fontWeight: "700",
+    color: '#4eab52',
+    fontWeight: '700'
   },
-  logo:{
-    resizeMode: "stretch",
+  logo: {
+    resizeMode: 'stretch',
     height: '100%',
-    width: 65,
+    width: 65
   },
-  avatar :{
+  avatar: {
     marginTop: 0,
     marginLeft: 10,
     marginRight: 10,
@@ -69,17 +68,17 @@ export default StyleSheet.create({
   },
   avatarTitle: {
     color: '#FFF',
-    fontWeight: "bold",
+    fontWeight: 'bold',
     top: -5
   },
   avatarCaption: {
     color: '#FFF',
     fontSize: 12,
     lineHeight: 12,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     top: -10
   },
   titleHeader: {
     fontSize: 10
-  },
-});
+  }
+})

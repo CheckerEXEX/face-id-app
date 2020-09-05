@@ -17,7 +17,7 @@ const Item = (props) => {
       >
         <Image
           style={styles.image}
-          source={require("../../../assets/avatar.png")}
+          source={require("../../common/styles/img/avatar.png")}
         />
         <View style={styles.time_Left}>
           {/* <Icon
@@ -52,7 +52,7 @@ const Item = (props) => {
         </View>
         <Image
           style={styles.image}
-          source={require("../../../assets/avatar.png")}
+          source={require("../../common/styles/img/avatar.png")}
         />
       </View>
     </View>

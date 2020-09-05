@@ -4,9 +4,9 @@
     "slug": "FaceIdApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./src/common/styles/img/icon.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./src/common/styles/img/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

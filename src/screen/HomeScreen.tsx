@@ -60,7 +60,7 @@ const HomeScreen = (props) => {
       }
       setLocationName(nameLocation);
       setLocation(location);
-      
+
       getWeather(location.coords.latitude, location.coords.longitude);
 
     })();
@@ -159,11 +159,11 @@ const HomeScreen = (props) => {
               <Icon size={50} name="navicon" type="font-awesome" onPress={() => props.navigation.openDrawer()}/>
             </View> */}
             {/* <View style={{ width: "60%", justifyContent: "center", alignItems: "center" }}>
-              <Image style={HomeStyle.logo} source={require("../../assets/favicon.png")}/>
+              <Image style={HomeStyle.logo} source={require("../common/styles/img/favicon.png")}/>
             </View> */}
             <View style={{justifyContent: "center", flexDirection: 'row'}}>
               <TouchableOpacity onPress={() => { props.navigation.navigate("ProfileScreen")}}>
-                <Image style={HomeStyle.avatar} source={require("../../assets/employee.png")}/>
+                <Image style={HomeStyle.avatar} source={require("../common/styles/img/employee.png")}/>
               </TouchableOpacity>
               <View style={{justifyContent: "center"}}>
                 <Title style={HomeStyle.avatarTitle}>{name}</Title>

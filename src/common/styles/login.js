@@ -27,8 +27,7 @@ export default StyleSheet.create({
   title: {
     paddingBottom: 60,
     fontWeight: 'bold',
-    color: "black",
-    fontSize: 20,
+    fontSize: 18,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -52,7 +51,6 @@ export default StyleSheet.create({
     flex: 1,
     color: "gray",
     height: 45,
-    padding: 5,
   },
   buttonGroup: {
     marginTop: 10,
@@ -60,7 +58,7 @@ export default StyleSheet.create({
     justifyContent: "center",
   },
   icon: {
-    marginTop: 13,
+    marginTop: 15,
     paddingRight: 15,
   },
   iconButton: {
@@ -72,13 +70,22 @@ export default StyleSheet.create({
     height: 50,
     alignItems: "center",
     justifyContent: "center",
-    margin: 10,
+    marginTop: 10,
+    marginBottom: 10,
     backgroundColor: PRIMARY_BACKGROUND_COLOR,
+    borderRadius : 5
   },
   loginText: {
     fontSize: 20,
     fontWeight: "bold",
     color: "#FFF",
   },
-
+  lottie: {
+    marginTop: 150,
+    marginBottom: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    width: 300,
+    height: 300
+  }
 });

@@ -3,7 +3,7 @@ import { View, ActivityIndicator, StyleSheet, Modal, Text } from "react-native";
 
 const Loading = (props) => {
   return (
-    <Modal transparent={true} animationType={"none"} visible={props.isLoading}>
+    <Modal transparent={true} animationType={"fade"} visible={props.isLoading}>
       <View style={styles.modalBackground}>
         <View style={styles.activityIndicatorWrapper}>
           <ActivityIndicator size="large" color="#4eab52" />
