@@ -3,6 +3,9 @@ const PRIMARY_BACKGROUND_COLOR = '#19224d';
 
 const screenHeight = Dimensions.get('window').height;
 
+const heightHeader = 70;
+const heightFooter = 70;
+
 export default StyleSheet.create({
   container: {
     backgroundColor: '#FFF'
@@ -12,35 +15,38 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: PRIMARY_BACKGROUND_COLOR,
     width: '100%',
-    height: 65,
-    paddingTop: 5
+    height: heightHeader,
+    paddingTop: 10
   },
   location: {
     // height: screenHeight - 65 - 100,
   },
   body: {
-    justifyContent: 'center',
+    flex: 1,
     width: '100%',
-    height: screenHeight - 65 - 100,
+    height: screenHeight - heightHeader - heightFooter,
     backgroundColor: PRIMARY_BACKGROUND_COLOR
   },
   footer: {
+    height : heightFooter,
     width: '100%',
-    height: 100,
-    backgroundColor: PRIMARY_BACKGROUND_COLOR
+    backgroundColor: PRIMARY_BACKGROUND_COLOR,
+    flexDirection: 'row',
   },
   position: {
     fontSize: 25,
-    color: '#000',
+    color: '#FFF',
     fontWeight: 'bold'
   },
   positionName: {
     textAlign: 'center',
+    color:'#FFF',
     marginLeft: 5,
     fontSize: 15,
     justifyContent: 'center'
   },
   clock: {
+    color: '#FFF',
     marginTop: 20
   },
   title: {
@@ -80,5 +86,23 @@ export default StyleSheet.create({
   },
   titleHeader: {
     fontSize: 10
-  }
+  },
+    
+  lottie: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: 65,
+    height: 65,
+    top: -10,
+  },
+  // circle: {
+  //   top: -15,
+  //   width: 70,
+  //   height: 70,
+  //   borderRadius: 10,
+  //   backgroundColor: 'white',
+  //   zIndex: 5,
+  //   elevation: 5, // works on android
+  //   position: 'relative'
+  // }
 })

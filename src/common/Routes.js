@@ -6,7 +6,7 @@ import {
     createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from '../screen/LoginScreen';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import Drawer from './Drawer';
+import Drawer from './component/Drawer';
 
 const RootStack = createStackNavigator();
 

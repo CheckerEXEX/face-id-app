@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, ActivityIndicator, StyleSheet, Modal, Text } from "react-native";
-import AnimatedLoader from "react-native-animated-loader";
+import AnimatedLoader from "../library/react-native-animated-loader/src/index";
 
 const LoginLoading = (props) => {
   return (

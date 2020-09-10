@@ -78,11 +78,11 @@ const CalendarScreen = (props) => {
       </View>
       <View style={styles.body}>
         <View style={styles.body_top}>
-          <CalendarPicker
+          {/* <CalendarPicker
             onDateChange={onDateChange}
             mode="date"
             format="YYYY-MM-DD"
-            minDate={minDate}
+            minDate={new Date()}
             maxDate={new Date()}
             weekdays={weekdays}
             months={months}
@@ -90,7 +90,7 @@ const CalendarScreen = (props) => {
             nextTitle={">"}
             selectMonthTitle={"Chọn tháng "}
             selectYearTitle={" Chọn năm"}
-          />
+          /> */}
           <View>
             {!hasItem ? (
               <Item data={data} />

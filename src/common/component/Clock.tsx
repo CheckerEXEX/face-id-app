@@ -25,7 +25,7 @@ const Clock = () => {
     };
   }, []);
 
-  return <Text style={{ fontSize: 40 }}>{timeString}</Text>;
+  return <Text style={{ color: '#FFF', fontSize: 40 }}>{timeString}</Text>;
 };
 
 export default Clock;

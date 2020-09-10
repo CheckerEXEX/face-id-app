@@ -11,7 +11,7 @@ import {
 import { Icon } from "react-native-elements";
 import LoginLoading from "../common/component/LoginLoading";
 import AnimatedSplash from "react-native-animated-splash-screen";
-import AnimatedLoader from "react-native-animated-loader";
+import AnimatedLoader from "../common/library/react-native-animated-loader/src/index";
 import { useDispatch } from "react-redux";
 import { addUserDto } from "../actions/user";
 
@@ -27,6 +27,8 @@ const LoginScreen = (props) => {
   const [titleLoading, setTitleLoading] = useState(null);
   useEffect(() => {
     setTimeout(() => {
+      setUser('quang-tung');
+      setPassword('123456');
       setIsLoaded(true);
     }, 500);
   }, []);
@@ -54,7 +56,7 @@ const LoginScreen = (props) => {
       setTimeout(() => {
         setIsLoading(false);
         props.navigation.navigate("Drawer");
-      }, 5000);
+      }, 2000);
     } else {
       Alert.alert(
         "Thông báo",
@@ -95,7 +97,8 @@ const LoginScreen = (props) => {
             <View style={LoginStyle.loginGroup}>
               <View style={LoginStyle.input}>
                 <Icon color="#19224d" name="user-o" size={15} type="font-awesome" style={LoginStyle.icon}/>
-                <TextInput defaultValue="nqtung"
+                <TextInput
+                  value={user}
                   style={LoginStyle.textInput}
                   placeholderTextColor="gray"
                   placeholder="Tài khoản"
@@ -104,7 +107,8 @@ const LoginScreen = (props) => {
               </View>
               <View style={LoginStyle.input}>
                 <Icon color="#19224d" name="key" size={15} type="font-awesome" style={LoginStyle.icon}/>
-                <TextInput defaultValue="123456"
+                <TextInput
+                  value={password}
                   style={LoginStyle.textInput}
                   secureTextEntry
                   placeholderTextColor="gray"

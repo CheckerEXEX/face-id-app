@@ -2,11 +2,12 @@ import React from "react";
 import {
   createStackNavigator,
 } from "@react-navigation/stack";
-import CameraScreen from "./component/Camera";
-import HomeScreen from "../screen/HomeScreen";
-import ListScreen from "../screen/ListScreen";
-import ProfileScreen from "../screen/ProfileScreen";
-import CalendarScreen from "../screen/CalendarScreen";
+import InitScreen from "../../screen/InitScreen";
+import CameraScreen from ".././component/Camera";
+import HomeScreen from "../../screen/HomeScreen";
+import ListScreen from "../../screen/ListScreen";
+import ProfileScreen from "../../screen/ProfileScreen";
+import CalendarScreen from "../../screen/CalendarScreen";
 
 const Stack = createStackNavigator();
 
@@ -23,6 +24,7 @@ const Content = () => {
         gestureEnabled: false,
       }}
     >
+      <Stack.Screen name="InitScreen" component={InitScreen} />
       <Stack.Screen name="HomeScreen" component={HomeScreen} />
       <Stack.Screen name="ListScreen" component={ListScreen} />
       <Stack.Screen name="ProfileScreen" component={ProfileScreen}/>

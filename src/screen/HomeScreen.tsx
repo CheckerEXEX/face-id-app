@@ -1,38 +1,53 @@
 import React, { useEffect, useState } from "react";
 import {
   Text,
+  TextInput,
   View,
   SafeAreaView,
   TouchableOpacity
 } from "react-native";
 import { Icon, Image } from "react-native-elements";
+import { Title, Caption} from "react-native-paper";
 import * as Location from "expo-location";
+import CalendarPicker, {
+  DateChangedCallback,
+  CustomDateStyle,
+  DisabledDatesFunc,
+  CustomDatesStylesFunc,
+  CustomDayHeaderStylesFunc,
+} from 'react-native-calendar-picker';
+import AnimatedLoader from "../common/library/react-native-animated-loader/src/index";
+
+// COMPONENT
 import Clock from "../common/component/Clock";
 import Loading from "../common/component/Loading";
-import { useSelector, useDispatch } from "react-redux";
-import { removeBase64 } from "../actions/camera";
-import { Title, Caption} from "react-native-paper";
 
+// CSS
 import BaseStyle from "../common/styles/base";
 import HomeStyle from "../common/styles/home";
 import GridStyle from "../common/styles/grid";
+
+// REDUX
+import { useSelector, useDispatch } from "react-redux";
+import { removeBase64 } from "../actions/camera";
+
 
 const HomeScreen = (props) => {
 
   const userDto = useSelector((state) => state.user.userDto);
   const { name, msnv } = userDto[0];
 
-  const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [location, setLocation] = useState(null);
   const [locationName, setLocationName] = useState(null);
   const [hasRadius, setHasRadius] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [titleLoading, setTitleLoading] = useState(null);
-  const [forecast, setForecast] = useState(null);
+  //const [forecast, setForecast] = useState(null);
 
   const LATITUDE_SYSTEMEXE = 10.801244131973288;
   const LONGITUDE_SYSTEMEXE = 106.640986249321;
-  const RADIUS_DEAULT = 0.1; //km
+  const RADIUS_DEFAULT = 0.1; //km
 
   const dispatch = useDispatch();
 
@@ -42,33 +57,39 @@ const HomeScreen = (props) => {
       if (status !== "granted") {
         setErrorMsg("Không tìm thấy vị trí vui lòng thử lại !");
       }
-      let location = await Location.getCurrentPositionAsync({});
+      let location = await Location.getCurrentPositionAsync({accuracy:Location.Accuracy.Highest});
       let nameLocation = await Location.reverseGeocodeAsync({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
       });
+
       const radius_km = getRadiusTwoPoint(
         LATITUDE_SYSTEMEXE,
         LONGITUDE_SYSTEMEXE,
         location.coords.latitude,
         location.coords.longitude
       );
-      if (radius_km <= RADIUS_DEAULT) {
+
+      if (radius_km <= RADIUS_DEFAULT) {
         setHasRadius(false);
       } else {
         setHasRadius(true);
       }
-      setLocationName(nameLocation);
+      setLocationName(nameLocation)
       setLocation(location);
-
-      getWeather(location.coords.latitude, location.coords.longitude);
+      setIsLoading(false);
+      //getWeather(location.coords.latitude, location.coords.longitude);
 
     })();
     // component un mount
     return () => {
       setIsLoading(false);
+      setErrorMsg(null);
       setLocationName(null);
       setLocation(null);
+      setHasRadius(true);
+      setIsLoading(false);
+      setTitleLoading(null);
     };
   }, []);
   // get base64 from redux
@@ -92,6 +113,16 @@ const HomeScreen = (props) => {
 
       setIsLoading(false);
     }
+     // component un mount
+    return () => {
+      setIsLoading(false);
+      setErrorMsg(null);
+      setLocationName(null);
+      setLocation(null);
+      setHasRadius(true);
+      setIsLoading(false);
+      setTitleLoading(null);
+    };
   }, [base64]);
 
   // calculation location radius two point
@@ -115,11 +146,11 @@ const HomeScreen = (props) => {
     dist = (dist * 180) / Math.PI;
     dist = dist * 60 * 1.1515;
     dist = dist * 1.609344;
-    console.log("positon_system: ", dist);
+    console.log("position_system: ", dist);
     return dist;
   };
 
-  let street = "";
+  let streetName = "";
   let city = "";
   let text = "";
 
@@ -127,26 +158,139 @@ const HomeScreen = (props) => {
     text = errorMsg;
   } else if (location) {
     locationName.find((item: any) => {
-      (street = item.street), (city = item.region);
+      (streetName = item.name), (city = item.region);
     });
-    text = street + " - " + city;
+    text = streetName + " - " + city;
+    console.log(text);
   }
 
-  const getWeather = async (latitude, longitude) => {
-    const api_key = "f0283990e0581e2d7e1b7c41996132e9";
-    try {
-      const api_requests = await fetch(
-        `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&units=metric&lang=vi&exclude=hourly,daily&appid=${api_key}`
-      );
-      const response = await api_requests.json();
-      setForecast(response);
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 1000);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const getWeather = async (latitude, longitude) => {
+  //   const api_key = "f0283990e0581e2d7e1b7c41996132e9";
+  //   try {
+  //     const api_requests = await fetch(
+  //       `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&units=metric&lang=vi&exclude=hourly,daily&appid=${api_key}`
+  //     );
+  //     const response = await api_requests.json();
+  //     setForecast(response);
+  //     setTimeout(() => {
+  //       setIsLoading(false);
+  //     }, 1000);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  const TestRangeDurations = () => {
+    return (
+        <CalendarPicker
+            minRangeDuration={[
+                { date: new Date(), minDuration: 4 },
+                { date: new Date(), minDuration: 3 },
+            ]}
+            maxRangeDuration={[
+                { date: new Date(), maxDuration: 4 },
+                { date: new Date(), maxDuration: 3 },
+            ]}
+        />
+    );
+};
+
+const TestDisabledDates = () => {
+    const isDateDisabled: DisabledDatesFunc = date => date.day() % 2 === 1;
+    return <CalendarPicker disabledDates={isDateDisabled} />;
+};
+
+const TestCustomDateStyle = () => {
+    const customStyles: CustomDateStyle[] = [
+        {
+            date: new Date(),
+            containerStyle: { flex: 1 },
+            style: { flex: 1 },
+            textStyle: { fontSize: 10 },
+        },
+        {
+            date: '2020-10-10',
+            style: { flex: 1 },
+        },
+    ];
+
+    return <CalendarPicker customDatesStyles={customStyles} />;
+};
+
+const TestCustomDateFuncs = () => {
+    const customDatesStylesFn: CustomDatesStylesFunc = date => {
+        if (date.weekday() === 0) {
+            return {
+                containerStyle: {
+                    backgroundColor: 'red',
+                },
+                textStyle: {
+                    color: 'black',
+                },
+            };
+        } else {
+            return {
+                containerStyle: {
+                    backgroundColor: 'white',
+                },
+                style: {
+                    alignContent: 'center',
+                },
+                textStyle: {
+                    color: 'black',
+                },
+            };
+        }
+    };
+
+    const customDayHeaderStylesFn: CustomDayHeaderStylesFunc = (date: {
+        dayOfWeek: number;
+        year: number;
+        month: number;
+    }) => {
+        return {
+            textStyle: {
+                color: date.year === 2020 ? 'red' : 'blue',
+            },
+            style: {
+                backgroundColor: 'yellow',
+            },
+        };
+    };
+    return <CalendarPicker customDatesStyles={customDatesStylesFn} customDayHeaderStyles={customDayHeaderStylesFn} />;
+};
+
+const onDateChange: DateChangedCallback = date => console.log(date.day());
+
+
+const TestRef = () => {
+    const ref = React.useRef<CalendarPicker>();
+    ref.current!.handleOnPressNext();
+    ref.current!.handleOnPressPrevious();
+    ref.current!.handleOnPressDay({
+        day: 5,
+        month: 6,
+        year: 2020
+    });
+    ref.current!.resetSelections();
+};
+
+const TestDayOfWeekStyles = () => {
+    return (
+        <CalendarPicker
+            allowRangeSelection
+            previousTitle="<"
+            previousTitleStyle={{ color: '#fff' }}
+            nextTitle=">"
+            nextTitleStyle={{ color: '#f00' }}
+            dayLabelsWrapper={{
+                borderBottomWidth: 0,
+                borderTopWidth: 0,
+            }}
+        />
+    );
+};
+
 
   return (
     <>
@@ -170,13 +314,61 @@ const HomeScreen = (props) => {
                 <Caption style={HomeStyle.avatarCaption}>MSNV: {msnv}</Caption>
               </View>
             </View>
-            <View style={{justifyContent: "center", paddingRight: 10}}>
-              <Icon color="#FFF" size={30} name="sign-out" type="font-awesome" onPress={() => props.navigation.navigate("Login")}/>
+            <View style={{justifyContent: "center", paddingRight: 10, top: -5}}>
+              <Icon color="#FFF" size={20} name="sign-out" type="font-awesome" onPress={() => props.navigation.navigate("Login")}/>
               <Text style={{fontSize: 12, color:"#FFF"}}>Đăng xuất</Text>
             </View>
           </View>
 
           <View style={HomeStyle.body}>
+
+            <View>
+              <CalendarPicker
+                weekdays={['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'C.Nhật']}
+                months={['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12']}
+                onDateChange={onDateChange}
+                onMonthChange={onDateChange}
+                startFromMonday
+                showDayStragglers
+                allowRangeSelection
+                allowBackwardRangeSelect
+                previousTitle="Tháng trước"
+                nextTitle="Tháng sau"
+                selectedDayColor="#4eab52"
+                selectedDayStyle={{ flex: 1 }}
+                selectedDayTextColor="#FFF"
+                selectedRangeStartStyle={{ flex: 1 }}
+                selectedRangeEndStyle={{ flex: 1 }}
+                selectedRangeStyle={{ flex: 1 }}
+                // disabledDates={[new Date(), new Date()]}
+                // disabledDatesTextStyle={{ fontSize: 10 }}
+                // selectedStartDate={new Date()}
+                // selectedEndDate={new Date()}
+                minRangeDuration={1}
+                maxRangeDuration={2}
+                todayBackgroundColor="#f44336"
+                // todayTextStyle={{ fontSize: 10 }}
+                textStyle={{ color: 'white' }}
+                scrollable
+                //horizontal={false}
+                // scaleFactor={3}
+                // minDate={new Date()}
+                // maxDate={new Date()}
+                //initialDate={new Date()}
+                // width={3}
+                // height={3}
+                enableDateChange
+                restrictMonthNavigation
+                // dayShape="square"
+                // headingLevel={3}
+                // previousTitleStyle={{ fontSize: 10 }}
+              // nextTitleStyle={{ fontSize: 10 }}
+              // dayLabelsWrapper={{ flex: 1 }}
+              // monthYearHeaderWrapperStyle={{ flex: 1 }}
+              />
+            </View>
+
+
             {/* <View style={stylesWeather.current}>
               {isLoaded ? (
                 <>
@@ -198,7 +390,7 @@ const HomeScreen = (props) => {
                       Vị trí không hợp lệ
                     </Text>
                     <Text style={{ textAlign: "center", color: "#f44336", fontSize: 12 }}>
-                      (Bán kính {RADIUS_DEAULT*1000}m tính từ vị trí công ty)
+                      (Bán kính {RADIUS_DEFAULT*1000}m tính từ vị trí công ty)
                     </Text>
                   </View>
                 )}
@@ -305,65 +497,76 @@ const HomeScreen = (props) => {
                     />
                     <View style={{ marginLeft: 10 }}>
                       <Text style={styles.title}>Đơn từ</Text>
-                      <Text style={styles.content_title}>Đơn xin phép</Text>
+                      <Text style={styles.content_title}>Đơn xin phép</Text> 
                     </View>
                   </TouchableOpacity>
                 </View>
               </View>
             </SafeAreaView> 
           </View>*/}
-          <View style={HomeStyle.footer}>
-              {/* <View
-                style={{
-                  position: "absolute",
-                  alignSelf: "center",
-                  backgroundColor: "#FFF",
-                  borderRadius: 50,
-                  bottom: 55,
-                  zIndex: 10,
-                }}
-              >
-                <Icon
-                  name="camera"
-                  // disabled={hasRadius}
-                  type="font-awesome"
-                  color="#227f58"
-                  containerStyle={{ alignSelf: "center" }}
-                  reverse
-                  size={35}
-                  onPress={() => {
-                    props.navigation.navigate("CameraScreen");
-                  }}
-                />
-              </View> */}
-              {/* <View
-                style={{
-                  position: "absolute",
-                  backgroundColor: "#227f58",
-                  borderColor: "#227f58",
-                  borderTopWidth: 0.5,
-                  bottom: 0,
-                  zIndex: 1,
-                  width: "100%",
-                  height: 100,
-                  paddingHorizontal: 15,
-                  paddingVertical: 10,
-
-                  flex: 1,
-                  flexDirection: 'row',
-                  flexWrap: 'wrap',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              /> */}
-              <View style={GridStyle.boxContainer}><Text>B1</Text></View>
-              <View style={GridStyle.boxContainer}><Text>B2</Text></View>
-              <View style={GridStyle.boxContainer}><Text>B3</Text></View>
-              <View style={GridStyle.boxContainer}><Text>B4</Text></View>
-              <View style={GridStyle.boxContainer}><Text>B5</Text></View>
-          </View>
+          {/* <View style={HomeStyle.footer}>
+            <View style={GridStyle.boxContainer}>
+              <Icon
+                reverse
+                reverseColor="#19224d"
+                size={28}
+                name="home"
+                type="font-awesome"
+                color="transparent"
+              />
+              <Text style={GridStyle.textIcon}>Trang chính</Text>
+            </View>
+            <View style={GridStyle.boxContainer}>
+              <Icon
+                reverse
+                reverseColor="#19224d"
+                size={28}
+                name="list"
+                type="font-awesome"
+                color="transparent"
+              />
+              <Text style={GridStyle.textIcon}>Lịch sử</Text>
+            </View>
+            <View style={GridStyle.boxContainer}>
+              <View style={HomeStyle.circle}>
+                <TouchableOpacity onPress={() => {props.navigation.navigate("CameraScreen")}}>
+                  <AnimatedLoader
+                    visible={true}
+                    overlayColor="#rgba(255,255,255,0)"
+                    source={require("../common/styles/loader/28847-face-recognising-system-face-detection-scanning-face-face-scanner.json")}
+                    animationStyle={HomeStyle.lottie}
+                    speed={0.5}
+                    loop={true}
+                    image={true}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View style={GridStyle.boxContainer}>
+              <Icon
+                underlayColor="red"
+                reverse
+                reverseColor="#19224d"
+                size={28}
+                name="calendar"
+                type="font-awesome"
+                color="transparent"
+              />
+            </View>
+            <View style={GridStyle.boxContainer}>
+              <Icon
+                reverse
+                reverseColor="#19224d"
+                size={28}
+                name="file-text"
+                type="font-awesome"
+                color="transparent"
+              />
+            </View>
+          </View> */}
         {/* </ScrollView> */}
       </SafeAreaView>
+    
     </>
   );
 };

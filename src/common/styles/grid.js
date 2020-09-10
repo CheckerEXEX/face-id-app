@@ -1,9 +1,19 @@
-import { StyleSheet} from 'react-native';
+import { StyleSheet, Dimensions} from 'react-native';
 
-const PRIMARY_BACKGROUND_COLOR = '#19224d';
+const width = '20%';
+const height = '100%';
 
 export default StyleSheet.create({
   boxContainer: {
-
+    width: width,
+    height: height,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'gold',
+    color: '#FFF'
+  },
+  textIcon: {
+    top: -15,
+    fontSize: 12,
   }
 });
