@@ -5,8 +5,6 @@ import FlashyStyled from "../common/bottom/FlashyStyled";
 
 
 const InitScreen = (props) => {
-
-
   return (
     <>
       <FlashyStyled/>

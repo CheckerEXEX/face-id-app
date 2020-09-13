@@ -1,10 +1,5 @@
 import { StyleSheet, Dimensions } from 'react-native';
-const PRIMARY_BACKGROUND_COLOR = '#19224d';
-
-const screenHeight = Dimensions.get('window').height;
-
-const heightHeader = 70;
-const heightFooter = 70;
+import { STYLE_CONST } from './types';
 
 export default StyleSheet.create({
   container: {
@@ -13,9 +8,9 @@ export default StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: PRIMARY_BACKGROUND_COLOR,
+    backgroundColor: STYLE_CONST.PRIMARY_BACKGROUND_COLOR,
     width: '100%',
-    height: heightHeader,
+    height: STYLE_CONST.HEADER_HEIGHT,
     paddingTop: 10
   },
   location: {
@@ -24,13 +19,13 @@ export default StyleSheet.create({
   body: {
     flex: 1,
     width: '100%',
-    height: screenHeight - heightHeader - heightFooter,
-    backgroundColor: PRIMARY_BACKGROUND_COLOR
+    height: STYLE_CONST.SCREEN_HEIGHT - STYLE_CONST.HEADER_HEIGHT - STYLE_CONST.FOOTER_HEIGHT,
+    backgroundColor: STYLE_CONST.PRIMARY_BACKGROUND_COLOR
   },
   footer: {
-    height : heightFooter,
+    height : STYLE_CONST.FOOTER_HEIGHT,
     width: '100%',
-    backgroundColor: PRIMARY_BACKGROUND_COLOR,
+    backgroundColor: STYLE_CONST.PRIMARY_BACKGROUND_COLOR,
     flexDirection: 'row',
   },
   position: {
@@ -48,21 +43,6 @@ export default StyleSheet.create({
   clock: {
     color: '#FFF',
     marginTop: 20
-  },
-  title: {
-    fontSize: 18,
-    color: '#4eab52',
-    fontWeight: '700'
-  },
-  content_title: {
-    fontSize: 12,
-    color: '#4eab52',
-    fontWeight: '700'
-  },
-  logo: {
-    resizeMode: 'stretch',
-    height: '100%',
-    width: 65
   },
   avatar: {
     marginTop: 0,
@@ -87,22 +67,47 @@ export default StyleSheet.create({
   titleHeader: {
     fontSize: 10
   },
-    
   lottie: {
     alignItems: "center",
     justifyContent: "center",
-    width: 65,
-    height: 65,
-    top: -10,
+    width: 145,
+    height: 145,
   },
-  // circle: {
-  //   top: -15,
-  //   width: 70,
-  //   height: 70,
-  //   borderRadius: 10,
-  //   backgroundColor: 'white',
-  //   zIndex: 5,
-  //   elevation: 5, // works on android
-  //   position: 'relative'
-  // }
+  circle: {
+    top: -18,
+    width: 70,
+    height: 70,
+    borderRadius: 70/2,
+    backgroundColor: 'white',
+    borderColor: STYLE_CONST.SECONDARY_BACKGROUND_COLOR,
+    borderWidth: 2,
+    zIndex: 100,
+    elevation: 5, // works on android
+    position: 'relative'
+  },
+  tabFocusIn: {
+    fontSize: 30,
+    paddingTop: 8,
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    color: STYLE_CONST.SECONDARY_BACKGROUND_COLOR
+  },
+  tabFocusOut: {
+    paddingTop: 8,
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    color: STYLE_CONST.PRIMARY_BACKGROUND_COLOR
+  },
+  tabBarBarStyle : {
+    flex: 1,
+    height: 60,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 24,
+  },
 })

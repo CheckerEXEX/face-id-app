@@ -11,6 +11,8 @@ import Item from "../common/component/Item";
 import HeaderContent from "../common/header/HeaderContent";
 import Loading from "../common/component/Loading";
 
+import BaseStyle from "../common/styles/base";
+
 const DATA = [
   {
     id: "1",
@@ -80,24 +82,22 @@ const ListScreen = (props) => {
   }, 1500);
 
   return (
-    <View style={styles.container}>
-      <Loading isLoading={isLoading} />
-      <View style={styles.header}>
-        <HeaderContent
-          navigation={props.navigation}
-          title={"LỊCH SỬ CHẤM CÔNG"}
-        />
-      </View>
-      <View style={styles.body}>
-        <SafeAreaView>
-          <FlatList
-            data={DATA}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-          />
-        </SafeAreaView>
-      </View>
-    </View>
+    <>
+      <SafeAreaView style={BaseStyle.topSafeArea} />
+      <SafeAreaView style={BaseStyle.bottomSafeArea}>
+        <Loading isLoading={isLoading} />
+        
+        <View style={styles.body}>
+          <SafeAreaView>
+            <FlatList
+              data={DATA}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id}
+            />
+          </SafeAreaView>
+        </View>
+      </SafeAreaView>
+    </>
   );
 };
 

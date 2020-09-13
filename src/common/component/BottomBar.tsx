@@ -89,96 +89,95 @@ const tabs: TabsConfig<FlashyTabBarItemConfig, MainTabsParams> = {
 
 const BottomTab = () => {
    // hooks
-   const { bottom } = useSafeArea();
+  const { bottom } = useSafeArea();
 
-   // memos
-   const screenPaddingBottom = useMemo(() => {
-     // icon size + margin padding + outer space + inner space + screen bottom padding
-     return 20 + bottom + 12 * 2 + 12 * 2 + 12;
-   }, [bottom]);
- 
-   const tabBarOptions = useMemo(
-     () => ({
-       safeAreaInsets: {
-         bottom: 0,
-       },
-       style: {
-         position: 'absolute',
-         left: 0,
-         right: 0,
-         bottom: 0,
-         borderRadius: 16,
-         marginLeft: 32,
-         marginRight: 32,
-         marginBottom: bottom,
-         backgroundColor: '#000',
-         shadowColor: '#000',
-         shadowOffset: {
-           width: 0,
-           height: 12,
-         },
-         shadowOpacity: 0.58,
-         shadowRadius: 16.0,
- 
-         elevation: 24,
-       },
-     }),
-     [bottom]
-   );
- 
+  // memos
+  const screenPaddingBottom = useMemo(() => {
+    // icon size + margin padding + outer space + inner space + screen bottom padding
+    return 20 + bottom + 12 * 2 + 12 * 2 + 12;
+  }, [bottom]);
+
+  const tabBarOptions = useMemo(
+    () => ({
+      safeAreaInsets: {
+        bottom: 0,
+      },
+      style: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        borderRadius: 16,
+        marginLeft: 32,
+        marginRight: 32,
+        marginBottom: bottom,
+        backgroundColor: '#000',
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 12,
+        },
+        shadowOpacity: 0.58,
+        shadowRadius: 16.0,
+
+        elevation: 24,
+      },
+    }),
+    [bottom]
+  );
    // render
-   return (
-     <Tab.Navigator
-       tabBarOptions={tabBarOptions}
-       tabBar={props => (
-         <AnimatedTabBar
-           preset="flashy"
-           tabs={tabs}
-           iconSize={20}
-           itemOuterSpace={12}
-           itemInnerSpace={12}
-           {...props}
-         />
-       )}
-     >
-       <Tab.Screen
-         name="Home"
-         initialParams={{
-           backgroundColor: '#000',
-           nextScreen: 'Likes',
-           paddingBottom: screenPaddingBottom,
-         }}
-         component={HomeScreen}
-       />
-       <Tab.Screen
-         name="Likes"
-         initialParams={{
-           backgroundColor: '#000',
-           nextScreen: 'Search',
-           paddingBottom: screenPaddingBottom,
-         }}
-         component={CalendarScreen}
-       />
-       <Tab.Screen
-         name="Search"
-         initialParams={{
-           backgroundColor: '#000',
-           nextScreen: 'Profile',
-           paddingBottom: screenPaddingBottom,
-         }}
-         component={CameraScreen}
-       />
-       <Tab.Screen
-         name="Profile"
-         initialParams={{
-           backgroundColor: '#000',
-           nextScreen: 'Home',
-           paddingBottom: screenPaddingBottom,
-         }}
-         component={ProfileScreen}
-       />
-     </Tab.Navigator>
-   );
- };
+  return (
+    <Tab.Navigator
+      tabBarOptions={tabBarOptions}
+      tabBar={props => (
+        <AnimatedTabBar
+          preset="flashy"
+          tabs={tabs}
+          iconSize={20}
+          itemOuterSpace={12}
+          itemInnerSpace={12}
+          {...props}
+        />
+      )}
+    >
+      <Tab.Screen
+        name="Home"
+        initialParams={{
+          backgroundColor: '#000',
+          nextScreen: 'Likes',
+          paddingBottom: screenPaddingBottom,
+        }}
+        component={HomeScreen}
+      />
+      <Tab.Screen
+        name="Likes"
+        initialParams={{
+          backgroundColor: '#000',
+          nextScreen: 'Search',
+          paddingBottom: screenPaddingBottom,
+        }}
+        component={CalendarScreen}
+      />
+      <Tab.Screen
+        name="Search"
+        initialParams={{
+          backgroundColor: '#000',
+          nextScreen: 'Profile',
+          paddingBottom: screenPaddingBottom,
+        }}
+        component={CameraScreen}
+      />
+      <Tab.Screen
+        name="Profile"
+        initialParams={{
+          backgroundColor: '#000',
+          nextScreen: 'Home',
+          paddingBottom: screenPaddingBottom,
+        }}
+        component={ProfileScreen}
+      />
+    </Tab.Navigator>
+  );
+};
 
 export default BottomTab;

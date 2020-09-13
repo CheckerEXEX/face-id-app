@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
+import { STYLE_CONST } from './types';
 
-const PRIMARY_BACKGROUND_COLOR = '#19224d';
 export default StyleSheet.create({
   logoGroup: {
     position: 'absolute',
@@ -41,7 +41,7 @@ export default StyleSheet.create({
     borderTopColor: "#FFF",
     borderRightColor: "#FFF",
     borderLeftColor: "#FFF",
-    borderBottomColor: PRIMARY_BACKGROUND_COLOR,
+    borderBottomColor: STYLE_CONST.PRIMARY_BACKGROUND_COLOR,
     borderWidth: 1,
     backgroundColor: "#FFF",
     paddingLeft: 10,
@@ -72,7 +72,7 @@ export default StyleSheet.create({
     justifyContent: "center",
     marginTop: 10,
     marginBottom: 10,
-    backgroundColor: PRIMARY_BACKGROUND_COLOR,
+    backgroundColor: STYLE_CONST.PRIMARY_BACKGROUND_COLOR,
     borderRadius : 5
   },
   loginText: {
