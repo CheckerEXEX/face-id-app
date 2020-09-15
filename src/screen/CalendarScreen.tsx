@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import { useStateIfMounted } from "use-state-if-mounted";
 import {
   Text,
   View,
@@ -13,10 +14,10 @@ import Loading from "../common/component/Loading";
 import { Icon } from "react-native-elements";
 
 const CalendarScreen = (props) => {
-  const [hasItem, setHasItem] = useState(true);
-  const [data, setData] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
-  const [minDate, setMinDate] = useState("");
+  const [hasItem, setHasItem] = useStateIfMounted(true);
+  const [data, setData] = useStateIfMounted({});
+  const [isLoading, setIsLoading] = useStateIfMounted(true);
+  const [minDate, setMinDate] = useStateIfMounted("");
 
   useEffect(() => {
     setTimeout(() => {

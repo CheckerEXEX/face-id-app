@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Text, View, StyleSheet } from "react-native";
+import React, { useEffect } from "react";
+import { useStateIfMounted } from "use-state-if-mounted";
+import { View, StyleSheet } from "react-native";
 import { Camera } from "expo-camera";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Icon } from "react-native-elements";
@@ -7,8 +8,8 @@ import { useDispatch } from "react-redux";
 import { addBase64 } from "../../actions/camera";
 
 const CameraScreen = (props) => {
-  const [cameraRef, setCameraRef] = useState(null);
-  const [base64, setBase64] = useState(null);
+  const [cameraRef, setCameraRef] = useStateIfMounted(null);
+  const [base64, setBase64] = useStateIfMounted(null);
   const dispatch = useDispatch();
 
   useEffect(() => {

@@ -15,6 +15,7 @@
     "@react-navigation/material-top-tabs": "^5.2.16",
     "@react-navigation/native": "^5.7.3",
     "@react-navigation/stack": "^5.9.0",
+    "@types/react": "^16.9.49",
     "@types/react-native-calendar-picker": "^7.0.0",
     "expo": "~38.0.8",
     "expo-camera": "~8.3.1",
@@ -43,7 +44,8 @@
     "react-native-web": "^0.13.12",
     "react-navigation-transitions": "^1.0.12",
     "react-redux": "^7.2.1",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "use-state-if-mounted": "^1.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",

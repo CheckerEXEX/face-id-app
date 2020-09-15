@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { View, Text } from "react-native";
+import React, { useEffect } from "react";
+import { useStateIfMounted } from "use-state-if-mounted";
+import {  Text } from "react-native";
 
 const formatDate = (date) => {
   if (!date) return "";
@@ -10,7 +11,7 @@ const formatDate = (date) => {
 };
 
 const Clock = () => {
-  const [timeString, setTimeString] = useState("");
+  const [timeString, setTimeString] = useStateIfMounted("");
 
   useEffect(() => {
     const clockInterval = setInterval(() => {

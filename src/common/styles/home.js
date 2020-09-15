@@ -70,8 +70,8 @@ export default StyleSheet.create({
   lottie: {
     alignItems: "center",
     justifyContent: "center",
-    width: 145,
-    height: 145,
+    width: 140,
+    height: 140,
   },
   circle: {
     top: -18,
@@ -80,13 +80,12 @@ export default StyleSheet.create({
     borderRadius: 70/2,
     backgroundColor: 'white',
     borderColor: STYLE_CONST.SECONDARY_BACKGROUND_COLOR,
-    borderWidth: 2,
+    borderWidth: 3,
     zIndex: 100,
     elevation: 5, // works on android
     position: 'relative'
   },
   tabFocusIn: {
-    fontSize: 30,
     paddingTop: 8,
     flex: 1,
     alignItems: "center",

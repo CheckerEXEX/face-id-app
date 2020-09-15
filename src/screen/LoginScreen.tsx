@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import { useStateIfMounted } from "use-state-if-mounted";
 import {
   Text,
   View,
@@ -9,22 +10,23 @@ import {
   SafeAreaView
 } from "react-native";
 import { Icon } from "react-native-elements";
+
 import LoginLoading from "../common/component/LoginLoading";
 import AnimatedSplash from "react-native-animated-splash-screen";
 import AnimatedLoader from "../common/library/react-native-animated-loader/src/index";
 import { useDispatch } from "react-redux";
 import { addUserDto } from "../actions/user";
 
-import LoginStyle from "../common/styles/login"
-import BaseStyle from "../common/styles/base"
+import LoginStyle from "../common/styles/login";
+import BaseStyle from "../common/styles/base";
 
 
 const LoginScreen = (props) => {
-  const [user, setUser] = useState(null);
-  const [password, setPassword] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [titleLoading, setTitleLoading] = useState(null);
+  const [user, setUser] = useStateIfMounted(null);
+  const [password, setPassword] = useStateIfMounted(null);
+  const [isLoaded, setIsLoaded] = useStateIfMounted(false);
+  const [isLoading, setIsLoading] = useStateIfMounted(false);
+  const [titleLoading, setTitleLoading] = useStateIfMounted(null);
   useEffect(() => {
     setTimeout(() => {
       setUser('quang-tung');

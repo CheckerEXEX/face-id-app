@@ -28,12 +28,7 @@ const FlashyStyledScreen = () => {
       <View style={{ flexDirection: 'row', backgroundColor: 'transparent' }}>
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key];
-          const label =
-            options.tabBarLabel !== undefined
-              ? options.tabBarLabel
-              : options.title !== undefined
-              ? options.title
-              : route.name;
+          const label = options.tabBarLabel !== undefined ? options.tabBarLabel : options.title !== undefined ? options.title : route.name;
           const isFocused = state.index === index;
           const onPress = () => {
             const event = navigation.emit({
@@ -70,6 +65,7 @@ const FlashyStyledScreen = () => {
               accessibilityRole="button"
               accessibilityState={{selected : isFocused}}
               onPress={onPress}
+              key={route.key}
               onLongPress={onLongPress}
               style={HomeStyle.tabBarBarStyle}
             >
@@ -82,6 +78,7 @@ const FlashyStyledScreen = () => {
               accessibilityRole="button"
               accessibilityState={{selected : isFocused}}
               onPress={onPress}
+              key={route.key}
               onLongPress={onLongPress}
               style={HomeStyle.tabBarBarStyle}
             >

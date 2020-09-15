@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useStateIfMounted } from "use-state-if-mounted";
 import {
   Text,
   TextInput,
@@ -11,6 +12,7 @@ import { Title, Caption} from "react-native-paper";
 import * as Location from "expo-location";
 import CalendarPicker, {
   DateChangedCallback,
+  MonthChangedCallback,
   CustomDateStyle,
   DisabledDatesFunc,
   CustomDatesStylesFunc,
@@ -24,6 +26,7 @@ import Loading from "../common/component/Loading";
 // CSS
 import BaseStyle from "../common/styles/base";
 import HomeStyle from "../common/styles/home";
+import CalendarStyle from "../common/styles/calendar";
 
 // REDUX
 import { useSelector, useDispatch } from "react-redux";
@@ -35,13 +38,13 @@ const HomeScreen = (props) => {
   const userDto = useSelector((state) => state.user.userDto);
   const { name, msnv } = userDto[0];
 
-  const [errorMsg, setErrorMsg] = useState(null);
-  const [location, setLocation] = useState(null);
-  const [locationName, setLocationName] = useState(null);
-  const [hasRadius, setHasRadius] = useState(true);
-  const [isLoading, setIsLoading] = useState(true);
-  const [titleLoading, setTitleLoading] = useState(null);
-  //const [forecast, setForecast] = useState(null);
+  const [errorMsg, setErrorMsg] = useStateIfMounted(null);
+  const [location, setLocation] = useStateIfMounted(null);
+  const [locationName, setLocationName] = useStateIfMounted(null);
+  const [hasRadius, setHasRadius] = useStateIfMounted(true);
+  const [isLoading, setIsLoading] = useStateIfMounted(true);
+  const [titleLoading, setTitleLoading] = useStateIfMounted(null);
+  //const [forecast, setForecast] = useStateIfMounted(null);
 
   const LATITUDE_SYSTEMEXE = 10.801244131973288;
   const LONGITUDE_SYSTEMEXE = 106.640986249321;
@@ -51,6 +54,7 @@ const HomeScreen = (props) => {
 
   useEffect(() => {
     (async () => {
+
       let { status } = await Location.requestPermissionsAsync();
       if (status !== "granted") {
         setErrorMsg("Không tìm thấy vị trí vui lòng thử lại !");
@@ -144,7 +148,6 @@ const HomeScreen = (props) => {
     dist = (dist * 180) / Math.PI;
     dist = dist * 60 * 1.1515;
     dist = dist * 1.609344;
-    console.log("position_system: ", dist);
     return dist;
   };
 
@@ -159,7 +162,7 @@ const HomeScreen = (props) => {
       (streetName = item.name), (city = item.region);
     });
     text = streetName + " - " + city;
-    console.log(text);
+    console.log('LOCATION: ' + text);
   }
 
   // const getWeather = async (latitude, longitude) => {
@@ -178,117 +181,87 @@ const HomeScreen = (props) => {
   //   }
   // };
 
-  const TestRangeDurations = () => {
-    return (
-        <CalendarPicker
-            minRangeDuration={[
-                { date: new Date(), minDuration: 4 },
-                { date: new Date(), minDuration: 3 },
-            ]}
-            maxRangeDuration={[
-                { date: new Date(), maxDuration: 4 },
-                { date: new Date(), maxDuration: 3 },
-            ]}
-        />
-    );
-};
-
-const TestDisabledDates = () => {
-    const isDateDisabled: DisabledDatesFunc = date => date.day() % 2 === 1;
-    return <CalendarPicker disabledDates={isDateDisabled} />;
-};
-
-const TestCustomDateStyle = () => {
+  const TestRangeDurations = (date) => {
     const customStyles: CustomDateStyle[] = [
-        {
-            date: new Date(),
-            containerStyle: { flex: 1 },
-            style: { flex: 1 },
-            textStyle: { fontSize: 10 },
-        },
-        {
-            date: '2020-10-10',
-            style: { flex: 1 },
-        },
+      {
+          date: date,
+          containerStyle: { },
+          style: { backgroundColor: '#a91b4b' },
+          textStyle: { fontWeight: "bold" },
+      },
+      {
+          date: '2020-09-10',
+          textStyle: { color: 'red' },
+      },
     ];
-
-    return <CalendarPicker customDatesStyles={customStyles} />;
+    return customStyles;
 };
 
-const TestCustomDateFuncs = () => {
-    const customDatesStylesFn: CustomDatesStylesFunc = date => {
-        if (date.weekday() === 0) {
-            return {
-                containerStyle: {
-                    backgroundColor: 'red',
-                },
-                textStyle: {
-                    color: 'black',
-                },
-            };
-        } else {
-            return {
-                containerStyle: {
-                    backgroundColor: 'white',
-                },
-                style: {
-                    alignContent: 'center',
-                },
-                textStyle: {
-                    color: 'black',
-                },
-            };
-        }
-    };
+// const TestDisabledDates = () => {
+//     const isDateDisabled: DisabledDatesFunc = date => date.day() % 2 === 1;
+//     return <CalendarPicker disabledDates={isDateDisabled} />;
+// };
 
-    const customDayHeaderStylesFn: CustomDayHeaderStylesFunc = (date: {
-        dayOfWeek: number;
-        year: number;
-        month: number;
-    }) => {
-        return {
-            textStyle: {
-                color: date.year === 2020 ? 'red' : 'blue',
-            },
-            style: {
-                backgroundColor: 'yellow',
-            },
-        };
-    };
-    return <CalendarPicker customDatesStyles={customDatesStylesFn} customDayHeaderStyles={customDayHeaderStylesFn} />;
-};
+  const onDateChange: DateChangedCallback = (date) => {
+      console.log('DATE_SELECTED: ' + date.format('DD/MM/YYYY'));
+      TestRangeDurations(date);
+  }
+  // const onMonthChange: MonthChangedCallback = date => console.log('MONTH_SELECTED: ' + date.month());
 
-const onDateChange: DateChangedCallback = date => console.log(date.day());
+  const customDayHeaderStyles: CustomDayHeaderStylesFunc = date => {
+    switch(date.dayOfWeek) {
+      case 5: // Saturday
+      return {
+        style:CalendarStyle.headerStyle,
+        textStyle: CalendarStyle.saturdayHeaderStyle
+      };
+      case 6: // Sunday
+      return {
+        style:CalendarStyle.headerStyle,
+        textStyle: CalendarStyle.sundayHeaderStyle
+      };
+      default:
+      return {
+        style:CalendarStyle.headerStyle,
+        textStyle: CalendarStyle.dayHeaderStyle
+      };
+    }
+  };
 
+  const customDatesStyles: CustomDatesStylesFunc = date => {
+    switch(date.weekday()) {
+      case 5: // Saturday
+      return {
+        containerStyle: {},
+        style:{},
+        textStyle: CalendarStyle.saturdayBodyStyle
+      };
+      case 6: // Sunday
+      return {
+        containerStyle: {},
+        style:{},
+        textStyle: CalendarStyle.sundayBodyStyle
+      };
+      default:
+      return {
+        containerStyle: {},
+        style:{},
+        textStyle: CalendarStyle.dayBodyStyle
+      };
+    }
+  };
 
-const TestRef = () => {
-    const ref = React.useRef<CalendarPicker>();
-    ref.current!.handleOnPressNext();
-    ref.current!.handleOnPressPrevious();
-    ref.current!.handleOnPressDay({
-        day: 5,
-        month: 6,
-        year: 2020
-    });
-    ref.current!.resetSelections();
-};
-
-const TestDayOfWeekStyles = () => {
-    return (
-        <CalendarPicker
-            allowRangeSelection
-            previousTitle="<"
-            previousTitleStyle={{ color: '#fff' }}
-            nextTitle=">"
-            nextTitleStyle={{ color: '#f00' }}
-            dayLabelsWrapper={{
-                borderBottomWidth: 0,
-                borderTopWidth: 0,
-            }}
-        />
-    );
-};
-
+// const TestRef = () => {
+//     const ref = React.useRef<CalendarPicker>();
+//     ref.current!.handleOnPressNext();
+//     ref.current!.handleOnPressPrevious();
+//     ref.current!.handleOnPressDay({
+//         day: 5,
+//         month: 6,
+//         year: 2020
+//     });
+//     ref.current!.resetSelections();
+// };
 
   return (
     <>
@@ -318,51 +291,41 @@ const TestDayOfWeekStyles = () => {
         </View>
 
         <View style={HomeStyle.body}>
-          <View>
+          <View style={{height: 370, paddingBottom : 10}}>
             <CalendarPicker
               weekdays={['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'C.Nhật']}
-              months={['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12']}
+              months={['Tháng 1 /', 'Tháng 2 /', 'Tháng 3 /', 'Tháng 4 /', 'Tháng 5 /', 'Tháng 6 /', 'Tháng 7 /', 'Tháng 8 /', 'Tháng 9 /', 'Tháng 10 /', 'Tháng 11 /', 'Tháng 12 /']}
               onDateChange={onDateChange}
-              onMonthChange={onDateChange}
-              startFromMonday
-              showDayStragglers
-              allowRangeSelection
-              allowBackwardRangeSelect
-              previousTitle="Tháng trước"
-              nextTitle="Tháng sau"
-              selectedDayColor="#4eab52"
-              selectedDayStyle={{ flex: 1 }}
+              // onMonthChange={onMonthChange}
+              showDayStragglers={true}
+              nextComponent={<Icon color="#FFF" size={28} name="arrow-circle-right" type="font-awesome"/>}
+              previousComponent={<Icon color="#FFF" size={28} name="arrow-circle-left" type="font-awesome"/>}
+              selectYearTitle={'Chọn năm'}
+              selectMonthTitle={'Năm '}
+              // monthYearHeaderWrapperStyle={{borderColor: '#a91b4b', borderWidth: 3, borderRadius: 25, backgroundColor: '#a91b4b', paddingHorizontal: 10, width: 180}}
+              customDayHeaderStyles={customDayHeaderStyles}
+              customDatesStyles={customDatesStyles}
+              selectedDayColor="#388e3c"
               selectedDayTextColor="#FFF"
-              selectedRangeStartStyle={{ flex: 1 }}
-              selectedRangeEndStyle={{ flex: 1 }}
-              selectedRangeStyle={{ flex: 1 }}
-              // disabledDates={[new Date(), new Date()]}
-              // disabledDatesTextStyle={{ fontSize: 10 }}
-              // selectedStartDate={new Date()}
-              // selectedEndDate={new Date()}
-              minRangeDuration={1}
-              maxRangeDuration={2}
-              todayBackgroundColor="#f44336"
-              // todayTextStyle={{ fontSize: 10 }}
-              textStyle={{ color: 'white' }}
-              scrollable
-              //horizontal={false}
-              // scaleFactor={3}
-              // minDate={new Date()}
-              // maxDate={new Date()}
-              //initialDate={new Date()}
-              // width={3}
-              // height={3}
+              textStyle={{ color: '#FFF' }}
+              // scrollable={scrollable}
+              minDate={new Date('1900-01-01')}
+              maxDate={new Date('2900-12-31')}
               enableDateChange
               restrictMonthNavigation
-              // dayShape="square"
-              // headingLevel={3}
-              // previousTitleStyle={{ fontSize: 10 }}
-            // nextTitleStyle={{ fontSize: 10 }}
-            // dayLabelsWrapper={{ flex: 1 }}
-            // monthYearHeaderWrapperStyle={{ flex: 1 }}
+              headingLevel={5}
             />
-          </View>
+              <View
+                // style={{
+                //   flex: 1,
+                //   marginHorizontal: 10,
+                //   borderBottomColor: '#a91b4b',
+                //   borderBottomWidth: 1,
+                //   width: '95%',
+                // }}
+              />
+              </View>
+            
 
 
           {/* <View style={stylesWeather.current}>

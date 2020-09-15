@@ -14,7 +14,7 @@ export default StyleSheet.create({
     justifyContent: "center",
   },
   text: {
-    color: STYLE_CONST.SECONDARY_BACKGROUND_COLOR,
+    color: 'white',
     fontWeight: "bold",
     top: 110,
     fontSize: 16

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { useStateIfMounted } from "use-state-if-mounted";
 import {
   Text,
   View,
@@ -75,7 +76,7 @@ const DATA = [
 const renderItem = ({ item }) => <Item data={item} />;
 
 const ListScreen = (props) => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useStateIfMounted(true);
 
   setTimeout(() => {
     setIsLoading(false);
