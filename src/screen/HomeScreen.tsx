@@ -308,6 +308,8 @@ const HomeScreen = (props) => {
               selectedDayColor="#388e3c"
               selectedDayTextColor="#FFF"
               textStyle={{ color: '#FFF' }}
+              todayBackgroundColor='#a91b4b'
+              todayTextStyle={{ fontWeight: 'bold', color: '#FFF' }}
               // scrollable={scrollable}
               minDate={new Date('1900-01-01')}
               maxDate={new Date('2900-12-31')}

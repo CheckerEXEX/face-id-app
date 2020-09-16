@@ -5,7 +5,7 @@ import {
 import InitScreen from "../../screen/InitScreen";
 import CameraScreen from ".././component/Camera";
 import HomeScreen from "../../screen/HomeScreen";
-import ListScreen from "../../screen/ListScreen";
+import HistoryScreen from "../../screen/HistoryScreen";
 import ProfileScreen from "../../screen/ProfileScreen";
 import CalendarScreen from "../../screen/CalendarScreen";
 
@@ -26,7 +26,7 @@ const Content = () => {
     >
       <Stack.Screen name="InitScreen" component={InitScreen} />
       <Stack.Screen name="HomeScreen" component={HomeScreen} />
-      <Stack.Screen name="ListScreen" component={ListScreen} />
+      <Stack.Screen name="HistoryScreen" component={HistoryScreen} />
       <Stack.Screen name="ProfileScreen" component={ProfileScreen}/>
       <Stack.Screen name="CalendarScreen" component={CalendarScreen} />
       <Stack.Screen name="CameraScreen" component={CameraScreen} />

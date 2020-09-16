@@ -12,7 +12,7 @@ import AnimatedLoader from "../library/react-native-animated-loader/src/index";
 
 import CameraScreen from "../component/Camera";
 import HomeScreen from "../../screen/HomeScreen";
-import ListScreen from "../../screen/ListScreen";
+import HistoryScreen from "../../screen/HistoryScreen";
 import ProfileScreen from "../../screen/ProfileScreen";
 import CalendarScreen from "../../screen/CalendarScreen";
 
@@ -24,7 +24,15 @@ const Tab = createBottomTabNavigator<MainTabsParams>();
 
 const FlashyStyledScreen = () => {
   function MyTabBar({ state, descriptors, navigation }) {
+
+    // Ẩn bottom bar khi ở màn hình Camera
+    if (state.index == 2) {
+      console.log(descriptors);
+      return null;
+    };
+
     return (
+
       <View style={{ flexDirection: 'row', backgroundColor: 'transparent' }}>
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key];
@@ -39,7 +47,6 @@ const FlashyStyledScreen = () => {
               navigation.navigate(route.name);
             }
           };
-
           let iconName;
           if (route.name === 'Trang chủ') {
             iconName = 'home';
@@ -105,8 +112,8 @@ const FlashyStyledScreen = () => {
   // render
   return (
     <Tab.Navigator tabBar={props => <MyTabBar {...props} />} >
-      <Tab.Screen name="Trang chủ" component={HomeScreen} />
-      <Tab.Screen name="Lịch sử" component={ListScreen} />
+      <Tab.Screen name="Trang chủ" component={HomeScreen} options={{ tabBarBadge: 3 }} />
+      <Tab.Screen name="Lịch sử" component={HistoryScreen} />
       <Tab.Screen name="Chấm công" component={CameraScreen} />
       <Tab.Screen name="Thông tin" component={ProfileScreen} />
       <Tab.Screen name="Cài đặt" component={CalendarScreen} />
