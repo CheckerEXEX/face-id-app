@@ -8,7 +8,7 @@ export default StyleSheet.create({
   },
   activityIndicatorWrapper: {
     backgroundColor: STYLE_CONST.PRIMARY_BACKGROUND_COLOR,
-    height: STYLE_CONST.SCREEN_HEIGHT - STYLE_CONST.FOOTER_HEIGHT,
+    height: STYLE_CONST.SCREEN_HEIGHT,
     width: '100%',
     alignItems: "center",
     justifyContent: "center",
