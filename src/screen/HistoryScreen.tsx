@@ -45,7 +45,6 @@ const HistoryScreen = (props) => {
       <SafeAreaView style={BaseStyle.topSafeArea} />
       <SafeAreaView style={BaseStyle.bottomSafeArea}>
         <Loading isLoading={isLoading} />
-        
         <View style={styles.body}>
         {/* <CalendarStrip
           scrollable
@@ -56,25 +55,25 @@ const HistoryScreen = (props) => {
           dateNameStyle={{color: 'white'}}
           iconContainer={{flex: 0.1}}
         /> */}
-         <CalendarStrip
-                    calendarAnimation={{type: 'parallel', duration: 500}}
-                    daySelectionAnimation={{type: 'background', duration: 500, highlightColor: '#a91b4b'}}
-                    style={{height: 100, paddingTop: 20, paddingBottom: 10}}
-                    calendarHeaderStyle={{color: 'white'}}
-                    calendarColor={'#19224d'}
-                    dateNumberStyle={{color: 'white'}}
-                    dateNameStyle={{color: 'white'}}
-                    highlightDateNumberStyle={{color: 'yellow'}}
-                    highlightDateNameStyle={{color: 'yellow'}}
-                    disabledDateNameStyle={{color: 'grey'}}
-                    disabledDateNumberStyle={{color: 'grey'}}
-                    // datesWhitelist={datesWhitelist}
-                    // datesBlacklist={datesBlacklist}
-                    iconLeft={require('../common/styles/img/arrow-89-512.png')}
-                    iconRight={require('../common/styles/img/arrow-25-512.png')}
-                    iconContainer={{flex: 0.1}}
-                    locale={locale}
-                />
+          <CalendarStrip
+            calendarAnimation={{type: 'parallel', duration: 500}}
+            daySelectionAnimation={{type: 'background', duration: 500, highlightColor: '#a91b4b'}}
+            style={{height: 100, paddingTop: 20, paddingBottom: 10}}
+            calendarHeaderStyle={{color: 'white'}}
+            calendarColor={'#19224d'}
+            dateNumberStyle={{color: 'white'}}
+            dateNameStyle={{color: 'white'}}
+            highlightDateNumberStyle={{color: 'yellow'}}
+            highlightDateNameStyle={{color: 'yellow'}}
+            disabledDateNameStyle={{color: 'grey'}}
+            disabledDateNumberStyle={{color: 'grey'}}
+            // datesWhitelist={datesWhitelist}
+            // datesBlacklist={datesBlacklist}
+            iconLeft={require('../common/styles/img/arrow-89-512.png')}
+            iconRight={require('../common/styles/img/arrow-25-512.png')}
+            iconContainer={{flex: 0.1}}
+            locale={locale}
+          />
           <SafeAreaView>
             <FlatList
               data={DATA}

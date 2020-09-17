@@ -1,23 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useStateIfMounted } from "use-state-if-mounted";
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import { Marker, Circle } from 'react-native-maps';
 import {
   Text,
-  TextInput,
+  StyleSheet,
   View,
   SafeAreaView,
-  TouchableOpacity
+  TouchableOpacity,
+  Dimensions
 } from "react-native";
 import { Icon, Image } from "react-native-elements";
 import { Title, Caption} from "react-native-paper";
 import * as Location from "expo-location";
-import CalendarPicker, {
-  DateChangedCallback,
-  MonthChangedCallback,
-  CustomDateStyle,
-  DisabledDatesFunc,
-  CustomDatesStylesFunc,
-  CustomDayHeaderStylesFunc,
-} from 'react-native-calendar-picker';
 
 // COMPONENT
 import Clock from "../common/component/Clock";
@@ -26,11 +21,10 @@ import Loading from "../common/component/Loading";
 // CSS
 import BaseStyle from "../common/styles/base";
 import HomeStyle from "../common/styles/home";
-import CalendarStyle from "../common/styles/calendar";
+import DarkStyles from "../common/styles/MapStyles/Dark.json"
 
 // REDUX
 import { useSelector, useDispatch } from "react-redux";
-import { removeBase64 } from "../actions/camera";
 
 
 const HomeScreen = (props) => {
@@ -38,17 +32,41 @@ const HomeScreen = (props) => {
   const userDto = useSelector((state) => state.user.userDto);
   const { name, msnv } = userDto[0];
 
-  const [errorMsg, setErrorMsg] = useStateIfMounted(null);
-  const [location, setLocation] = useStateIfMounted(null);
-  const [locationName, setLocationName] = useStateIfMounted(null);
-  const [hasRadius, setHasRadius] = useStateIfMounted(true);
-  const [isLoading, setIsLoading] = useStateIfMounted(true);
-  const [titleLoading, setTitleLoading] = useStateIfMounted(null);
-  //const [forecast, setForecast] = useStateIfMounted(null);
+  let { width, height } = Dimensions.get('window');
+  const ASPECT_RATIO = width / height;
+  const LATITUDE = 0;
+  const LONGITUDE = 0;
+  const LATITUDE_DELTA = 0.01;
+  const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
   const LATITUDE_SYSTEMEXE = 10.801244131973288;
   const LONGITUDE_SYSTEMEXE = 106.640986249321;
   const RADIUS_DEFAULT = 0.1; //km
+
+  const [errorMsg, setErrorMsg] = useStateIfMounted(null);
+
+  const [location, setLocation] = useStateIfMounted({
+    region: {
+      latitude: LATITUDE,
+      longitude: LONGITUDE,
+      latitudeDelta: LATITUDE_DELTA,
+      longitudeDelta: LONGITUDE_DELTA,
+    },
+    company: {
+      latitude: LATITUDE_SYSTEMEXE,
+      longitude: LONGITUDE_SYSTEMEXE,
+      latitudeDelta: LATITUDE_DELTA,
+      longitudeDelta: LONGITUDE_DELTA,
+    }
+  });
+
+  const [locationName, setLocationName] = useStateIfMounted(null);
+  const [hasRadius, setHasRadius] = useStateIfMounted(true);
+  const [isLoading, setIsLoading] = useStateIfMounted(true);
+  const [titleLoading, setTitleLoading] = useStateIfMounted(null);
+  const [watchID, setWatchID] = useStateIfMounted(null);
+
+  //const [forecast, setForecast] = useStateIfMounted(null);
 
   const dispatch = useDispatch();
 
@@ -59,17 +77,17 @@ const HomeScreen = (props) => {
       if (status !== "granted") {
         setErrorMsg("Không tìm thấy vị trí vui lòng thử lại !");
       }
-      let location = await Location.getCurrentPositionAsync({accuracy:Location.Accuracy.Highest});
+      let l = await Location.getCurrentPositionAsync({accuracy:Location.Accuracy.Highest});
       let nameLocation = await Location.reverseGeocodeAsync({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
+        latitude: l.coords.latitude,
+        longitude: l.coords.longitude,
       });
 
       const radius_km = getRadiusTwoPoint(
         LATITUDE_SYSTEMEXE,
         LONGITUDE_SYSTEMEXE,
-        location.coords.latitude,
-        location.coords.longitude
+        l.coords.latitude,
+        l.coords.longitude
       );
 
       if (radius_km <= RADIUS_DEFAULT) {
@@ -77,8 +95,22 @@ const HomeScreen = (props) => {
       } else {
         setHasRadius(true);
       }
-      setLocationName(nameLocation)
-      setLocation(location);
+      setLocationName(nameLocation);
+      setLocation({
+        region: {
+          latitude: l.coords.latitude,
+          longitude: l.coords.longitude,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA,
+        },
+        company: {
+          latitude: LATITUDE_SYSTEMEXE,
+          longitude: LONGITUDE_SYSTEMEXE,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA,
+        }
+      });
+      // setLocation(location);
       setIsLoading(false);
       //getWeather(location.coords.latitude, location.coords.longitude);
 
@@ -94,38 +126,6 @@ const HomeScreen = (props) => {
       setTitleLoading(null);
     };
   }, []);
-  // get base64 from redux
-  const base64 = useSelector((state) => state.camera.base64);
-
-  // handle base64
-  useEffect(() => {
-    if (base64) {
-      //console.log("Base 64 is a: ", base64);
-      setIsLoading(true);
-      setTitleLoading("Đang xử lý");
-      try {
-        //handle server in here
-      } catch (error) {
-        console.log(error);
-      }
-
-      // remove base64 of redux when success handle
-      const action = removeBase64();
-      dispatch(action);
-
-      setIsLoading(false);
-    }
-     // component un mount
-    return () => {
-      setIsLoading(false);
-      setErrorMsg(null);
-      setLocationName(null);
-      setLocation(null);
-      setHasRadius(true);
-      setIsLoading(false);
-      setTitleLoading(null);
-    };
-  }, [base64]);
 
   // calculation location radius two point
   const getRadiusTwoPoint = (
@@ -153,115 +153,20 @@ const HomeScreen = (props) => {
 
   let streetName = "";
   let city = "";
-  let text = "";
+  let result = "";
 
   if (errorMsg) {
-    text = errorMsg;
-  } else if (location) {
+    result = errorMsg;
+  } else if (location.region.latitude != 0) {
+    console.log("LOCATION: " + location.region.latitude);
     locationName.find((item: any) => {
       (streetName = item.name), (city = item.region);
     });
-    text = streetName + " - " + city;
-    console.log('LOCATION: ' + text);
+    result = streetName + " - " + city;
+    console.log('ADDRESS: ' + result);
   }
 
-  // const getWeather = async (latitude, longitude) => {
-  //   const api_key = "f0283990e0581e2d7e1b7c41996132e9";
-  //   try {
-  //     const api_requests = await fetch(
-  //       `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&units=metric&lang=vi&exclude=hourly,daily&appid=${api_key}`
-  //     );
-  //     const response = await api_requests.json();
-  //     setForecast(response);
-  //     setTimeout(() => {
-  //       setIsLoading(false);
-  //     }, 1000);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  const TestRangeDurations = (date) => {
-    const customStyles: CustomDateStyle[] = [
-      {
-          date: date,
-          containerStyle: { },
-          style: { backgroundColor: '#a91b4b' },
-          textStyle: { fontWeight: "bold" },
-      },
-      {
-          date: '2020-09-10',
-          textStyle: { color: 'red' },
-      },
-    ];
-    return customStyles;
-};
-
-// const TestDisabledDates = () => {
-//     const isDateDisabled: DisabledDatesFunc = date => date.day() % 2 === 1;
-//     return <CalendarPicker disabledDates={isDateDisabled} />;
-// };
-
-  const onDateChange: DateChangedCallback = (date) => {
-      console.log('DATE_SELECTED: ' + date.format('DD/MM/YYYY'));
-      TestRangeDurations(date);
-  }
-  // const onMonthChange: MonthChangedCallback = date => console.log('MONTH_SELECTED: ' + date.month());
-
-  const customDayHeaderStyles: CustomDayHeaderStylesFunc = date => {
-    switch(date.dayOfWeek) {
-      case 5: // Saturday
-      return {
-        style:CalendarStyle.headerStyle,
-        textStyle: CalendarStyle.saturdayHeaderStyle
-      };
-      case 6: // Sunday
-      return {
-        style:CalendarStyle.headerStyle,
-        textStyle: CalendarStyle.sundayHeaderStyle
-      };
-      default:
-      return {
-        style:CalendarStyle.headerStyle,
-        textStyle: CalendarStyle.dayHeaderStyle
-      };
-    }
-  };
-
-  const customDatesStyles: CustomDatesStylesFunc = date => {
-    switch(date.weekday()) {
-      case 5: // Saturday
-      return {
-        containerStyle: {},
-        style:{},
-        textStyle: CalendarStyle.saturdayBodyStyle
-      };
-      case 6: // Sunday
-      return {
-        containerStyle: {},
-        style:{},
-        textStyle: CalendarStyle.sundayBodyStyle
-      };
-      default:
-      return {
-        containerStyle: {},
-        style:{},
-        textStyle: CalendarStyle.dayBodyStyle
-      };
-    }
-  };
-
-// const TestRef = () => {
-//     const ref = React.useRef<CalendarPicker>();
-//     ref.current!.handleOnPressNext();
-//     ref.current!.handleOnPressPrevious();
-//     ref.current!.handleOnPressDay({
-//         day: 5,
-//         month: 6,
-//         year: 2020
-//     });
-//     ref.current!.resetSelections();
-// };
+  const circleRef = useRef(null)
 
   return (
     <>
@@ -292,56 +197,37 @@ const HomeScreen = (props) => {
 
         <View style={HomeStyle.body}>
           <View style={{height: 370, paddingBottom : 10}}>
-            <CalendarPicker
-              weekdays={['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'C.Nhật']}
-              months={['Tháng 1 /', 'Tháng 2 /', 'Tháng 3 /', 'Tháng 4 /', 'Tháng 5 /', 'Tháng 6 /', 'Tháng 7 /', 'Tháng 8 /', 'Tháng 9 /', 'Tháng 10 /', 'Tháng 11 /', 'Tháng 12 /']}
-              onDateChange={onDateChange}
-              // onMonthChange={onMonthChange}
-              showDayStragglers={true}
-              nextComponent={<Icon color="#FFF" size={28} name="arrow-circle-right" type="font-awesome"/>}
-              previousComponent={<Icon color="#FFF" size={28} name="arrow-circle-left" type="font-awesome"/>}
-              selectYearTitle={'Chọn năm'}
-              selectMonthTitle={'Năm '}
-              // monthYearHeaderWrapperStyle={{borderColor: '#a91b4b', borderWidth: 3, borderRadius: 25, backgroundColor: '#a91b4b', paddingHorizontal: 10, width: 180}}
-              customDayHeaderStyles={customDayHeaderStyles}
-              customDatesStyles={customDatesStyles}
-              selectedDayColor="#388e3c"
-              selectedDayTextColor="#FFF"
-              textStyle={{ color: '#FFF' }}
-              todayBackgroundColor='#a91b4b'
-              todayTextStyle={{ fontWeight: 'bold', color: '#FFF' }}
-              // scrollable={scrollable}
-              minDate={new Date('1900-01-01')}
-              maxDate={new Date('2900-12-31')}
-              enableDateChange
-              restrictMonthNavigation
-              headingLevel={5}
-            />
-              <View
-                // style={{
-                //   flex: 1,
-                //   marginHorizontal: 10,
-                //   borderBottomColor: '#a91b4b',
-                //   borderBottomWidth: 1,
-                //   width: '95%',
-                // }}
-              />
-              </View>
-            
-
-
-          {/* <View style={stylesWeather.current}>
-            {isLoaded ? (
-              <>
-                <Image style={stylesWeather.largeIcon} source={{
-                  uri: `http://openweathermap.org/img/wn/${forecast.current.weather[0].icon}@4x.png`,
-                }}
+            <View style={StyleSheet.absoluteFillObject}>
+              <MapView style={StyleSheet.absoluteFillObject}
+                provider={ PROVIDER_GOOGLE }
+                // customMapStyle={ DarkStyles }
+                showsUserLocation={ true }
+                region={ location.region }
+                >
+                <Marker
+                  coordinate={location.company}
+                  // image={require('../common/styles/img/pin-company.png')}
                 />
-                <Text style={stylesWeather.currentTemp}>{Math.round(forecast.current.temp)}°C</Text>
-              </>
-            ) : null}
-          </View> */}
-          <View style={{alignItems: "center"}}>
+                <Circle
+                  center={{
+                    latitude: location.company.latitude,
+                    longitude: location.company.longitude
+                  }}
+                  ref={circleRef}
+                  onLayout={() => (circleRef.current.setNativeProps({
+                    strokeColor: "rgba(169,27,45,1)",
+                    fillColor: "rgba(169,27,75,0.5)",
+                  }))}
+                  radius={RADIUS_DEFAULT*1000}
+                  strokeWidth={1}
+                  strokeColor="rgba(169,27,45,0.8)"
+                  fillColor="rgba(169,27,75,0.3)"
+                />
+              </MapView>
+              {/* <View style={{ position: 'absolute', top: 100, left: 50 }}/> */}
+            </View>
+          </View>
+          <View style={{alignItems: "center", paddingTop: 20}}>
             <View>
               {!hasRadius ? (
                 <Text style={HomeStyle.position}>Vị trí hợp lệ</Text>
@@ -366,7 +252,7 @@ const HomeScreen = (props) => {
                 />
               </View>
               <View style={{ maxWidth: "90%" }}>
-                <Text style={HomeStyle.positionName}>{text}</Text>
+                <Text style={HomeStyle.positionName}>{result}</Text>
               </View>
             </View>
             <View style={HomeStyle.clock}>

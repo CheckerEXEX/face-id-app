@@ -47,10 +47,10 @@ const LoginScreen = (props) => {
 
       // server trả về user dto
       const userDto = {
-        user: "khangndit@gmail.com",
+        user: "quang-tung@system-exe.com.vn",
         password: "########",
-        name: "Nguyễn Duy Khang",
-        msnv: "SEV168",
+        name: "Nguyễn Quang Tùng",
+        msnv: "SEV087",
       };
       // gọi qua action
       const action = addUserDto(userDto);

@@ -19,7 +19,7 @@ const DrawerContent = (props) => {
               width: 80,
               borderRadius: 5,
             }}
-            source={require("../styles/img/avatar.png")}
+            source={require("../styles/img/employee.png")}
           />
           <Title style={styles.title}>{name}</Title>
           <Caption style={styles.caption}>Mã số nhân viên: {msnv}</Caption>

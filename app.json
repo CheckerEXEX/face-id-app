@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "FaceIdApp",
-    "slug": "FaceIdApp",
+    "name": "FaceIdApp1",
+    "slug": "faceidapp1",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./src/common/styles/img/icon.png",

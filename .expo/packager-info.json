@@ -1,10 +1,10 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": 19000,
-  "packagerPort": 19001,
-  "packagerPid": 21556,
-  "expoServerNgrokUrl": "https://7p-5zn.tungnguyen164.face-id-app.exp.direct",
-  "packagerNgrokUrl": "https://packager.7p-5zn.tungnguyen164.face-id-app.exp.direct",
-  "ngrokPid": 19540,
+  "expoServerPort": null,
+  "packagerPort": null,
+  "packagerPid": null,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null,
   "webpackServerPort": null
 }
