@@ -12,9 +12,7 @@ import { Title, Caption} from "react-native-paper";
 import * as Location from "expo-location";
 import CalendarPicker, {
   DateChangedCallback,
-  MonthChangedCallback,
   CustomDateStyle,
-  DisabledDatesFunc,
   CustomDatesStylesFunc,
   CustomDayHeaderStylesFunc,
 } from 'react-native-calendar-picker';
@@ -33,7 +31,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { removeBase64 } from "../actions/camera";
 
 
-const HomeScreen = (props) => {
+const AnalysisScreen = (props) => {
 
   const userDto = useSelector((state) => state.user.userDto);
   const { name, msnv } = userDto[0];
@@ -276,7 +274,7 @@ const HomeScreen = (props) => {
             <Image style={HomeStyle.logo} source={require("../common/styles/img/favicon.png")}/>
           </View> */}
           <View style={{justifyContent: "center", flexDirection: 'row'}}>
-            <TouchableOpacity onPress={() => { props.navigation.navigate("ProfileScreen")}}>
+            <TouchableOpacity onPress={() => { props.navigation.openDrawer()}}>
               <Image style={HomeStyle.avatar} source={require("../common/styles/img/employee.png")}/>
             </TouchableOpacity>
             <View style={{justifyContent: "center"}}>
@@ -379,4 +377,4 @@ const HomeScreen = (props) => {
   );
 };
 
-export default HomeScreen;
+export default AnalysisScreen;

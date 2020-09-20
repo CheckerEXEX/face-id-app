@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "FaceIdApp2",
-    "slug": "faceidapp2",
+    "name": "FaceIdApp3",
+    "slug": "faceidapp3",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./src/common/styles/img/icon.png",
@@ -17,7 +17,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.checker.faceid",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "The application requires access to your photos to allow you to upload a profile picture."
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"

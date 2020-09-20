@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { useStateIfMounted } from "use-state-if-mounted";
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
-import { Marker, Circle } from 'react-native-maps';
+import MapView, { Marker, Circle, Callout , PROVIDER_GOOGLE } from 'react-native-maps';
+import { useTheme } from '@react-navigation/native';
 import {
   Text,
   StyleSheet,
@@ -21,11 +21,11 @@ import Loading from "../common/component/Loading";
 // CSS
 import BaseStyle from "../common/styles/base";
 import HomeStyle from "../common/styles/home";
-import DarkStyles from "../common/styles/MapStyles/Dark.json"
+import DarkStyles from "../common/styles/MapStyles/Modest.json"
+import LightStyles from "../common/styles/MapStyles/Retro.json"
 
 // REDUX
 import { useSelector, useDispatch } from "react-redux";
-
 
 const HomeScreen = (props) => {
 
@@ -38,7 +38,6 @@ const HomeScreen = (props) => {
   const LONGITUDE = 0;
   const LATITUDE_DELTA = 0.01;
   const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-
   const LATITUDE_SYSTEMEXE = 10.801244131973288;
   const LONGITUDE_SYSTEMEXE = 106.640986249321;
   const RADIUS_DEFAULT = 0.1; //km
@@ -62,17 +61,28 @@ const HomeScreen = (props) => {
 
   const [locationName, setLocationName] = useStateIfMounted(null);
   const [hasRadius, setHasRadius] = useStateIfMounted(true);
-  const [isLoading, setIsLoading] = useStateIfMounted(true);
+  const [isLoading, setIsLoading] = useStateIfMounted(false);
   const [titleLoading, setTitleLoading] = useStateIfMounted(null);
-  const [watchID, setWatchID] = useStateIfMounted(null);
 
+  const myPlace = {
+    type: 'FeatureCollection',
+    features: [
+      {
+        type: 'Feature',
+        properties: {},
+        geometry: {
+          type: 'Point',
+          coordinates: [10.801244131973288, 106.640986249321],
+        }
+      }
+    ]
+  };
   //const [forecast, setForecast] = useStateIfMounted(null);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     (async () => {
-
       let { status } = await Location.requestPermissionsAsync();
       if (status !== "granted") {
         setErrorMsg("Không tìm thấy vị trí vui lòng thử lại !");
@@ -110,8 +120,8 @@ const HomeScreen = (props) => {
           longitudeDelta: LONGITUDE_DELTA,
         }
       });
-      // setLocation(location);
       setIsLoading(false);
+      // setLocation(location);
       //getWeather(location.coords.latitude, location.coords.longitude);
 
     })();
@@ -158,7 +168,6 @@ const HomeScreen = (props) => {
   if (errorMsg) {
     result = errorMsg;
   } else if (location.region.latitude != 0) {
-    console.log("LOCATION: " + location.region.latitude);
     locationName.find((item: any) => {
       (streetName = item.name), (city = item.region);
     });
@@ -166,8 +175,9 @@ const HomeScreen = (props) => {
     console.log('ADDRESS: ' + result);
   }
 
-  const circleRef = useRef(null)
-
+  const circleRef = useRef(null);
+  const theme = useTheme();
+  console.log(theme.dark);
   return (
     <>
       <SafeAreaView style={BaseStyle.topSafeArea} />
@@ -200,14 +210,38 @@ const HomeScreen = (props) => {
             <View style={StyleSheet.absoluteFillObject}>
               <MapView style={StyleSheet.absoluteFillObject}
                 provider={ PROVIDER_GOOGLE }
-                // customMapStyle={ DarkStyles }
+                customMapStyle={ DarkStyles }
                 showsUserLocation={ true }
                 region={ location.region }
                 >
                 <Marker
                   coordinate={location.company}
-                  // image={require('../common/styles/img/pin-company.png')}
-                />
+                  opacity={1}
+                  image={require('../common/styles/img/location.png')}
+                  // title="SystemEXE Việt Nam"
+                  // description="Etown 1, 364 Cộng Hòa, P.13, Q.Tân Bình, TP Hồ Chí Minh"
+                >
+                  <Callout tooltip>
+                    <View>
+                      <View style={styles.bubble}>
+                        <Image
+                          style={styles.image}
+                          source={require('../common/styles/img/logo-vn.png')}
+                        />
+                      </View>
+                      <View style={styles.arrow} />
+                    </View>
+                  </Callout>
+                </Marker>
+                <Marker
+                  coordinate={location.region}
+                  opacity={1}
+                  image={require('../common/styles/img/personal.png')}
+                  // title="SystemEXE Việt Nam"
+                  // description="Etown 1, 364 Cộng Hòa, P.13, Q.Tân Bình, TP Hồ Chí Minh"
+                >
+                </Marker>
+
                 <Circle
                   center={{
                     latitude: location.company.latitude,
@@ -243,7 +277,7 @@ const HomeScreen = (props) => {
               )}
             </View>
             <View style={{ flexDirection: "row", marginTop: 20 }}>
-              <View>
+              {/* <View>
                 <Icon
                   name="map-marker"
                   type="font-awesome"
@@ -253,7 +287,7 @@ const HomeScreen = (props) => {
               </View>
               <View style={{ maxWidth: "90%" }}>
                 <Text style={HomeStyle.positionName}>{result}</Text>
-              </View>
+              </View> */}
             </View>
             <View style={HomeStyle.clock}>
               <Clock />
@@ -266,3 +300,33 @@ const HomeScreen = (props) => {
 };
 
 export default HomeScreen;
+
+
+const styles = StyleSheet.create({
+  map: {
+    height: '100%'
+  },
+  // Callout bubble
+  bubble: {
+    flexDirection: 'column',
+    alignSelf: 'flex-start',
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    borderColor: '#ccc',
+    padding: 6,
+    width: 150,
+    height: 28,
+  },
+  arrow: {
+    backgroundColor: 'transparent',
+    borderColor: 'transparent',
+    borderTopColor: '#fff',
+    borderWidth: 15,
+    alignSelf: 'center',
+    marginBottom: -15
+  },
+  image: {
+    width: "100%",
+    height: 15,
+  },
+});

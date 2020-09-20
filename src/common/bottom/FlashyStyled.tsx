@@ -14,7 +14,7 @@ import CameraScreen from "../component/Camera";
 import HomeScreen from "../../screen/HomeScreen";
 import HistoryScreen from "../../screen/HistoryScreen";
 import ProfileScreen from "../../screen/ProfileScreen";
-import CalendarScreen from "../../screen/CalendarScreen";
+import AnalysisScreen from "../../screen/AnalysisScreen";
 
 import HomeStyle from "../styles/home";
 
@@ -56,7 +56,7 @@ const FlashyStyledScreen = () => {
             iconName = null
           } else if (route.name === 'Thông tin') {
             iconName = 'user-tie';
-          } else if (route.name === 'Cài đặt') {
+          } else if (route.name === 'Thống kê') {
             iconName = 'cog';
           }
 
@@ -115,8 +115,8 @@ const FlashyStyledScreen = () => {
       <Tab.Screen name="Trang chủ" component={HomeScreen} options={{ tabBarBadge: 3 }} />
       <Tab.Screen name="Lịch sử" component={HistoryScreen} />
       <Tab.Screen name="Chấm công" component={CameraScreen} />
+      <Tab.Screen name="Thống kê" component={AnalysisScreen} />
       <Tab.Screen name="Thông tin" component={ProfileScreen} />
-      <Tab.Screen name="Cài đặt" component={CalendarScreen} />
     </Tab.Navigator>
   );
 };

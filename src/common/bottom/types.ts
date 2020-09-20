@@ -11,5 +11,5 @@ export type MainTabsParams = {
   'Lịch sử': ScreenParams;
   'Chấm công': ScreenParams;
   'Thông tin': ScreenParams;
-  'Cài đặt': ScreenParams;
+  'Thống kê': ScreenParams;
 };

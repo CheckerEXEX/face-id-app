@@ -73,7 +73,7 @@ export default StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     backgroundColor: STYLE_CONST.PRIMARY_BACKGROUND_COLOR,
-    borderRadius : 5
+    borderRadius : 5,
   },
   loginText: {
     fontSize: 20,

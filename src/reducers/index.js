@@ -1,11 +1,22 @@
-import { combineReducers } from 'redux';
-import userDtoReducer from './user';
-import base64Reducer from './camera'
+import { composeWithDevTools } from 'redux-devtools-extension';
+import {
+    applyMiddleware,
+    combineReducers,
+    createStore,
+} from 'redux';
+import ReduxThunk from 'redux-thunk';
+import AuthReducer from './auth';
 
-// tổng hợp các reducer ở đây
-const rootReducer = combineReducers({
-    user: userDtoReducer,
-    camera: base64Reducer
-})
+const reducers = combineReducers({
+    auth: AuthReducer
+});
 
-export default rootReducer;
+const middleware = [ReduxThunk];
+
+const store = createStore(
+    reducers,
+    {},
+    composeWithDevTools(applyMiddleware(...middleware)),
+);
+
+export default store;
