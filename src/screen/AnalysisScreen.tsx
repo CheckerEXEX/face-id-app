@@ -33,7 +33,7 @@ import { removeBase64 } from "../actions/camera";
 
 const AnalysisScreen = (props) => {
 
-  const userDto = useSelector((state) => state.user.userDto);
+  const userDto = useSelector((state) => state.user);
   const { name, msnv } = userDto[0];
 
   const [errorMsg, setErrorMsg] = useStateIfMounted(null);
@@ -283,7 +283,7 @@ const AnalysisScreen = (props) => {
             </View>
           </View>
           <View style={{justifyContent: "center", paddingRight: 10, top: -5}}>
-            <Icon color="#a91b4b" size={20} name="sign-out" type="font-awesome" onPress={() => props.navigation.navigate("Login")}/>
+            <Icon color="#a91b4b" size={20} name="sign-out" type="font-awesome" onPress={() => props.navigation.navigate("LoginScreen")}/>
             <Text style={{fontSize: 12, color:"#a91b4b"}}>Đăng xuất</Text>
           </View>
         </View>

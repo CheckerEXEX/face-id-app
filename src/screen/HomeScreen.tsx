@@ -29,15 +29,17 @@ import { useSelector, useDispatch } from "react-redux";
 
 const HomeScreen = (props) => {
 
-  const userDto = useSelector((state) => state.user.userDto);
-  const { name, msnv } = userDto[0];
+  // const userDto = useSelector((state) => []);
+  // const { name, msnv } = userDto[0];
 
   let { width, height } = Dimensions.get('window');
   const ASPECT_RATIO = width / height;
   const LATITUDE = 0;
   const LONGITUDE = 0;
-  const LATITUDE_DELTA = 0.01;
+  const LATITUDE_DELTA = 0.00922;
   const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+  const LATITUDE_TEST = 10.807564357807692;
+  const LONGITUDE_TEST = 106.64522843480425;
   const LATITUDE_SYSTEMEXE = 10.801244131973288;
   const LONGITUDE_SYSTEMEXE = 106.640986249321;
   const RADIUS_DEFAULT = 0.1; //km
@@ -46,8 +48,8 @@ const HomeScreen = (props) => {
 
   const [location, setLocation] = useStateIfMounted({
     region: {
-      latitude: LATITUDE,
-      longitude: LONGITUDE,
+      latitude: LATITUDE_TEST,
+      longitude: LONGITUDE_TEST,
       latitudeDelta: LATITUDE_DELTA,
       longitudeDelta: LONGITUDE_DELTA,
     },
@@ -63,25 +65,25 @@ const HomeScreen = (props) => {
   const [hasRadius, setHasRadius] = useStateIfMounted(true);
   const [isLoading, setIsLoading] = useStateIfMounted(false);
   const [titleLoading, setTitleLoading] = useStateIfMounted(null);
-
-  const myPlace = {
-    type: 'FeatureCollection',
-    features: [
-      {
-        type: 'Feature',
-        properties: {},
-        geometry: {
-          type: 'Point',
-          coordinates: [10.801244131973288, 106.640986249321],
-        }
-      }
-    ]
-  };
   //const [forecast, setForecast] = useStateIfMounted(null);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
+    setLocation({
+      region: {
+        latitude: LATITUDE_TEST,
+        longitude: LONGITUDE_TEST,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA,
+      },
+      company: {
+        latitude: LATITUDE_SYSTEMEXE,
+        longitude: LONGITUDE_SYSTEMEXE,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA,
+      }
+    });
     (async () => {
       let { status } = await Location.requestPermissionsAsync();
       if (status !== "granted") {
@@ -92,6 +94,7 @@ const HomeScreen = (props) => {
         latitude: l.coords.latitude,
         longitude: l.coords.longitude,
       });
+      console.log(l);
 
       const radius_km = getRadiusTwoPoint(
         LATITUDE_SYSTEMEXE,
@@ -108,8 +111,8 @@ const HomeScreen = (props) => {
       setLocationName(nameLocation);
       setLocation({
         region: {
-          latitude: l.coords.latitude,
-          longitude: l.coords.longitude,
+          latitude: LATITUDE_TEST,
+          longitude: LONGITUDE_TEST,
           latitudeDelta: LATITUDE_DELTA,
           longitudeDelta: LONGITUDE_DELTA,
         },
@@ -168,14 +171,16 @@ const HomeScreen = (props) => {
   if (errorMsg) {
     result = errorMsg;
   } else if (location.region.latitude != 0) {
-    locationName.find((item: any) => {
-      (streetName = item.name), (city = item.region);
-    });
-    result = streetName + " - " + city;
+    // locationName.find((item: any) => {
+    //   (streetName = item.name), (city = item.region);
+    // });
+    // result = streetName + " - " + city;
     console.log('ADDRESS: ' + result);
   }
 
   const circleRef = useRef(null);
+  const mapRef = useRef(null);
+
   const theme = useTheme();
   console.log(theme.dark);
   return (
@@ -195,12 +200,12 @@ const HomeScreen = (props) => {
               <Image style={HomeStyle.avatar} source={require("../common/styles/img/employee.png")}/>
             </TouchableOpacity>
             <View style={{justifyContent: "center"}}>
-              <Title style={HomeStyle.avatarTitle}>{name}</Title>
-              <Caption style={HomeStyle.avatarCaption}>MSNV: {msnv}</Caption>
+              <Title style={HomeStyle.avatarTitle}>NQT</Title>
+              <Caption style={HomeStyle.avatarCaption}>MSNV: SVN0087</Caption>
             </View>
           </View>
           <View style={{justifyContent: "center", paddingRight: 10, top: -5}}>
-            <Icon color="#a91b4b" size={20} name="sign-out" type="font-awesome" onPress={() => props.navigation.navigate("Login")}/>
+            <Icon color="#a91b4b" size={20} name="sign-out" type="font-awesome" onPress={() => props.navigation.navigate("LoginScreen")}/>
             <Text style={{fontSize: 12, color:"#a91b4b"}}>Đăng xuất</Text>
           </View>
         </View>
@@ -208,16 +213,55 @@ const HomeScreen = (props) => {
         <View style={HomeStyle.body}>
           <View style={{height: 370, paddingBottom : 10}}>
             <View style={StyleSheet.absoluteFillObject}>
-              <MapView style={StyleSheet.absoluteFillObject}
+              <MapView
+                style={StyleSheet.absoluteFillObject}
+                ref={mapRef}
                 provider={ PROVIDER_GOOGLE }
                 customMapStyle={ DarkStyles }
                 showsUserLocation={ true }
-                region={ location.region }
+                initialRegion={ location.company }
+                onMapReady={() => {mapRef.current.fitToSuppliedMarkers(['mk1','mk2'],
+                  {
+                    edgePadding: {
+                      top: 70,
+                      right: 70,
+                      bottom: 70,
+                      left: 70
+                    },
+                    animated: true
+                  }
+                )}}
+                // onMapReady={() => {mapRef.current.fitToCoordinates(
+                //   [
+                //     { latitude: location.company.latitude,longitude: location.company.longitude },
+                //     { latitude: location.region.latitude,longitude: location.region.longitude }
+                //   ],
+                //   { edgePadding: {
+                //       top: 50,
+                //       right: 50,
+                //       bottom: 50,
+                //       left: 50
+                //     },
+                //     animated: true
+                //   }
+                // )}}
+              >
+
+                <Marker
+                  coordinate={location.region}
+                  opacity={1}
+                  image={require('../common/styles/img/personal.png')}
+                  identifier={'mk1'}
+                  // title="SystemEXE Việt Nam"
+                  // description="Etown 1, 364 Cộng Hòa, P.13, Q.Tân Bình, TP Hồ Chí Minh"
                 >
+                </Marker>
+
                 <Marker
                   coordinate={location.company}
                   opacity={1}
                   image={require('../common/styles/img/location.png')}
+                  identifier={'mk2'}
                   // title="SystemEXE Việt Nam"
                   // description="Etown 1, 364 Cộng Hòa, P.13, Q.Tân Bình, TP Hồ Chí Minh"
                 >
@@ -232,14 +276,6 @@ const HomeScreen = (props) => {
                       <View style={styles.arrow} />
                     </View>
                   </Callout>
-                </Marker>
-                <Marker
-                  coordinate={location.region}
-                  opacity={1}
-                  image={require('../common/styles/img/personal.png')}
-                  // title="SystemEXE Việt Nam"
-                  // description="Etown 1, 364 Cộng Hòa, P.13, Q.Tân Bình, TP Hồ Chí Minh"
-                >
                 </Marker>
 
                 <Circle

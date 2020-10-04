@@ -1,8 +1,9 @@
-import SignInScreen from "../screens/SignInScreen";
-import HomeScreen from "../screens/HomeScreen";
+import LoginScreen from "../screen/LoginScreen";
+import InitScreen from "../screen/InitScreen";
 import * as React from "react";
 import {createStackNavigator} from '@react-navigation/stack';
 import {useSelector} from "react-redux";
+import InitScreen from "../screen/InitScreen";
 const Stack = createStackNavigator();
 
 export default function Navigation(props) {
@@ -14,13 +15,13 @@ export default function Navigation(props) {
         options={{
           headerShown: false
         }}
-        name="SignIn"
-        component={SignInScreen}
+        name="LoginScreen"
+        component={LoginScreen}
       />
     ) : (
       <Stack.Screen
-        name="Home"
-        component={HomeScreen}
+        name="InitScreen"
+        component={InitScreen}
       />
     )}
   </Stack.Navigator>;

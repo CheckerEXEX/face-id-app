@@ -25,12 +25,11 @@ export const errorLogIn = (errorMessage) => ({
 });
 
 export const login = (username, password) => (dispatch) => {
-  console.log(username);
-  console.log(password);
+  console.log(username + ' ' + password);
   dispatch(loggingIn(true));
   userService.login(username, password).then(async (res) => {
     await dispatch(loggedIn(res.data));
-    await navigate('Drawer');
+    await navigate('InitScreen');
   }).catch((err) => {
     dispatch(errorLogIn('Wrong username or password'));
   }).finally(() => {

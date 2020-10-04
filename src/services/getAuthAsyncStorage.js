@@ -9,9 +9,9 @@ export async function getAuthAsyncStorage() {
   };
 }
 
-export async function setAuthAsyncStorage(response) {
-  await AsyncStorage.setItem('userToken', response.data.token);
-  await AsyncStorage.setItem('userData', JSON.stringify(response.data.user));
+export async function setAuthAsyncStorage(data) {
+  await AsyncStorage.setItem('userToken', data.token);
+  await AsyncStorage.setItem('userData', JSON.stringify(data.user));
 }
 
 export async function resetAuthAsyncStorage() {

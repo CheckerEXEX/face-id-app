@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { SafeAreaView, View, Button, StyleSheet, Text } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { Icon } from "react-native-elements";
 
 const HeaderContent = (props) => {
   return (

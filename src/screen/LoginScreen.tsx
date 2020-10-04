@@ -43,7 +43,7 @@ const LoginScreen = (props) => {
 
   // gọi useDispatch để sử dụng
   const dispatch = useDispatch();
-
+  console.log(dispatch);
   // // kiểm tra login
   // const handleLogin = () => {
   //   if (username && password) {

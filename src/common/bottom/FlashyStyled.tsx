@@ -1,10 +1,9 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import {
   View,
   TouchableOpacity,
   Text,
 } from "react-native";
-import { useSafeArea } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
