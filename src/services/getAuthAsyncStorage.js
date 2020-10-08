@@ -1,20 +1,20 @@
 import { AsyncStorage } from 'react-native';
 
 export async function getAuthAsyncStorage() {
-  const token = await AsyncStorage.getItem('userToken');
-  const user = await AsyncStorage.getItem('userData');
+  const token = await AsyncStorage.getItem('employeeToken');
+  const employee = await AsyncStorage.getItem('employeeData');
   return {
     token,
-    user: JSON.parse(user),
+    employee: JSON.parse(employee),
   };
 }
 
 export async function setAuthAsyncStorage(data) {
-  await AsyncStorage.setItem('userToken', data.token);
-  await AsyncStorage.setItem('userData', JSON.stringify(data.user));
+  await AsyncStorage.setItem('employeeToken', data.token);
+  await AsyncStorage.setItem('employeeData', JSON.stringify(data.employee));
 }
 
 export async function resetAuthAsyncStorage() {
-  await AsyncStorage.removeItem('userData');
-  await AsyncStorage.removeItem('userToken');
+  await AsyncStorage.removeItem('employeeToken');
+  await AsyncStorage.removeItem('employeeData');
 }

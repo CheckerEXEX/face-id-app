@@ -8,9 +8,9 @@ const Stack = createStackNavigator();
 
 export default function Navigation(props) {
   const auth = useSelector((state) => state.auth);
-  const userToken = auth.user ? auth.user.token : null;
+  const token = auth.employee ? auth.employee.token : null;
   return <Stack.Navigator>
-    {userToken === null ? (
+    {token === null ? (
       <Stack.Screen
         options={{
           headerShown: false

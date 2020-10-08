@@ -2,11 +2,11 @@ import axios from 'axios';
 import { API_URL } from '../config/constants';
 import {resetAuthAsyncStorage, setAuthAsyncStorage} from "./getAuthAsyncStorage";
 
-function login(userName, password) {
+function login(loginId, loginPassword) {
   return new Promise((resolve, reject) => {
-    axios.post(`${API_URL}/getUser`, {
-      userName: userName,
-      password : password
+    axios.post(`${API_URL}/login`, {
+      loginId: loginId,
+      loginPassword : loginPassword
     }).then(async (res) => {
       try {
         console.log(res.data);
@@ -34,7 +34,7 @@ async function logout(getState) {
   });
 }
 
-export const userService = {
+export const loginService = {
   login,
   logout,
 };

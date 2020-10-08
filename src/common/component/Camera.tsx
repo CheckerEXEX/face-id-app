@@ -2,13 +2,12 @@ import React, { useState } from 'react';
 import { View, Text, Image, Dimensions, StyleSheet, Platform, StatusBar } from 'react-native';
 import * as Permissions from 'expo-permissions'
 import { Camera } from 'expo-camera';
-import { Icon, Button, Overlay } from "react-native-elements";
+import { Icon } from "react-native-elements";
 import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import * as ImagePicker from 'expo-image-picker';
 import AnimatedLoader from "../library/react-native-animated-loader/src/index";
 
-import * as Location from "expo-location";
 import HomeStyle from "../styles/home";
 import Clock from "./Clock";
 
@@ -145,7 +144,7 @@ const PreviewScreen = ({ route, navigation }) => {
     setIsSubmiting(true)
     setTimeout(() => {
       setIsSubmiting(false)
-      navigation.navigate("ResultScreen", { uri: uri, isSuccess: success, userName: "Quang Tùng" })
+      navigation.navigate("ResultScreen", { uri: uri, isSuccess: success, employeeName: "Quang Tùng" })
     }, 1000)
   }
 
@@ -185,7 +184,7 @@ const PreviewScreen = ({ route, navigation }) => {
                 size={15}
               />
             </View>
-            
+
             <View style={{ maxWidth: "90%" }}>
               <Text style={[HomeStyle.positionName, { color: "black" }]}>490/4A - Thành phố Hồ Chí Minh</Text>
             </View>
@@ -224,7 +223,7 @@ const PreviewScreen = ({ route, navigation }) => {
 
 const ResultScreen = ({ route, navigation }) => {
 
-  let { uri, isSuccess, userName } = route.params;
+  let { uri, isSuccess, employeeName } = route.params;
 
   return (
     <View style={styles.container}>
@@ -258,7 +257,7 @@ const ResultScreen = ({ route, navigation }) => {
 
               <View style={{ width: 0.7 * winWidth, borderWidth: 1, borderRadius: 20, backgroundColor: "#a4eb96", padding: 10, marginTop: 20 }}>
                 <Text style={styles.txtInfoStyle}>Check in thành công</Text>
-                <Text style={styles.txtInfoStyle}>Tên nhân viên: {userName}</Text>
+                <Text style={styles.txtInfoStyle}>Tên nhân viên: {employeeName}</Text>
                 <Text style={styles.txtInfoStyle}>Thời gian: 8h00</Text>
                 <Text style={styles.txtInfoStyle}>Vị trí: 364 Cộng Hòa</Text>
               </View>
@@ -377,11 +376,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row"
   },
-  buttonArea2:{ 
-    flexDirection: 'row', 
-    justifyContent: "space-between", 
-    width: 0.9 * winWidth, 
-    height: 100 
+  buttonArea2:{
+    flexDirection: 'row',
+    justifyContent: "space-between",
+    width: 0.9 * winWidth,
+    height: 100
   }
 
 });

@@ -15,8 +15,6 @@ import { useSelector } from "react-redux";
 
 const ProfileScreen = (props) => {
 
-  const userDto = useSelector((state) => state.user.userDto);
-  const { name, msnv } = userDto[0];
   return (
     <SafeAreaView style={ProfileStyle.container}>
       <View style={ProfileStyle.userInfoSection}>
@@ -27,7 +25,7 @@ const ProfileScreen = (props) => {
               marginTop:15,
               marginBottom: 5,
             }]}>{name}</Title>
-            <Caption style={ProfileStyle.caption}>{msnv}</Caption>
+            <Caption style={ProfileStyle.caption}>{}</Caption>
           </View>
         </View>
       </View>

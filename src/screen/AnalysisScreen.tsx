@@ -33,8 +33,8 @@ import { removeBase64 } from "../actions/camera";
 
 const AnalysisScreen = (props) => {
 
-  const userDto = useSelector((state) => state.user);
-  const { name, msnv } = userDto[0];
+  const employeeDto = useSelector((state) => state.employee);
+  const { name, msnv } = employeeDto[0];
 
   const [errorMsg, setErrorMsg] = useStateIfMounted(null);
   const [location, setLocation] = useStateIfMounted(null);

@@ -24,8 +24,6 @@ import DrawerStyle from "../styles/drawer";
 import { useSelector } from "react-redux";
 
 const DrawerContent = (props) => {
-  // const userDto = useSelector((state) => state.user.userDto);
-  // const { name, msnv } = userDto[0];
 
   const paperTheme = useTheme();
 

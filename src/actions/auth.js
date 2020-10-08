@@ -7,7 +7,7 @@ import {
   AUTH_LOGOUT
 } from "../constants/auth";
 import {navigate} from "../services/navRef";
-import {userService} from "../services/userService";
+import {loginService} from "../services/loginService";
 
 export const loggingIn = (loggingIn) => ({
   type: AUTH_LOGGING_IN,
@@ -24,14 +24,14 @@ export const errorLogIn = (errorMessage) => ({
   payload: errorMessage,
 });
 
-export const login = (username, password) => (dispatch) => {
-  console.log(username + ' ' + password);
+export const login = (loginId, loginPassword) => (dispatch) => {
+  console.log(loginId + ' ' + loginPassword);
   dispatch(loggingIn(true));
-  userService.login(username, password).then(async (res) => {
+  loginService.login(loginId, loginPassword).then(async (res) => {
     await dispatch(loggedIn(res.data));
     await navigate('InitScreen');
   }).catch((err) => {
-    dispatch(errorLogIn('Wrong username or password'));
+    dispatch(errorLogIn('Wrong Id or password'));
   }).finally(() => {
     dispatch(loggingIn(false));
   });
@@ -53,7 +53,7 @@ export const errorLogOut = (errorMessage) => ({
 
 export const logout = () => async (dispatch, getState) => {
   dispatch(loggingOut(true));
-  await userService.logout(getState).then((res) => {
+  await loginService.logout(getState).then((res) => {
     dispatch(loggedOut());
   }).catch((err) => {
     dispatch(errorLogOut('Error logging out.'));

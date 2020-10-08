@@ -52,11 +52,11 @@ const App = () => {
   useEffect(() => {
     const load = async () => {
       await setIsLoadingFromAsyncStorage(true);
-      const userStorage = await getAuthAsyncStorage();
-      if (userStorage.user && userStorage.token) {
+      const storage = await getAuthAsyncStorage();
+      if (storage.employee && storage.token) {
         await store.dispatch(loggedIn({
-          user: userStorage.user,
-          token: userStorage.token,
+          employee: storage.employee,
+          token: storage.token,
         }));
       }
       await setIsLoadingFromAsyncStorage(false);
