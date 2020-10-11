@@ -1,15 +1,15 @@
 import axios from 'axios';
-import { API_URL } from '../config/constants';
+import { API } from '../config/constants';
 import {resetAuthAsyncStorage, setAuthAsyncStorage} from "./getAuthAsyncStorage";
 
 function login(loginId, loginPassword) {
   return new Promise((resolve, reject) => {
-    axios.post(`${API_URL}/login`, {
+    axios.post(`${API.DATABASE}/login`, {
       loginId: loginId,
       loginPassword : loginPassword
     }).then(async (res) => {
       try {
-        console.log(res.data);
+        console.log(res.data.message);
         await setAuthAsyncStorage(res.data);
         resolve(res);
       } catch (e) { reject(e) }
@@ -23,7 +23,7 @@ async function logout(getState) {
   return new Promise((resolve, reject) => {
     const currentState = getState();
     const { token } = currentState.auth;
-    axios.get(`${API_URL}/logout`, {
+    axios.get(`${API.DATABASE}/logout`, {
       headers: {
         authorization: `Bearer ${token}`,
       },

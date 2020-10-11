@@ -5,7 +5,8 @@ import { Camera } from 'expo-camera';
 import { Icon } from "react-native-elements";
 import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from 'expo-image-picker';import axios from 'axios';
+import { API } from '../../config/constants';
 import AnimatedLoader from "../library/react-native-animated-loader/src/index";
 
 import HomeStyle from "../styles/home";
@@ -60,28 +61,28 @@ class CameraScreen extends React.Component {
 
   camera = null;
 
-  setFlashMode = (flashMode) => this.setState({ flashMode });
-
   setCameraType = (cameraType) => this.setState({ cameraType });
 
   handleCaptureIn = () => this.setState({ capturing: true });
 
-  _pickImage = async (props) => {
-    let image2Data = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-    });
-    if (!image2Data.cancelled) {
-      props.navigation.navigate('PreviewScreen', { "base64Data": image2Data.base64, "uri": image2Data.uri })
-    }
+  // _pickImage = async (props) => {
+  //   let image2Data = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
+  //   });
+  //   if (!image2Data.cancelled) {
+  //     props.navigation.navigate('PreviewScreen', { "base64Data": image2Data.base64, "uri": image2Data.uri })
+  //   }
 
-  };
+  // };
 
 
   _handleShortCapture = async (props) => {
+    console.log('Take Picture')
     const photoData = await this.camera.takePictureAsync({
       base64: true
     });
-    props.navigation.navigate('PreviewScreen', { "base64Data": photoData.base64, "uri": photoData.uri })
+    const data = { "base64Data": photoData.base64, "uri": photoData.uri };
+    props.navigation.navigate('PreviewScreen', data)
   };
 
 
@@ -103,7 +104,7 @@ class CameraScreen extends React.Component {
           <View style={{ height: 24, backgroundColor: '#19224d' }} />
           <View>
             <Camera
-              type={cameraType}
+              type={Camera.Constants.Type.front}
               flashMode={flashMode}
               autoFocus={autoFocus}
               style={styles.preview}
@@ -111,22 +112,20 @@ class CameraScreen extends React.Component {
             />
           </View>
           <View style={styles.buttonArea}>
-            <TouchableOpacity
-              onPress={() => this.setCameraType(
-                cameraType === Camera.Constants.Type.back ? Camera.Constants.Type.front : Camera.Constants.Type.back
-              )}>
+            {/* <TouchableOpacity
+              onPress={() => this.setCameraType(Camera.Constants.Type.back)}>
               <Ionicons name="md-reverse-camera" color="white" size={40} />
+            </TouchableOpacity> */}
+
+            <TouchableOpacity style={styles.container} onPress={() => this._handleShortCapture(this.props)}>
+              <Icon reverse name="camera" type="font-awesome" color="green" />
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.container}>
-              <Icon reverse name="camera" type="font-awesome" color="green" onPress={() => this._handleShortCapture(this.props)} />
-            </TouchableOpacity>
-
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => this._pickImage(this.props)}>
 
               <Ionicons name="md-images" size={40} color="white" />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
           </View>
         </View>
@@ -137,15 +136,28 @@ class CameraScreen extends React.Component {
 
 const PreviewScreen = ({ route, navigation }) => {
   const [isSubmiting, setIsSubmiting] = useState(false);
-
   let { uri } = route.params;
 
   let Submit = (success) => {
-    setIsSubmiting(true)
-    setTimeout(() => {
-      setIsSubmiting(false)
-      navigation.navigate("ResultScreen", { uri: uri, isSuccess: success, employeeName: "Quang Tùng" })
-    }, 1000)
+
+    return new Promise((resolve, reject) => {
+      console.log(API.PYTHON);
+      axios.post(`${API.PYTHON}/predict`, {
+        image_base64: route.params.base64Data
+      }).then(async (res) => {
+        try {
+          console.log(JSON.stringify(res));
+          //resolve(res);
+        } catch (e) { reject(e) }
+      }).catch((err) => {
+        reject(err)
+      });
+    });
+    // setIsSubmiting(true)
+    // setTimeout(() => {
+    //   setIsSubmiting(false)
+    //   navigation.navigate("ResultScreen", { uri: uri, isSuccess: success, employeeName: "Quang Tùng" })
+    // }, 1000)
   }
 
 

@@ -26,7 +26,7 @@ const FlashyStyledScreen = () => {
 
     // Ẩn bottom bar khi ở màn hình Camera
     if (state.index == 2) {
-      console.log(descriptors);
+      //console.log(descriptors);
       return null;
     };
 

@@ -31,7 +31,7 @@ export const login = (loginId, loginPassword) => (dispatch) => {
     await dispatch(loggedIn(res.data));
     await navigate('InitScreen');
   }).catch((err) => {
-    dispatch(errorLogIn('Wrong Id or password'));
+    dispatch(errorLogIn('Sai tên đăng nhập hoặc mật khẩu'));
   }).finally(() => {
     dispatch(loggingIn(false));
   });

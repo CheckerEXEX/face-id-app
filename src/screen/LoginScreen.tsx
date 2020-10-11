@@ -41,7 +41,7 @@ const LoginScreen = (props) => {
 
   // gọi useDispatch để sử dụng
   const dispatch = useDispatch();
-  console.log(dispatch);
+  //console.log(dispatch);
 
   return (
     <>
