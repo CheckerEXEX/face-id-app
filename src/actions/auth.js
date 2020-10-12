@@ -25,7 +25,6 @@ export const errorLogIn = (errorMessage) => ({
 });
 
 export const login = (loginId, loginPassword) => (dispatch) => {
-  console.log(loginId + ' ' + loginPassword);
   dispatch(loggingIn(true));
   loginService.login(loginId, loginPassword).then(async (res) => {
     await dispatch(loggedIn(res.data));
@@ -52,9 +51,11 @@ export const errorLogOut = (errorMessage) => ({
 });
 
 export const logout = () => async (dispatch, getState) => {
+  console.log('CLICK LOG OUT')
   dispatch(loggingOut(true));
   await loginService.logout(getState).then((res) => {
     dispatch(loggedOut());
+    navigate('LoginScreen');
   }).catch((err) => {
     dispatch(errorLogOut('Error logging out.'));
   }).finally(() => {

@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useStateIfMounted } from "use-state-if-mounted";
 import {
   Text,
-  TextInput,
   View,
   SafeAreaView,
   TouchableOpacity
@@ -28,8 +27,6 @@ import CalendarStyle from "../common/styles/calendar";
 
 // REDUX
 import { useSelector, useDispatch } from "react-redux";
-import { removeBase64 } from "../actions/camera";
-
 
 const AnalysisScreen = (props) => {
 
@@ -42,7 +39,6 @@ const AnalysisScreen = (props) => {
   const [hasRadius, setHasRadius] = useStateIfMounted(true);
   const [isLoading, setIsLoading] = useStateIfMounted(true);
   const [titleLoading, setTitleLoading] = useStateIfMounted(null);
-  //const [forecast, setForecast] = useStateIfMounted(null);
 
   const LATITUDE_SYSTEMEXE = 10.801244131973288;
   const LONGITUDE_SYSTEMEXE = 106.640986249321;
@@ -92,39 +88,6 @@ const AnalysisScreen = (props) => {
       setTitleLoading(null);
     };
   }, []);
-  // get base64 from redux
-  const base64 = useSelector((state) => state.camera.base64);
-
-  // handle base64
-  useEffect(() => {
-    if (base64) {
-      //console.log("Base 64 is a: ", base64);
-      setIsLoading(true);
-      setTitleLoading("Đang xử lý");
-      try {
-        //handle server in here
-      } catch (error) {
-        console.log(error);
-      }
-
-      // remove base64 of redux when success handle
-      const action = removeBase64();
-      dispatch(action);
-
-      setIsLoading(false);
-    }
-     // component un mount
-    return () => {
-      setIsLoading(false);
-      setErrorMsg(null);
-      setLocationName(null);
-      setLocation(null);
-      setHasRadius(true);
-      setIsLoading(false);
-      setTitleLoading(null);
-    };
-  }, [base64]);
-
   // calculation location radius two point
   const getRadiusTwoPoint = (
     latitude_1,
@@ -249,18 +212,6 @@ const AnalysisScreen = (props) => {
     }
   };
 
-// const TestRef = () => {
-//     const ref = React.useRef<CalendarPicker>();
-//     ref.current!.handleOnPressNext();
-//     ref.current!.handleOnPressPrevious();
-//     ref.current!.handleOnPressDay({
-//         day: 5,
-//         month: 6,
-//         year: 2020
-//     });
-//     ref.current!.resetSelections();
-// };
-
   return (
     <>
       <SafeAreaView style={BaseStyle.topSafeArea} />
@@ -274,7 +225,7 @@ const AnalysisScreen = (props) => {
             <Image style={HomeStyle.logo} source={require("../common/styles/img/favicon.png")}/>
           </View> */}
           <View style={{justifyContent: "center", flexDirection: 'row'}}>
-            <TouchableOpacity onPress={() => { props.navigation.openDrawer()}}>
+            <TouchableOpacity onPress={() => { props.navigation.navigate("Drawer")}}>
               <Image style={HomeStyle.avatar} source={require("../common/styles/img/employee.png")}/>
             </TouchableOpacity>
             <View style={{justifyContent: "center"}}>

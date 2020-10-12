@@ -182,7 +182,8 @@ const HomeScreen = (props) => {
   const mapRef = useRef(null);
 
   const theme = useTheme();
-  console.log(theme.dark);
+  console.log('THEME: ' + theme.dark);
+
   return (
     <>
       <SafeAreaView style={BaseStyle.topSafeArea} />

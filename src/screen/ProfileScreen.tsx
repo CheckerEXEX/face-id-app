@@ -1,5 +1,6 @@
-import React, { useContext } from "react";
+import React, { useEffect } from "react";
 import { View, SafeAreaView, Image } from "react-native";
+import { useStateIfMounted } from "use-state-if-mounted";
 import {
   Title,
   Caption,
@@ -10,10 +11,33 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import ProfileStyle from "../common/styles/profile";
 
-import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { logout } from "../actions/auth";
 
+import {getAuthAsyncStorage} from "../../src/services/getAuthAsyncStorage";
 
 const ProfileScreen = (props) => {
+
+  const [employeeData, setEmployeeData] = useStateIfMounted(null);
+  const [isLoading, setIsLoadingFromAsyncStorage] = useStateIfMounted(true);
+
+  useEffect(() => {
+    const load = async () => {
+      await setIsLoadingFromAsyncStorage(true);
+      const storage = await getAuthAsyncStorage();
+      if (storage.employee && storage.token) {
+        setEmployeeData(storage.employee);
+      }
+      await setIsLoadingFromAsyncStorage(false);
+    }
+    load();
+  }, []);
+
+  if (isLoading) {
+    return null;
+  }
+
+  const dispatch = useDispatch();
 
   return (
     <SafeAreaView style={ProfileStyle.container}>
@@ -24,7 +48,7 @@ const ProfileScreen = (props) => {
             <Title style={[ProfileStyle.title, {
               marginTop:15,
               marginBottom: 5,
-            }]}>{name}</Title>
+            }]}>{employeeData.employeeName}</Title>
             <Caption style={ProfileStyle.caption}>{}</Caption>
           </View>
         </View>
@@ -32,20 +56,20 @@ const ProfileScreen = (props) => {
 
       <View style={ProfileStyle.userInfoSection}>
         <View style={ProfileStyle.row}>
-          <Icon name="map-marker-radius" color="#777777" size={20}/>
-          <Text style={{color:"#777777", marginLeft: 20}}>Kolkata, India</Text>
+          <Icon name="map-marker-radius" color="#19224d" size={20}/>
+          <Text style={{color:"#19224d", marginLeft: 20}}>{employeeData.address}</Text>
         </View>
         <View style={ProfileStyle.row}>
-          <Icon name="phone" color="#777777" size={20}/>
-          <Text style={{color:"#777777", marginLeft: 20}}>+91-900000009</Text>
+          <Icon name="phone" color="#19224d" size={20}/>
+          <Text style={{color:"#19224d", marginLeft: 20}}>{employeeData.phone}</Text>
         </View>
         <View style={ProfileStyle.row}>
-          <Icon name="email" color="#777777" size={20}/>
-          <Text style={{color:"#777777", marginLeft: 20}}>john_doe@email.com</Text>
+          <Icon name="email" color="#19224d" size={20}/>
+          <Text style={{color:"#19224d", marginLeft: 20}}>{employeeData.email}</Text>
         </View>
       </View>
 
-      <View style={ProfileStyle.infoBoxWrapper}>
+      {/* <View style={ProfileStyle.infoBoxWrapper}>
           <View style={[ProfileStyle.infoBox, {
             borderRightColor: '#dddddd',
             borderRightWidth: 1
@@ -57,37 +81,31 @@ const ProfileScreen = (props) => {
             <Title>12</Title>
             <Caption>Orders</Caption>
           </View>
-      </View>
+      </View> */}
 
       <View style={ProfileStyle.menuWrapper}>
         <TouchableRipple onPress={() => {}}>
           <View style={ProfileStyle.menuItem}>
-            <Icon name="heart-outline" color="#FF6347" size={25}/>
+            <Icon name="heart-outline" color="#19224d" size={25}/>
             <Text style={ProfileStyle.menuItemText}>Your Favorites</Text>
           </View>
         </TouchableRipple>
         <TouchableRipple onPress={() => {}}>
           <View style={ProfileStyle.menuItem}>
-            <Icon name="credit-card" color="#FF6347" size={25}/>
-            <Text style={ProfileStyle.menuItemText}>Payment</Text>
-          </View>
-        </TouchableRipple>
-        <TouchableRipple onPress={() => {}}>
-          <View style={ProfileStyle.menuItem}>
-            <Icon name="share-outline" color="#FF6347" size={25}/>
-            <Text style={ProfileStyle.menuItemText}>Tell Your Friends</Text>
-          </View>
-        </TouchableRipple>
-        <TouchableRipple onPress={() => {}}>
-          <View style={ProfileStyle.menuItem}>
-            <Icon name="account-check-outline" color="#FF6347" size={25}/>
+            <Icon name="account-check-outline" color="#19224d" size={25}/>
             <Text style={ProfileStyle.menuItemText}>Support</Text>
           </View>
         </TouchableRipple>
         <TouchableRipple onPress={() => {}}>
           <View style={ProfileStyle.menuItem}>
-            <Icon name="settings-outline" color="#FF6347" size={25}/>
+            <Icon name="settings-outline" color="#19224d" size={25}/>
             <Text style={ProfileStyle.menuItemText}>Settings</Text>
+          </View>
+        </TouchableRipple>
+        <TouchableRipple onPress={() => dispatch(logout())}>
+          <View style={ProfileStyle.menuItem}>
+            <Icon name="logout" color="#19224d" size={25}/>
+            <Text style={ProfileStyle.menuItemText}>Đăng xuất</Text>
           </View>
         </TouchableRipple>
       </View>

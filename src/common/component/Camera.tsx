@@ -3,11 +3,10 @@ import { View, Text, Image, Dimensions, StyleSheet, Platform, StatusBar } from '
 import * as Permissions from 'expo-permissions'
 import { Camera } from 'expo-camera';
 import { Icon } from "react-native-elements";
-import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import * as ImagePicker from 'expo-image-picker';import axios from 'axios';
-import { API } from '../../config/constants';
 import AnimatedLoader from "../library/react-native-animated-loader/src/index";
+import { cameraService } from '../../services/cameraService';
+import { navigate } from "../../services/navRef";
 
 import HomeStyle from "../styles/home";
 import Clock from "./Clock";
@@ -138,21 +137,13 @@ const PreviewScreen = ({ route, navigation }) => {
   const [isSubmiting, setIsSubmiting] = useState(false);
   let { uri } = route.params;
 
-  let Submit = (success) => {
-
-    return new Promise((resolve, reject) => {
-      console.log(API.PYTHON);
-      axios.post(`${API.PYTHON}/predict`, {
-        image_base64: route.params.base64Data
-      }).then(async (res) => {
-        try {
-          console.log(JSON.stringify(res));
-          //resolve(res);
-        } catch (e) { reject(e) }
-      }).catch((err) => {
-        reject(err)
-      });
-    });
+  let capture = (success) => {
+    cameraService.capture(route.params.base64Data).then(async (res) => {
+      console.log(res);
+    //await navigate('ResultScreen');
+    }).catch((err) => {
+      console.log(err);
+    })
     // setIsSubmiting(true)
     // setTimeout(() => {
     //   setIsSubmiting(false)
@@ -215,16 +206,9 @@ const PreviewScreen = ({ route, navigation }) => {
 
         <TouchableOpacity
           style={styles.button}
-          onPress={() => Submit(true)}
+          onPress={() => capture(true)}
         >
-          <Text style={{ color: "white" }}>Xác nhận (thành công)</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => Submit(false)}
-        >
-          <Text style={{ color: "white" }}>Xác nhận (thất bại)</Text>
+          <Text style={{ color: "white" }}>Xác nhận</Text>
         </TouchableOpacity>
       </View>
 

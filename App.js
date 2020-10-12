@@ -1,4 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React, {
+  useState,
+  useEffect
+} from 'react';
 import {
   NavigationContainer,
   DefaultTheme as NavigationDefaultTheme,
@@ -11,12 +14,19 @@ import {
   DarkTheme as PaperDarkTheme
 } from 'react-native-paper';
 
-// import { AuthContext } from "./components/context";
-import { Provider } from 'react-redux';
+import {
+  Provider
+} from 'react-redux';
 import store from './src/reducers';
-import { navigationRef } from './src/services/navRef';
-import {getAuthAsyncStorage} from "./src/services/getAuthAsyncStorage";
-import {loggedIn} from "./src/actions/auth";
+import {
+  navigationRef
+} from './src/services/navRef';
+import {
+  getAuthAsyncStorage
+} from "./src/services/getAuthAsyncStorage";
+import {
+  loggedIn
+} from "./src/actions/auth";
 
 
 import Routes from './src/common/Routes';

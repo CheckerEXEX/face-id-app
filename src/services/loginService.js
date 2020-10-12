@@ -23,9 +23,9 @@ async function logout(getState) {
   return new Promise((resolve, reject) => {
     const currentState = getState();
     const { token } = currentState.auth;
-    axios.get(`${API.DATABASE}/logout`, {
+    axios.post(`${API.DATABASE}/logout`, {
       headers: {
-        authorization: `Bearer ${token}`,
+        authorization: `${token}`,
       },
     }).then(async (response) => {
       resolve(response);

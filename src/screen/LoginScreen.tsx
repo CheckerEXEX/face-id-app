@@ -2,21 +2,19 @@ import React, { useEffect } from "react";
 import { useStateIfMounted } from "use-state-if-mounted";
 import {
   View,
-  TouchableOpacity,
   TextInput,
   Image,
-  Alert,
   SafeAreaView,
   StyleSheet
 } from "react-native";
-import { Icon, Input, Button, Text } from "react-native-elements";
+import { Icon, Button, Text } from "react-native-elements";
 
 import LoginLoading from "../common/component/LoginLoading";
 import AnimatedSplash from "react-native-animated-splash-screen";
 import AnimatedLoader from "../common/library/react-native-animated-loader/src/index";
 
 import { useDispatch, useSelector } from "react-redux";
-import {login} from "../actions/auth";
+import { login } from "../actions/auth";
 
 import LoginStyle from "../common/styles/login";
 import BaseStyle from "../common/styles/base";
