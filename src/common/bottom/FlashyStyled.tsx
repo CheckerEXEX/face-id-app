@@ -23,15 +23,9 @@ const Tab = createBottomTabNavigator<MainTabsParams>();
 
 const FlashyStyledScreen = () => {
   function MyTabBar({ state, descriptors, navigation }) {
-
-    // Ẩn bottom bar khi ở màn hình Camera
-    if (state.index == 2) {
-      //console.log(descriptors);
-      return null;
-    };
-
+    console.log('%c%s', 'color: #807160', state.index);
+    
     return (
-
       <View style={{ flexDirection: 'row', backgroundColor: 'transparent' }}>
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key];

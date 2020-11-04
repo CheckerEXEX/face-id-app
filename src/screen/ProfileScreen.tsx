@@ -18,19 +18,39 @@ import {getAuthAsyncStorage} from "../../src/services/getAuthAsyncStorage";
 
 const ProfileScreen = (props) => {
 
-  const [employeeData, setEmployeeData] = useStateIfMounted(null);
+  const [employeeData, setEmployeeData] = useStateIfMounted(
+    { employeeId : "",
+      employeeName : "",
+      employeeImage : "",
+      email : "",
+      phone :"",
+      address : "",
+      position : "",
+      role : ""}
+  );
   const [isLoading, setIsLoadingFromAsyncStorage] = useStateIfMounted(true);
 
   useEffect(() => {
-    const load = async () => {
-      await setIsLoadingFromAsyncStorage(true);
+    (async () => {
+      setIsLoadingFromAsyncStorage(true);
       const storage = await getAuthAsyncStorage();
       if (storage.employee && storage.token) {
         setEmployeeData(storage.employee);
       }
-      await setIsLoadingFromAsyncStorage(false);
-    }
-    load();
+      setIsLoadingFromAsyncStorage(false);
+    })();
+    // component un mount
+    return () => {
+      setEmployeeData({ employeeId : "",
+      employeeName : "",
+      employeeImage : "",
+      email : "",
+      phone :"",
+      address : "",
+      position : "",
+      role : ""})
+    };
+    setIsLoadingFromAsyncStorage(false)
   }, []);
 
   if (isLoading) {
@@ -55,6 +75,14 @@ const ProfileScreen = (props) => {
       </View>
 
       <View style={ProfileStyle.userInfoSection}>
+        <View style={ProfileStyle.row}>
+          <Icon name="id-card" color="#19224d" size={20}/>
+          <Text style={{color:"#19224d", marginLeft: 20}}>{employeeData.employeeId}</Text>
+        </View>
+        <View style={ProfileStyle.row}>
+          <Icon name="license" color="#19224d" size={20}/>
+          <Text style={{color:"#19224d", marginLeft: 20}}>{employeeData.position}</Text>
+        </View>
         <View style={ProfileStyle.row}>
           <Icon name="map-marker-radius" color="#19224d" size={20}/>
           <Text style={{color:"#19224d", marginLeft: 20}}>{employeeData.address}</Text>
@@ -84,22 +112,17 @@ const ProfileScreen = (props) => {
       </View> */}
 
       <View style={ProfileStyle.menuWrapper}>
-        <TouchableRipple onPress={() => {}}>
-          <View style={ProfileStyle.menuItem}>
-            <Icon name="heart-outline" color="#19224d" size={25}/>
-            <Text style={ProfileStyle.menuItemText}>Your Favorites</Text>
-          </View>
-        </TouchableRipple>
+        
         <TouchableRipple onPress={() => {}}>
           <View style={ProfileStyle.menuItem}>
             <Icon name="account-check-outline" color="#19224d" size={25}/>
-            <Text style={ProfileStyle.menuItemText}>Support</Text>
+            <Text style={ProfileStyle.menuItemText}>Hỗ trợ</Text>
           </View>
         </TouchableRipple>
         <TouchableRipple onPress={() => {}}>
           <View style={ProfileStyle.menuItem}>
             <Icon name="settings-outline" color="#19224d" size={25}/>
-            <Text style={ProfileStyle.menuItemText}>Settings</Text>
+            <Text style={ProfileStyle.menuItemText}>Chỉnh sửa</Text>
           </View>
         </TouchableRipple>
         <TouchableRipple onPress={() => dispatch(logout())}>

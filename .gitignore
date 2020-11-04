@@ -2,3 +2,5 @@ node_modules
 .expo
 .expo/settings.json
 *.dev.js
+.expo/packager-info.json
+.expo/settings.json

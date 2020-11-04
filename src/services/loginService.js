@@ -9,7 +9,6 @@ function login(loginId, loginPassword) {
       loginPassword : loginPassword
     }).then(async (res) => {
       try {
-        console.log(res.data.message);
         await setAuthAsyncStorage(res.data);
         resolve(res);
       } catch (e) { reject(e) }

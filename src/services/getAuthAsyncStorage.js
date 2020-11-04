@@ -7,6 +7,7 @@ export async function getAuthAsyncStorage() {
     token,
     employee: JSON.parse(employee),
   };
+  console.log('%c%s', 'color: #1d5673', employee);
 }
 
 export async function setAuthAsyncStorage(data) {

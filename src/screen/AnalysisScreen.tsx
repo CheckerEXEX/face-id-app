@@ -17,7 +17,6 @@ import CalendarPicker, {
 } from 'react-native-calendar-picker';
 
 // COMPONENT
-import Clock from "../common/component/Clock";
 import Loading from "../common/component/Loading";
 
 // CSS
@@ -25,122 +24,43 @@ import BaseStyle from "../common/styles/base";
 import HomeStyle from "../common/styles/home";
 import CalendarStyle from "../common/styles/calendar";
 
-// REDUX
-import { useSelector, useDispatch } from "react-redux";
+// STORAGE
+import { getAuthAsyncStorage } from "../services/getAuthAsyncStorage";
 
 const AnalysisScreen = (props) => {
 
-  const employeeDto = useSelector((state) => state.employee);
-  const { name, msnv } = employeeDto[0];
-
-  const [errorMsg, setErrorMsg] = useStateIfMounted(null);
-  const [location, setLocation] = useStateIfMounted(null);
-  const [locationName, setLocationName] = useStateIfMounted(null);
-  const [hasRadius, setHasRadius] = useStateIfMounted(true);
-  const [isLoading, setIsLoading] = useStateIfMounted(true);
+  // const employeeDto = useSelector((state) => state.employee);
+  // const { name, msnv } = employeeDto[0];
+  const [employeeData, setEmployeeData] = useStateIfMounted(
+    { employeeId : "",
+      employeeName : "",
+      employeeImage : "",
+      email : "",
+      phone :"",
+      address : "",
+      position : "",
+      role : ""}
+  );
+  const [dateSelected, setDateSelected] = useStateIfMounted(null);
+  const [isLoading, setIsLoading] = useStateIfMounted(false);
   const [titleLoading, setTitleLoading] = useStateIfMounted(null);
-
-  const LATITUDE_SYSTEMEXE = 10.801244131973288;
-  const LONGITUDE_SYSTEMEXE = 106.640986249321;
-  const RADIUS_DEFAULT = 0.1; //km
-
-  const dispatch = useDispatch();
 
   useEffect(() => {
     (async () => {
-
-      let { status } = await Location.requestPermissionsAsync();
-      if (status !== "granted") {
-        setErrorMsg("Không tìm thấy vị trí vui lòng thử lại !");
+      const storage = await getAuthAsyncStorage();
+      if (storage.employee && storage.token) {
+        setEmployeeData(storage.employee);
       }
-      let location = await Location.getCurrentPositionAsync({accuracy:Location.Accuracy.Highest});
-      let nameLocation = await Location.reverseGeocodeAsync({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-      });
-
-      const radius_km = getRadiusTwoPoint(
-        LATITUDE_SYSTEMEXE,
-        LONGITUDE_SYSTEMEXE,
-        location.coords.latitude,
-        location.coords.longitude
-      );
-
-      if (radius_km <= RADIUS_DEFAULT) {
-        setHasRadius(false);
-      } else {
-        setHasRadius(true);
-      }
-      setLocationName(nameLocation)
-      setLocation(location);
       setIsLoading(false);
-      //getWeather(location.coords.latitude, location.coords.longitude);
+      setDateSelected("16/10/2020");
 
     })();
     // component un mount
     return () => {
       setIsLoading(false);
-      setErrorMsg(null);
-      setLocationName(null);
-      setLocation(null);
-      setHasRadius(true);
-      setIsLoading(false);
       setTitleLoading(null);
     };
   }, []);
-  // calculation location radius two point
-  const getRadiusTwoPoint = (
-    latitude_1,
-    longitude_1,
-    latitude_2,
-    longitude_2
-  ) => {
-    const rad_Latitude_1 = (Math.PI * latitude_1) / 180;
-    const rad_Latitude_2 = (Math.PI * latitude_2) / 180;
-    const theta = longitude_1 - longitude_2;
-    const rad_theta = (Math.PI * theta) / 180;
-    let dist =
-      Math.sin(rad_Latitude_1) * Math.sin(rad_Latitude_2) +
-      Math.cos(rad_Latitude_1) * Math.cos(rad_Latitude_2) * Math.cos(rad_theta);
-    if (dist > 1) {
-      dist = 1;
-    }
-    dist = Math.acos(dist);
-    dist = (dist * 180) / Math.PI;
-    dist = dist * 60 * 1.1515;
-    dist = dist * 1.609344;
-    return dist;
-  };
-
-  let streetName = "";
-  let city = "";
-  let result = "";
-
-  if (errorMsg) {
-    result = errorMsg;
-  } else if (location) {
-    locationName.find((item: any) => {
-      (streetName = item.name), (city = item.region);
-    });
-    result = streetName + " - " + city;
-    console.log('LOCATION: ' + result);
-  }
-
-  // const getWeather = async (latitude, longitude) => {
-  //   const api_key = "f0283990e0581e2d7e1b7c41996132e9";
-  //   try {
-  //     const api_requests = await fetch(
-  //       `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&units=metric&lang=vi&exclude=hourly,daily&appid=${api_key}`
-  //     );
-  //     const response = await api_requests.json();
-  //     setForecast(response);
-  //     setTimeout(() => {
-  //       setIsLoading(false);
-  //     }, 1000);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   const TestRangeDurations = (date) => {
     const customStyles: CustomDateStyle[] = [
@@ -164,7 +84,8 @@ const AnalysisScreen = (props) => {
 // };
 
   const onDateChange: DateChangedCallback = (date) => {
-      console.log('DATE_SELECTED: ' + date.format('DD/MM/YYYY'));
+      let dateSelected = date.format('DD/MM/YYYY');
+      setDateSelected(dateSelected);
       TestRangeDurations(date);
   }
   // const onMonthChange: MonthChangedCallback = date => console.log('MONTH_SELECTED: ' + date.month());
@@ -216,21 +137,15 @@ const AnalysisScreen = (props) => {
     <>
       <SafeAreaView style={BaseStyle.topSafeArea} />
       <SafeAreaView style={BaseStyle.bottomSafeArea}>
-        <Loading isLoading={isLoading} titleLoading={titleLoading} />
+        <Loading isLoading={isLoading} />
         <View style={HomeStyle.header}>
-          {/* <View style={{ width: "20%", justifyContent: "center"}}>
-            <Icon size={50} name="navicon" type="font-awesome" onPress={() => props.navigation.openDrawer()}/>
-          </View> */}
-          {/* <View style={{ width: "60%", justifyContent: "center", alignItems: "center" }}>
-            <Image style={HomeStyle.logo} source={require("../common/styles/img/favicon.png")}/>
-          </View> */}
           <View style={{justifyContent: "center", flexDirection: 'row'}}>
             <TouchableOpacity onPress={() => { props.navigation.navigate("Drawer")}}>
               <Image style={HomeStyle.avatar} source={require("../common/styles/img/employee.png")}/>
             </TouchableOpacity>
             <View style={{justifyContent: "center"}}>
-              <Title style={HomeStyle.avatarTitle}>{name}</Title>
-              <Caption style={HomeStyle.avatarCaption}>MSNV: {msnv}</Caption>
+              <Title style={HomeStyle.avatarTitle}>{employeeData.employeeName}</Title>
+              <Caption style={HomeStyle.avatarCaption}>MSNV: {employeeData.employeeId}</Caption>
             </View>
           </View>
           <View style={{justifyContent: "center", paddingRight: 10, top: -5}}>
@@ -266,60 +181,38 @@ const AnalysisScreen = (props) => {
               restrictMonthNavigation
               headingLevel={5}
             />
-              <View
-                // style={{
-                //   flex: 1,
-                //   marginHorizontal: 10,
-                //   borderBottomColor: '#a91b4b',
-                //   borderBottomWidth: 1,
-                //   width: '95%',
-                // }}
-              />
+            <View
+              style={{
+                flex: 1,
+                marginHorizontal: 10,
+                borderBottomColor: '#a91b4b',
+                borderBottomWidth: 1,
+                width: '95%',
+              }}
+            />
+             <View
+              style={{
+                paddingTop: 10,
+                paddingHorizontal: 10,
+              }}
+              >
+              <Title style={HomeStyle.avatarTitle}>Thông tin check-in ngày: {dateSelected}</Title>
+              <View style={{ flexDirection: 'row'}}>
+                <Text style={{color:"#fff", marginLeft: 20, width: 130}}>Thời gian check-in</Text>
+                <Text style={{color:"#fff", marginLeft: 20}}>:  07:55:12</Text>
               </View>
-            
-
-
-          {/* <View style={stylesWeather.current}>
-            {isLoaded ? (
-              <>
-                <Image style={stylesWeather.largeIcon} source={{
-                  uri: `http://openweathermap.org/img/wn/${forecast.current.weather[0].icon}@4x.png`,
-                }}
-                />
-                <Text style={stylesWeather.currentTemp}>{Math.round(forecast.current.temp)}°C</Text>
-              </>
-            ) : null}
-          </View> */}
-          <View style={{alignItems: "center"}}>
-            <View>
-              {!hasRadius ? (
-                <Text style={HomeStyle.position}>Vị trí hợp lệ</Text>
-              ) : (
-                <View>
-                  <Text style={{ textAlign: "center", color: "#f44336", fontWeight: "bold", fontSize: 25 }}>
-                    Vị trí không hợp lệ
-                  </Text>
-                  <Text style={{ textAlign: "center", color: "#f44336", fontSize: 12 }}>
-                    (Bán kính {RADIUS_DEFAULT*1000}m tính từ vị trí công ty)
-                  </Text>
-                </View>
-              )}
-            </View>
-            <View style={{ flexDirection: "row", marginTop: 20 }}>
-              <View>
-                <Icon
-                  name="map-marker"
-                  type="font-awesome"
-                  color="#227f58"
-                  size={15}
-                />
+              <View style={{ flexDirection: 'row'}}>
+                <Text style={{color:"#fff", marginLeft: 20, width: 130}}>Thời gian check-out</Text>
+                <Text style={{color:"#fff", marginLeft: 20}}>:  18:00:52</Text>
               </View>
-              <View style={{ maxWidth: "90%" }}>
-                <Text style={HomeStyle.positionName}>{result}</Text>
+              <View style={{ flexDirection: 'row'}}>
+                <Text style={{color:"#fff", marginLeft: 20, width: 130}}>Đi trễ</Text>
+                <Text style={{color:"#fff", marginLeft: 20}}>:  Không</Text>
               </View>
-            </View>
-            <View style={HomeStyle.clock}>
-              <Clock />
+              <View style={{ flexDirection: 'row'}}>
+                <Text style={{color:"#fff", marginLeft: 20, width: 130}}>Về sớm</Text>
+                <Text style={{color:"#fff", marginLeft: 20}}>:  Không</Text>
+              </View>
             </View>
           </View>
         </View>

@@ -8,7 +8,8 @@ import {
   View,
   SafeAreaView,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
+  AsyncStorage
 } from "react-native";
 import { Icon, Image } from "react-native-elements";
 import { Title, Caption} from "react-native-paper";
@@ -24,8 +25,8 @@ import HomeStyle from "../common/styles/home";
 import DarkStyles from "../common/styles/MapStyles/Modest.json"
 import LightStyles from "../common/styles/MapStyles/Retro.json"
 
-// REDUX
-import { useSelector, useDispatch } from "react-redux";
+// STORAGE
+import { getAuthAsyncStorage } from "../services/getAuthAsyncStorage";
 
 const HomeScreen = (props) => {
 
@@ -61,30 +62,43 @@ const HomeScreen = (props) => {
     }
   });
 
+  const [employeeData, setEmployeeData] = useStateIfMounted(
+    { employeeId : "",
+      employeeName : "",
+      employeeImage : "",
+      email : "",
+      phone :"",
+      address : "",
+      position : "",
+      role : ""}
+  );
   const [locationName, setLocationName] = useStateIfMounted(null);
   const [hasRadius, setHasRadius] = useStateIfMounted(true);
   const [isLoading, setIsLoading] = useStateIfMounted(false);
   const [titleLoading, setTitleLoading] = useStateIfMounted(null);
   //const [forecast, setForecast] = useStateIfMounted(null);
 
-  const dispatch = useDispatch();
-
   useEffect(() => {
-    setLocation({
-      region: {
-        latitude: LATITUDE_TEST,
-        longitude: LONGITUDE_TEST,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA,
-      },
-      company: {
-        latitude: LATITUDE_SYSTEMEXE,
-        longitude: LONGITUDE_SYSTEMEXE,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA,
-      }
-    });
+
+    // setLocation({
+    //   region: {
+    //     latitude: LATITUDE_TEST,
+    //     longitude: LONGITUDE_TEST,
+    //     latitudeDelta: LATITUDE_DELTA,
+    //     longitudeDelta: LONGITUDE_DELTA,
+    //   },
+    //   company: {
+    //     latitude: LATITUDE_SYSTEMEXE,
+    //     longitude: LONGITUDE_SYSTEMEXE,
+    //     latitudeDelta: LATITUDE_DELTA,
+    //     longitudeDelta: LONGITUDE_DELTA,
+    //   }
+    // });
     (async () => {
+      
+      const storage = await getAuthAsyncStorage();
+      setEmployeeData(storage.employee);
+
       let { status } = await Location.requestPermissionsAsync();
       if (status !== "granted") {
         setErrorMsg("Không tìm thấy vị trí vui lòng thử lại !");
@@ -94,7 +108,6 @@ const HomeScreen = (props) => {
         latitude: l.coords.latitude,
         longitude: l.coords.longitude,
       });
-      console.log(l);
 
       const radius_km = getRadiusTwoPoint(
         LATITUDE_SYSTEMEXE,
@@ -109,10 +122,11 @@ const HomeScreen = (props) => {
         setHasRadius(true);
       }
       setLocationName(nameLocation);
+      console.log('%c%s', 'color: #d90000', nameLocation);
       setLocation({
         region: {
-          latitude: LATITUDE_TEST,
-          longitude: LONGITUDE_TEST,
+          latitude: l.coords.latitude,
+          longitude: l.coords.longitude,
           latitudeDelta: LATITUDE_DELTA,
           longitudeDelta: LONGITUDE_DELTA,
         },
@@ -170,19 +184,18 @@ const HomeScreen = (props) => {
 
   if (errorMsg) {
     result = errorMsg;
-  } else if (location.region.latitude != 0) {
-    // locationName.find((item: any) => {
-    //   (streetName = item.name), (city = item.region);
-    // });
-    // result = streetName + " - " + city;
-    console.log('ADDRESS: ' + result);
+  } else if (locationName) {
+    locationName.find((item: any) => {
+      (streetName = item.name), (city = item.region);
+    });
+    result = streetName + " - " + city;
   }
 
   const circleRef = useRef(null);
   const mapRef = useRef(null);
 
   const theme = useTheme();
-  console.log('THEME: ' + theme.dark);
+  // console.log('THEME: ' + theme.dark);
 
   return (
     <>
@@ -201,8 +214,8 @@ const HomeScreen = (props) => {
               <Image style={HomeStyle.avatar} source={require("../common/styles/img/employee.png")}/>
             </TouchableOpacity>
             <View style={{justifyContent: "center"}}>
-              <Title style={HomeStyle.avatarTitle}>NQT</Title>
-              <Caption style={HomeStyle.avatarCaption}>MSNV: SVN0087</Caption>
+              <Title style={HomeStyle.avatarTitle}>{employeeData.employeeName}</Title>
+              <Caption style={HomeStyle.avatarCaption}>MSNV: {employeeData.employeeId}</Caption>
             </View>
           </View>
           <View style={{justifyContent: "center", paddingRight: 10, top: -5}}>
@@ -220,32 +233,32 @@ const HomeScreen = (props) => {
                 provider={ PROVIDER_GOOGLE }
                 customMapStyle={ DarkStyles }
                 showsUserLocation={ true }
-                initialRegion={ location.company }
-                onMapReady={() => {mapRef.current.fitToSuppliedMarkers(['mk1','mk2'],
-                  {
-                    edgePadding: {
-                      top: 70,
-                      right: 70,
-                      bottom: 70,
-                      left: 70
-                    },
-                    animated: true
-                  }
-                )}}
-                // onMapReady={() => {mapRef.current.fitToCoordinates(
-                //   [
-                //     { latitude: location.company.latitude,longitude: location.company.longitude },
-                //     { latitude: location.region.latitude,longitude: location.region.longitude }
-                //   ],
-                //   { edgePadding: {
-                //       top: 50,
-                //       right: 50,
-                //       bottom: 50,
-                //       left: 50
+                initialRegion={ location.region }
+                // onMapReady={() => {mapRef.current.fitToSuppliedMarkers(['mk1','mk2'],
+                //   {
+                //     edgePadding: {
+                //       top: 70,
+                //       right: 70,
+                //       bottom: 70,
+                //       left: 70
                 //     },
                 //     animated: true
                 //   }
                 // )}}
+                onMapReady={() => {mapRef.current.fitToCoordinates(
+                  [
+                    { latitude: location.company.latitude,longitude: location.company.longitude },
+                    { latitude: location.region.latitude,longitude: location.region.longitude }
+                  ],
+                  { edgePadding: {
+                      top: 50,
+                      right: 50,
+                      bottom: 50,
+                      left: 50
+                    },
+                    animated: true
+                  }
+                )}}
               >
 
                 <Marker
@@ -314,7 +327,7 @@ const HomeScreen = (props) => {
               )}
             </View>
             <View style={{ flexDirection: "row", marginTop: 20 }}>
-              {/* <View>
+              <View>
                 <Icon
                   name="map-marker"
                   type="font-awesome"
@@ -324,7 +337,7 @@ const HomeScreen = (props) => {
               </View>
               <View style={{ maxWidth: "90%" }}>
                 <Text style={HomeStyle.positionName}>{result}</Text>
-              </View> */}
+              </View>
             </View>
             <View style={HomeStyle.clock}>
               <Clock />

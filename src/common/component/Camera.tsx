@@ -15,7 +15,6 @@ import Clock from "./Clock";
 import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
 
 const Stack = createStackNavigator();
-
 export default function CameraScreens(props) {
   return (
     <Stack.Navigator
@@ -55,7 +54,8 @@ class CameraScreen extends React.Component {
     dataResponse: [],
     uri: "",
     base64: "",
-    rotatedeg: 0
+    rotatedeg: 0,
+    empoyeeName : ""
   };
 
   camera = null;
@@ -89,9 +89,10 @@ class CameraScreen extends React.Component {
     const camera = await Permissions.askAsync(Permissions.CAMERA);
     const audio = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
     const hasCameraPermission = (camera.status === 'granted' && audio.status === 'granted');
-
+    
     this.setState({ hasCameraPermission });
   };
+  
 
   render() {
 
@@ -111,11 +112,10 @@ class CameraScreen extends React.Component {
             />
           </View>
           <View style={styles.buttonArea}>
-            {/* <TouchableOpacity
-              onPress={() => this.setCameraType(Camera.Constants.Type.back)}>
-              <Ionicons name="md-reverse-camera" color="white" size={40} />
+            {/* <TouchableOpacity onPress={() => navigate('HomeScreen')}>
+              <Icon reverse name="home" type="font-awesome" color="green" />
             </TouchableOpacity> */}
-
+            
             <TouchableOpacity style={styles.container} onPress={() => this._handleShortCapture(this.props)}>
               <Icon reverse name="camera" type="font-awesome" color="green" />
             </TouchableOpacity>
@@ -139,8 +139,9 @@ const PreviewScreen = ({ route, navigation }) => {
 
   let capture = (success) => {
     cameraService.capture(route.params.base64Data).then(async (res) => {
-      console.log(res);
-    //await navigate('ResultScreen');
+      let employeeName = res.data.result;
+      let accuracy = res.data.accuracy;
+      navigation.navigate("ResultScreen", { uri: uri, isSuccess: success, employeeName: employeeName, accuracy : accuracy });
     }).catch((err) => {
       console.log(err);
     })
@@ -219,7 +220,7 @@ const PreviewScreen = ({ route, navigation }) => {
 
 const ResultScreen = ({ route, navigation }) => {
 
-  let { uri, isSuccess, employeeName } = route.params;
+  let { uri, isSuccess, employeeName, accuracy } = route.params;
 
   return (
     <View style={styles.container}>
@@ -254,6 +255,7 @@ const ResultScreen = ({ route, navigation }) => {
               <View style={{ width: 0.7 * winWidth, borderWidth: 1, borderRadius: 20, backgroundColor: "#a4eb96", padding: 10, marginTop: 20 }}>
                 <Text style={styles.txtInfoStyle}>Check in thành công</Text>
                 <Text style={styles.txtInfoStyle}>Tên nhân viên: {employeeName}</Text>
+                <Text style={styles.txtInfoStyle}>Độ chinh xác: {accuracy}</Text>
                 <Text style={styles.txtInfoStyle}>Thời gian: 8h00</Text>
                 <Text style={styles.txtInfoStyle}>Vị trí: 364 Cộng Hòa</Text>
               </View>
@@ -336,7 +338,7 @@ const { width: winWidth, height: winHeight } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   preview: {
-    height: winHeight * 0.75,
+    height: winHeight * 0.65,
     width: winWidth,
   },
   container: {

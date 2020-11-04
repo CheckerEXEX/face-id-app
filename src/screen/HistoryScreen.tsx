@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useStateIfMounted } from "use-state-if-mounted";
 import moment from 'moment';
 import {
@@ -7,18 +7,77 @@ import {
   StyleSheet,
   SafeAreaView,
   FlatList,
-  Button,
+  TouchableOpacity,
 } from "react-native";
+import { Title, Caption} from "react-native-paper";
+import { Icon, Image } from "react-native-elements";
 import Item from "../common/component/Item";
 import Loading from "../common/component/Loading";
 import CalendarStrip from 'react-native-calendar-strip';
 
 import BaseStyle from "../common/styles/base";
+import HomeStyle from "../common/styles/home";
+// STORAGE
+import { getAuthAsyncStorage } from "../services/getAuthAsyncStorage";
 
 const DATA = [
   {
     id: "1",
-    date: "Thứ 2 ngày 20-11-2020",
+    date: "Thứ 2 ngày 01/10/2020",
+    checkIn: "07:52:11",
+    checkOut: "18:23:20",
+    color: "red",
+  },{
+    id: "2",
+    date: "Thứ 3 ngày 02/10/2020",
+    checkIn: "07:52:11",
+    checkOut: "18:23:20",
+    color: "red",
+  },{
+    id: "3",
+    date: "Thứ 4 ngày 03/10/2020",
+    checkIn: "07:52:11",
+    checkOut: "18:23:20",
+    color: "red",
+  },{
+    id: "4",
+    date: "Thứ 5 ngày 04/10/2020",
+    checkIn: "07:52:11",
+    checkOut: "18:23:20",
+    color: "red",
+  },{
+    id: "5",
+    date: "Thứ 6 ngày 05/10/2020",
+    checkIn: "07:52:11",
+    checkOut: "18:23:20",
+    color: "red",
+  },{
+    id: "6",
+    date: "Thứ 2 ngày 01/10/2020",
+    checkIn: "07:52:11",
+    checkOut: "18:23:20",
+    color: "red",
+  },{
+    id: "7",
+    date: "Thứ 3 ngày 02/10/2020",
+    checkIn: "07:52:11",
+    checkOut: "18:23:20",
+    color: "red",
+  },{
+    id: "8",
+    date: "Thứ 4 ngày 03/10/2020",
+    checkIn: "07:52:11",
+    checkOut: "18:23:20",
+    color: "red",
+  },{
+    id: "9",
+    date: "Thứ 5 ngày 04/10/2020",
+    checkIn: "07:52:11",
+    checkOut: "18:23:20",
+    color: "red",
+  },{
+    id: "10",
+    date: "Thứ 6 ngày 05/10/2020",
     checkIn: "07:52:11",
     checkOut: "18:23:20",
     color: "red",
@@ -28,11 +87,34 @@ const DATA = [
 const renderItem = ({ item }) => <Item data={item} />;
 
 const HistoryScreen = (props) => {
-  const [isLoading, setIsLoading] = useStateIfMounted(true);
+  const [isLoading, setIsLoading] = useStateIfMounted(false);
+  const [employeeData, setEmployeeData] = useStateIfMounted(
+    { employeeId : "",
+      employeeName : "",
+      employeeImage : "",
+      email : "",
+      phone :"",
+      address : "",
+      position : "",
+      role : ""}
+  );
 
-  setTimeout(() => {
-    setIsLoading(false);
-  }, 1500);
+  useEffect(() => {
+    (async () => {
+      const storage = await getAuthAsyncStorage();
+      if (storage.employee && storage.token) {
+        setEmployeeData(storage.employee);
+      }
+      setIsLoading(false);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1500);
+    })();
+    // component un mount
+    return () => {
+      setIsLoading(false);
+    };
+  }, []);
 
   let datesWhitelist = [{
     start: moment(),
@@ -46,16 +128,22 @@ const HistoryScreen = (props) => {
       <SafeAreaView style={BaseStyle.bottomSafeArea}>
         <Loading isLoading={isLoading} />
         <View style={styles.body}>
-        {/* <CalendarStrip
-          scrollable
-          style={{height:200, paddingTop: 20, paddingBottom: 10}}
-          calendarColor={'#3343CE'}
-          calendarHeaderStyle={{color: 'white'}}
-          dateNumberStyle={{color: 'white'}}
-          dateNameStyle={{color: 'white'}}
-          iconContainer={{flex: 0.1}}
-        /> */}
-          <CalendarStrip
+        <View style={HomeStyle.header}>
+          <View style={{justifyContent: "center", flexDirection: 'row'}}>
+            <TouchableOpacity onPress={() => { props.navigation.navigate("Drawer")}}>
+              <Image style={HomeStyle.avatar} source={require("../common/styles/img/employee.png")}/>
+            </TouchableOpacity>
+            <View style={{justifyContent: "center"}}>
+              <Title style={HomeStyle.avatarTitle}>{employeeData.employeeName}</Title>
+              <Caption style={HomeStyle.avatarCaption}>MSNV: {employeeData.employeeId}</Caption>
+            </View>
+          </View>
+          <View style={{justifyContent: "center", paddingRight: 10, top: -5}}>
+            <Icon color="#a91b4b" size={20} name="sign-out" type="font-awesome" onPress={() => props.navigation.navigate("LoginScreen")}/>
+            <Text style={{fontSize: 12, color:"#a91b4b"}}>Đăng xuất</Text>
+          </View>
+        </View>
+          {/* <CalendarStrip
             calendarAnimation={{type: 'parallel', duration: 500}}
             daySelectionAnimation={{type: 'background', duration: 500, highlightColor: '#a91b4b'}}
             style={{height: 100, paddingTop: 20, paddingBottom: 10}}
@@ -73,7 +161,7 @@ const HistoryScreen = (props) => {
             iconRight={require('../common/styles/img/arrow-25-512.png')}
             iconContainer={{flex: 0.1}}
             locale={locale}
-          />
+          /> */}
           <SafeAreaView>
             <FlatList
               data={DATA}
